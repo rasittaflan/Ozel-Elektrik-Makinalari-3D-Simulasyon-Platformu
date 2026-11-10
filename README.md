@@ -1,6 +1,21 @@
 # Özel Elektrik Makinaları: 3D Hibrit Simülasyon & Aktif Öğrenme Laboratuvarı
 ## Special Electrical Machines: 3D Hybrid Simulation & Active Learning Platform
 
+<div align="center">
+
+[![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-0284c7?style=for-the-badge&logo=google-chrome&logoColor=white)](https://rasittaflan.github.io/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/rasittaflan/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu)
+[![KTÜ EEE](https://img.shields.io/badge/KTÜ-Electrical_%26_Electronics_Engineering-0369a1?style=for-the-badge&logo=mortarboard&logoColor=white)](https://www.ktu.edu.tr/eee)
+
+<br/>
+
+**🌐 Canlı Simülasyon Web Bağlantısı / Live Simulation URL:**  
+### **[https://rasittaflan.github.io/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu/](https://rasittaflan.github.io/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu/)**
+
+</div>
+
+---
+
 **Proje Sahibi / Project Owner:** Muhammet Raşit Taflan  
 **Ders / Course:** KTÜ Elektrik-Elektronik Mühendisliği — Özel Elektrik Makinaları (Dr. Hakan Kahveci Ders Notları)  
 **Sürüm / Version:** v1.0.0  
