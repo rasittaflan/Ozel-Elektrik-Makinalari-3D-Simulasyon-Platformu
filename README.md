@@ -1,12 +1,12 @@
-# Özel Elektrik Makinaları: 3D CAD & Dinamik ODE Simülasyon Platformu
-## Special Electrical Machines: 3D CAD & Dynamic ODE Simulation Platform
+# Özel Elektrik Makinaları: 3D Elektromanyetik Motor Laboratuvarı v3.0
+## Special Electrical Machines: 3D Electromagnetic Motor Laboratory v3.0
 
 <div align="center">
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-0284c7?style=for-the-badge&logo=google-chrome&logoColor=white)](https://rasittaflan.github.io/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/rasittaflan/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu)
 [![KTÜ EEE](https://img.shields.io/badge/KT%C3%9C-Electrical_%26_Electronics_Engineering-0369a1?style=for-the-badge&logo=mortarboard&logoColor=white)](https://www.ktu.edu.tr/eee)
-[![Version](https://img.shields.io/badge/Version-v2.0.0--PRO-10b981?style=for-the-badge)](https://github.com/rasittaflan/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu/releases)
+[![Version](https://img.shields.io/badge/Version-v3.0.0--PRO-10b981?style=for-the-badge)](https://github.com/rasittaflan/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu/releases)
 
 <br/>
 
@@ -20,14 +20,35 @@
 **Proje Sahibi / Project Owner:** Muhammet Raşit Taflan  
 **Ders / Course:** KTÜ Elektrik-Elektronik Mühendisliği — Özel Elektrik Makinaları  
 **Akademik Kaynak / Academic Source:** Dr. Hakan Kahveci Ders Notları (81 Sayfa)  
-**Sürüm / Version:** v2.0.0-PRO  
+**Sürüm / Version:** v3.0.0-PRO  
 **Tarih / Date:** Kasım 2026 / November 2026  
 
 ---
 
-## TR: Proje Hakkında (v2.0.0)
+## TR: Proje Hakkında (v3.0.0)
 
-Bu proje; Dr. Hakan Kahveci'nin Karadeniz Teknik Üniversitesi Elektrik-Elektronik Mühendisliği bölümünde anlattığı 81 sayfalık **"ÖZEL ELEKTRİK MAKİNALARI"** ders notlarının derinlemesine analiziyle geliştirilmiş; salt görsel animasyonların ötesinde, gerçek zamanlı diferansiyel denklem (ODE) çözücüsü, Three.js tabanlı CAD seviyesinde bileşen inceleyicisi, 10 standart kamera modu, 4 kanallı canlı osiloskop, interaktif güç elektroniği devreleri ve 11 mühendislik fizik testiyle doğrulanmış yeni nesil bir **Sanal Elektrik Makineleri Laboratuvarı ve Aktif Öğrenme Platformudur**.
+Bu proje; Dr. Hakan Kahveci'nin Karadeniz Teknik Üniversitesi Elektrik-Elektronik Mühendisliği bölümünde anlattığı 81 sayfalık **"ÖZEL ELEKTRİK MAKİNALARI"** ders notlarının derinlemesine analiziyle geliştirilmiş; salt görsel bir animasyonun ötesinde, motorun içerisindeki elektromanyetik olayları adım adım, yavaş çekimde ve fiziksel olarak doğrulanabilir bağıntılarla gösteren **3D Elektromanyetik Motor Laboratuvarı ve Aktif Öğrenme Platformudur**.
+
+### v3.0.0 Temel Geliştirmeleri:
+1. **3D Stator Manyetik Akı Çizgileri & Yön Okları:**
+   - N kutbundan S kutbuna doğru akan 9 adet kalın, parlak akı tüpü ve tüpler üzerinde sürekli akan 3D yön okları.
+   - Stator kutupları ($N \leftrightarrow S$) terslendiğinde akı yönü ve oklar anında tersine döner.
+2. **Hava Aralığı Manyetik Akı Isı Haritası (Heatmap):**
+   - Mavi ($0.0\,\text{T}$) $\rightarrow$ Yeşil ($0.5\,\text{T}$) $\rightarrow$ Kırmızı ($1.0+\,\text{T}$) analitik renk skalası ve Tesla birimi.
+3. **Rotor Oluklarında 3D Akım İşaretleri ve İletken Akışı:**
+   - 8 oluğun üzerinde ⊙ (Dışarı Akım / Turkuaz / Gözlemciye Doğru / +Z) ve ⊗ (İçeri Akım / Turuncu / Gözlemciden Uzağa / -Z) 3D rozetleri.
+   - İletkenler içinde konvansiyonel akım yönünü temsil eden hareketli parçacık akışı.
+4. **Oluk İnceleme ve Dönüş Yönü Deneyi (Sınav Hazırlık Modülü):**
+   - Öğrenci herhangi bir oluğa tıklayarak akım işaretini değiştirebilir, o iletkene etki eden Lorentz kuvveti $\vec{F}_k = I_k (\vec{l}_k \times \vec{B}_k)$ ve momentin nasıl tersine döndüğünü ve toplam moment ile rotor ivmelenme yönünü canlı inceleyebilir.
+5. **Yavaş Çekim ve Adım Adım Simülasyon:**
+   - Fiziksel motor hızı ($1200\,\text{d/d}$) ile görsel animasyon hızı birbirinden ayrılmıştır.
+   - 7 Görsel Hız Seçeneği: $0.01\times$ (Ultra Yavaş), $0.05\times$, $0.10\times$ (Yavaş), $0.25\times$ (Öğretici), $0.50\times$, $1.0\times$ (Gerçek Zaman), $2.0\times$.
+   - Adım Kontrolleri: Tek Adım ($+0.5^\circ$), $+1^\circ$, $+5^\circ$, $+15^\circ$, $+30^\circ$ ve $+45^\circ$ Komütasyon Adımı.
+   - $0^\circ - 360^\circ$ Mekanik Açı Kaydırıcısı ($\theta_m$) ve Elektriksel Açı ($\theta_e = p\cdot\theta_m$).
+6. **"Bana Açıkla" 8 Adımlı İnteraktif Eğitim Turu:**
+   - Stator Kutupları $\rightarrow$ Manyetik Akı $\rightarrow$ Oluk Akımları $\rightarrow$ Lorentz Kuvveti $\rightarrow$ Teğetsel Moment $\rightarrow$ Toplam Tork $\rightarrow$ Dönüş Yönü $\rightarrow$ Açısal Hız Vektörü zinciri 3D model üzerinde adım adım anlatılır.
+7. **Dönüş Yönü vs Omega Vektörü Ayrımı:**
+   - Rotor çevresindeki dairesel ok fiziksel mekanik dönüş yönünü, mil eksenindeki $\vec{\omega}$ oku ise açısal hız vektörünü gösterir.
 
 ### Temel Yenilikler (v2.0.0):
 1. **3D CAD Motor Laboratuvarı (Three.js WebGL & Raycasting):**

@@ -8,9 +8,9 @@ import shutil
 import zipfile
 
 BASE_DIR = r"R:\Dijital_Arsiv\03_PROJELER_VE_ARGE\06_Ozel_Elektrik_Makinalari_3D_Simulasyon_Platformu"
-ZIP_OUT = os.path.join(BASE_DIR, "Ozel_Elektrik_Makinalari_v2.0.0.zip")
-DESKTOP_ZIP = r"C:\Users\muham\OneDrive\Masaüstü\Ozel_Elektrik_Makinalari_v2.0.0.zip"
-DESKTOP2_ZIP = r"C:\Users\muham\Desktop\Ozel_Elektrik_Makinalari_v2.0.0.zip"
+ZIP_OUT = os.path.join(BASE_DIR, "Ozel_Elektrik_Makinalari_v3.0.0.zip")
+DESKTOP_ZIP = r"C:\Users\muham\OneDrive\Masaüstü\Ozel_Elektrik_Makinalari_v3.0.0.zip"
+DESKTOP2_ZIP = r"C:\Users\muham\Desktop\Ozel_Elektrik_Makinalari_v3.0.0.zip"
 
 EXCLUDE_DIRS = {".git", ".system_generated", "__pycache__"}
 EXCLUDE_EXTS = {".zip"}

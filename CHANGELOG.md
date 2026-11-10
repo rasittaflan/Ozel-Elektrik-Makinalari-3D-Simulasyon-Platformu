@@ -5,6 +5,32 @@ All notable changes to this project are documented in this file.
 
 ---
 
+## [3.0.0] - 2026-11-10
+
+### Added / Eklenenler
+- TR: 3D Stator Manyetik Alanı ve Akı Çizgileri tamamen yeniden modellendi; N kutbundan S kutbuna doğru uzanan 9 adet kalın ışıltılı akı tüpü ve tüpler üzerinde sürekli hareket eden 3D konik yön okları eklendi. Stator kutupları terslendiğinde oklar anında zıt yöne dönmektedir.
+- EN: Completely redesigned 3D Stator Magnetic Flux Lines with 9 luminous tubes bridging North to South poles and animated 3D directional arrowheads flowing along the flux curves. Reversing stator poles immediately inverts flux arrow direction.
+- TR: Hava aralığı manyetik akı yoğunluğu dağılımı ($B$) için mavi (0.0 T) -> yeşil (0.5 T) -> kırmızı (1.0+ T) renk skalasına sahip analitik Isı Haritası (Heatmap) katmanı ve Tesla göstergesi eklendi.
+- EN: Added an analytical air-gap flux density heatmap mesh with a blue (0.0 T) -> green (0.5 T) -> red (1.0+ T) color gradient and Tesla unit scale.
+- TR: Rotorun 8 oluğunun ön yüzeyine ⊙ (Dışarı Akım / Turkuaz) ve ⊗ (İçeri Akım / Turuncu) işaretlerini ve oluk numaralarını gösteren 3D Oluk Rozetleri yerleştirildi. Bakır iletkenler içine konvansiyonel akım yönünü temsil eden hareketli parçacık akışı entegre edildi.
+- EN: Placed 3D Slot Badges on all 8 rotor slots displaying ⊙ (Current Out / Turquoise) and ⊗ (Current In / Orange) symbols with slot numbers. Added animated conductor particle flow representing conventional current circulation.
+- TR: "Oluk İnceleme ve Dönüş Yönü Deneyi" sınav modülü eklendi: Kullanıcı herhangi bir oluğa tıklayarak akım işaretini tersine çevirebilir, o oluktaki Lorentz kuvvetinin nasıl tersine döndüğünü ve 8 oluğun toplam torku ile rotor ivmelenme yönünün nasıl değiştiğini anında inceleyebilir.
+- EN: Added "Slot Inspection & Rotation Direction Experiment" exam preparation module: Users can click any slot to toggle current sign, instantly observing the inverted local Lorentz force and its impact on total torque and acceleration direction.
+- TR: Yavaş Çekim ve Adım Adım Oynatma Motoru geliştirildi: Fiziksel motor hızı (1200 d/d, 125.7 rad/s) ile görsel animasyon hızı birbirinden ayrıldı. 0.01x ile 2x arasında 7 görsel zaman ölçeği, duraklatma, açı kaydırıcısı (0°-360°) ve adım butonları (+0.5°, +1°, +5°, +15°, +30°, +45° komütasyon) eklendi.
+- EN: Developed Slow-Motion & Stepping Playback Engine: Decoupled physical motor speed (1200 RPM, 125.7 rad/s) from visual rendering speed with 7 visual time-scales (0.01x to 2x), pause, 0°-360° mechanical angle scrubber, and incremental stepping buttons (+0.5°, +1°, +5°, +15°, +30°, +45°).
+- TR: "Bana Açıkla" 8 Adımlı İnteraktif Eğitim Turu eklendi: Stator kutupları -> Manyetik akı -> Oluk akımları -> Lorentz kuvveti -> Teğetsel moment -> Toplam tork -> Dönüş yönü -> Açısal hız vektörü zinciri 3D model üzerinde adım adım anlatılmaktadır.
+- EN: Added "Explain to Me" 8-step interactive educational walkthrough explaining stator poles -> magnetic flux -> slot currents -> Lorentz force -> tangential torque -> total torque -> rotation direction -> angular velocity vector on the 3D model.
+- TR: 3D çevresel dairesel mekanik dönüş oku ile mil eksenindeki $\vec{\omega}$ açısal hız vektörünün farkını vurgulayan teknik rozet ve göstergeler eklendi.
+- EN: Added technical badges distinguishing physical mechanical rotation arrow around the rotor from the axial angular velocity vector ($\vec{\omega}$) along the shaft.
+
+### Changed / Değiştirilenler
+- TR: DOM ID haritası optimize edildi; 187 HTML ID'si ile 108 JavaScript referansı arasında %100 tam örtüşme sağlandı (0 eksik ID).
+- EN: Optimized DOM ID bindings, achieving 100% full match between 187 defined HTML IDs and 108 JavaScript references with zero missing bindings.
+- TR: v2.0.0 kararlı sürümü `Ozel_Elektrik_Makinalari_v2.0.0_BACKUP.html` olarak arşivlendi.
+- EN: Archived v2.0.0 stable release as `Ozel_Elektrik_Makinalari_v2.0.0_BACKUP.html`.
+
+---
+
 ## [2.0.0] - 2026-11-10
 
 ### Added / Eklenenler

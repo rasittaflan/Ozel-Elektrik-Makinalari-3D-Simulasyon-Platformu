@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <title>Özel Elektrik Makinaları | Profesyonel 3D Mühendislik Simülasyonu & Aktif Öğrenme Laboratuvarı v2.0.0</title>
+  <title>Özel Elektrik Makinaları | 3D Elektromanyetik Motor Laboratuvarı v3.0.0</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -177,7 +177,7 @@
           <div class="flex items-center space-x-2">
             <span class="text-xs font-bold uppercase tracking-wider text-cyan-400">KTÜ EEE • ÖZEL ELEKTRİK MAKİNALARI</span>
             <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full border border-slate-700">Dr. Hakan Kahveci Notları</span>
-            <span class="text-[10px] bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded-full border border-cyan-800 font-bold">v2.0.0 CAD & ODE</span>
+            <span class="text-[10px] bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded-full border border-cyan-800 font-bold">v3.0.0 3D MANYETİK CAD</span>
           </div>
           <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white flex items-center gap-2">
             3D Mühendislik Simülasyonu & Aktif Öğrenme Laboratuvarı
@@ -260,7 +260,7 @@
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
 
     <!-- ========================================== -->
-    <!-- TAB 1: 3D CAD MOTOR & VEKTÖR LABORATUVARI -->
+    <!-- TAB 1: 3D CAD MOTOR & VEKTÖR LABORATUVARI v3.0 -->
     <!-- ========================================== -->
     <section id="tab-3d-lab" class="tab-content space-y-6">
       <!-- 3D Canvas & Engineering Inspector Layout -->
@@ -272,12 +272,17 @@
           <div class="px-4 py-3 bg-slate-900/95 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 z-10">
             <div class="flex items-center space-x-2">
               <span class="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"></span>
-              <span class="text-xs font-mono font-bold text-white uppercase tracking-wider">3D Endüstriyel Motor & Vektörel İnceleme Sahnesi</span>
-              <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-mono">PBR CAD Modu</span>
+              <span class="text-xs font-mono font-bold text-white uppercase tracking-wider">3D Elektromanyetik CAD Motor Laboratuvarı</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-mono">v3.0.0-PRO</span>
             </div>
 
-            <!-- 10 Engineering Camera View Presets -->
-            <div class="flex items-center space-x-1 text-xs">
+            <!-- View Modes, Explainer & Camera Presets -->
+            <div class="flex items-center space-x-1.5 text-xs">
+              <!-- Bana Açıkla Wizard Button -->
+              <button onclick="startExplainerTour()" class="px-2.5 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/50 font-bold transition flex items-center gap-1.5 shadow-sm" title="Motor Neden Bu Yöne Dönüyor? 8 Adımlı Görsel Anlatım">
+                <i class="fa-solid fa-graduation-cap text-amber-400"></i> Bana Açıkla
+              </button>
+
               <span class="text-slate-400 text-[11px] mr-1 hidden sm:inline">Kamera / Kesit:</span>
               <select id="selectCameraMode" onchange="setCameraPreset(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1 font-mono focus:ring-1 focus:ring-cyan-500">
                 <option value="iso">1. İzometrik CAD</option>
@@ -290,6 +295,8 @@
                 <option value="exploded">8. Parçalanmış Görünüm (Exploded)</option>
                 <option value="transparent">9. Şeffaf Stator (X-Ray)</option>
                 <option value="rotor_isolated">10. Yalnızca Rotor & Sargılar</option>
+                <option value="field_focus">11. Manyetik Alan Odaklı</option>
+                <option value="force_focus">12. Kuvvet & Moment Odaklı</option>
               </select>
               <button onclick="resetCameraView()" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 transition" title="Kamerayı Sıfırla"><i class="fa-solid fa-arrows-rotate"></i></button>
               <button onclick="toggle3DFullscreen()" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Tam Ekran 3D Görünüm"><i class="fa-solid fa-expand"></i></button>
@@ -297,13 +304,13 @@
           </div>
 
           <!-- 3D Canvas Container -->
-          <div class="relative w-full h-[580px] bg-slate-950 flex items-center justify-center overflow-hidden" id="canvas3dContainer">
+          <div class="relative w-full h-[600px] bg-slate-950 flex items-center justify-center overflow-hidden select-none" id="canvas3dContainer">
             <canvas id="motor3dCanvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
 
             <!-- Floating Vector HUD in Top-Left -->
-            <div class="absolute top-4 left-4 p-3.5 rounded-xl bg-slate-900/90 backdrop-blur-md border border-slate-800 text-xs font-mono space-y-1.5 shadow-2xl pointer-events-none select-none max-w-[240px]">
+            <div class="absolute top-4 left-4 p-3.5 rounded-xl bg-slate-900/90 backdrop-blur-md border border-slate-800 text-xs font-mono space-y-1.5 shadow-2xl pointer-events-none select-none max-w-[260px]">
               <div class="font-bold text-slate-200 text-[11px] uppercase tracking-wider mb-1 flex items-center gap-1.5 border-b border-slate-800 pb-1">
-                <i class="fa-solid fa-layer-group text-cyan-400"></i> Elektromanyetik Vektörler
+                <i class="fa-solid fa-layer-group text-cyan-400"></i> Canlı Vektörel Telemetri
               </div>
               <div class="flex items-center space-x-2">
                 <span class="w-3 h-3 rounded-full bg-cyan-400 inline-block shadow-sm shadow-cyan-400"></span>
@@ -319,11 +326,68 @@
               </div>
               <div class="flex items-center space-x-2">
                 <span class="w-3 h-3 rounded-full bg-pink-500 inline-block shadow-sm shadow-pink-500"></span>
-                <span class="text-slate-300">Toplam Moment ($T_e$): <strong id="hudTorque" class="text-pink-400">0.38 N·m</strong></span>
+                <span class="text-slate-300">Elektromanyetik Moment ($T_e$): <strong id="hudTorque" class="text-pink-400">0.38 N·m</strong></span>
               </div>
               <div class="flex items-center space-x-2">
                 <span class="w-3 h-3 rounded-full bg-indigo-400 inline-block shadow-sm shadow-indigo-400"></span>
                 <span class="text-slate-300">Açısal Hız ($\vec{\omega}$): <strong id="hudOmega" class="text-indigo-400">125.7 rad/s</strong></span>
+              </div>
+              <div class="flex items-center space-x-2 pt-1 border-t border-slate-800">
+                <i class="fa-solid fa-rotate text-cyan-400 text-xs"></i>
+                <span class="text-slate-300">Dönüş Yönü: <strong id="hudDirectionText" class="text-emerald-400">Saat Yönü (CW)</strong></span>
+              </div>
+            </div>
+
+            <!-- Difference Distinction Badge in Top-Center -->
+            <div class="absolute top-4 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-full bg-slate-900/90 backdrop-blur-md border border-slate-700/80 text-[11px] font-mono text-slate-300 shadow-xl pointer-events-none hidden md:flex items-center gap-2 max-w-xl">
+              <i class="fa-solid fa-circle-info text-cyan-400"></i>
+              <span><strong>Mekanik Dönüş vs $\vec{\omega}$:</strong> Çevresel dairesel ok dönüş yönünü; mil eksenindeki ok açısal hız vektörünü gösterir.</span>
+            </div>
+
+            <!-- Heatmap Color Scale Legend (Bottom-Left) -->
+            <div id="heatmapLegendBox" class="absolute bottom-14 left-4 p-2.5 rounded-xl bg-slate-900/90 backdrop-blur-md border border-slate-800 text-[10px] font-mono shadow-2xl pointer-events-none select-none hidden max-w-[210px]">
+              <div class="font-bold text-slate-200 mb-1 flex items-center gap-1">
+                <i class="fa-solid fa-fire-flame-curved text-rose-400"></i> Hava Aralığı Akı Dağılımı ($B$)
+              </div>
+              <div class="w-full h-3 rounded-sm bg-gradient-to-r from-blue-600 via-green-500 via-yellow-400 to-red-600 mb-1"></div>
+              <div class="flex justify-between text-slate-400 font-mono">
+                <span>0.0 T (Mavi)</span>
+                <span>0.6 T</span>
+                <span>1.2 T (Kırmızı)</span>
+              </div>
+              <div class="text-[9px] text-slate-400 mt-1 border-t border-slate-800 pt-0.5">Analitik modeldir, FEM analizi değildir.</div>
+            </div>
+
+            <!-- Step-by-Step "Bana Açıkla" Educational Modal -->
+            <div id="explainerOverlay" class="absolute inset-x-6 top-16 p-5 rounded-2xl bg-slate-900/95 backdrop-blur-xl border border-cyan-500/60 shadow-2xl z-30 hidden space-y-3 max-w-2xl mx-auto transition-all">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-bold text-xs" id="explainerStepBadge">Adım 1/8</span>
+                  <h4 class="font-bold text-white text-sm" id="explainerStepTitle">Stator Manyetik Kutupları</h4>
+                </div>
+                <button onclick="closeExplainerTour()" class="text-slate-400 hover:text-white text-sm"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+
+              <!-- Step Content -->
+              <p class="text-xs text-slate-200 leading-relaxed font-sans" id="explainerStepContent">
+                Stator üzerindeki sargılardan akım geçtiğinde elektro-mıknatıs kutupları (N ve S) oluşur. Manyetik akı çizgileri daima Kuzey (N) kutbundan çıkıp Güney (S) kutbuna doğru akar.
+              </p>
+
+              <div class="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-[11px] font-mono text-cyan-300" id="explainerStepFormula">
+                $$\vec{B} = B_{max} (-\hat{j})\quad (\text{Yukarıdan Aşağıya Do\u011fru})$$
+              </div>
+
+              <!-- Step Stepper Controls -->
+              <div class="flex items-center justify-between pt-1">
+                <button onclick="prevExplainerStep()" id="btnExplainerPrev" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono transition">
+                  <i class="fa-solid fa-chevron-left mr-1"></i> Önceki
+                </button>
+                <div class="flex space-x-1" id="explainerStepDots">
+                  <!-- Generated dots -->
+                </div>
+                <button onclick="nextExplainerStep()" id="btnExplainerNext" class="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold font-mono transition shadow-md shadow-cyan-600/30">
+                  Sonraki <i class="fa-solid fa-chevron-right ml-1"></i>
+                </button>
               </div>
             </div>
 
@@ -347,11 +411,14 @@
               </div>
             </div>
 
+            <!-- Hover Tooltip -->
+            <div id="partTooltip" class="absolute pointer-events-none p-2 rounded-lg bg-slate-900/95 border border-cyan-500/50 text-white text-xs font-mono shadow-xl hidden z-30"></div>
+
             <!-- Viewport Bottom Status Bar -->
             <div class="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-mono text-slate-400 bg-slate-900/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-800 pointer-events-none">
               <div class="flex items-center space-x-2">
                 <i class="fa-solid fa-hand-pointer text-cyan-400"></i>
-                <span>Parçaya Tıkla: Teknik İnceleme • Sol Tık: Döndür • Sağ Tık: Kaydır • Tekerlek: Zoom</span>
+                <span>Parçaya Tıkla: Detaylı İncele • Sol Tık: Döndür • Sağ Tık: Kaydır • Tekerlek: Zoom</span>
               </div>
               <div class="flex items-center space-x-4">
                 <span>Rotor Mekanik Açı: <strong id="hudRotorAngle" class="text-white">0.0°</strong></span>
@@ -359,95 +426,224 @@
               </div>
             </div>
           </div>
+
+          <!-- Bottom Control Bar: Slow Motion, Stepping & Manual Scrubber -->
+          <div class="p-4 bg-slate-900/90 border-t border-slate-800 space-y-3 font-mono text-xs">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <!-- Play / Pause / Reset -->
+              <div class="flex items-center space-x-2">
+                <button id="btnPlayPause3D" onclick="toggleMotorPlay()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition flex items-center gap-1.5 shadow-md shadow-emerald-600/30">
+                  <i class="fa-solid fa-pause"></i> <span id="btnPlayPauseText">Duraklat</span>
+                </button>
+                <button onclick="resetDynamicMotor()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Rotor Açısını ve Hızını Sıfırla">
+                  <i class="fa-solid fa-rotate-left"></i> Sıfırla
+                </button>
+              </div>
+
+              <!-- Visual Slow Motion Presets -->
+              <div class="flex items-center space-x-1.5">
+                <span class="text-slate-400 text-[11px]">Görsel Hız:</span>
+                <select id="selectTimeScale" onchange="setTimeScale(this.value)" class="bg-slate-800 border border-slate-700 text-cyan-300 text-xs rounded-lg px-2.5 py-1 font-bold focus:ring-1 focus:ring-cyan-500">
+                  <option value="0.01">0.01× (Ultra Yavaş)</option>
+                  <option value="0.05">0.05× (Çok Yavaş)</option>
+                  <option value="0.10" selected>0.10× (Yavaş - Önerilen)</option>
+                  <option value="0.25">0.25× (Öğretici Hız)</option>
+                  <option value="0.50">0.50× (Yarım Hız)</option>
+                  <option value="1.00">1.00× (Gerçek Zaman)</option>
+                  <option value="2.00">2.00× (Hızlandırılmış)</option>
+                </select>
+              </div>
+
+              <!-- Angle Stepping Buttons -->
+              <div class="flex items-center space-x-1">
+                <span class="text-slate-400 text-[11px] mr-1 hidden sm:inline">Manuel Adım:</span>
+                <button onclick="stepRotorAngle(0.5)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="+0.5° İlerle">+0.5°</button>
+                <button onclick="stepRotorAngle(1.0)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="+1° İlerle">+1°</button>
+                <button onclick="stepRotorAngle(5.0)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="+5° İlerle">+5°</button>
+                <button onclick="stepRotorAngle(15.0)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="+15° İlerle">+15°</button>
+                <button onclick="stepRotorAngle(45.0)" class="px-2 py-1 rounded bg-cyan-900/60 hover:bg-cyan-800 text-cyan-300 border border-cyan-700 font-bold transition" title="1 Komütasyon Dilimi (+45°)">+45° (Komütasyon)</button>
+              </div>
+            </div>
+
+            <!-- Manual Mechanical Angle Scrubber -->
+            <div class="space-y-1">
+              <div class="flex justify-between items-center text-[11px]">
+                <span class="text-slate-400">Rotor Mekanik Konum Kaydırıcısı ($\theta_m$):</span>
+                <span class="font-bold text-white"><span id="sliderAngleLabel">0.0</span>° <span class="text-cyan-400 text-[10px]">($\theta_e = p\cdot\theta_m$)</span></span>
+              </div>
+              <input type="range" id="sliderRotorAngle" min="0" max="360" step="0.5" value="0" oninput="onManualRotorAngleInput(this.value)" class="w-full">
+            </div>
+
+            <!-- Decoupled Physics Note -->
+            <div class="text-[10px] text-slate-400 flex items-center justify-between border-t border-slate-800/80 pt-1.5">
+              <span><i class="fa-solid fa-gauge-high text-cyan-400 mr-1"></i> Fiziksel Motor Hızı: <strong id="footerPhysSpeed" class="text-cyan-300">1200 d/d (125.7 rad/s)</strong></span>
+              <span class="text-slate-400">Görsel yavaşlatma durum denklemlerinin çözümünü etkilemez.</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Right: 3D Motor Engineering Controls & ODE State (Span 1) -->
+        <!-- Right Column: Interactive Exam Module & Controls (Span 1) -->
         <div class="space-y-4">
-          <!-- Main Drive Card -->
-          <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
-              <i class="fa-solid fa-sliders text-cyan-400"></i> Dinamik Sürüş & Gerilim
-            </h3>
+          <!-- CARD 1: OLUK İNCELEME VE DÖNÜŞ YÖNÜ DENEYİ (User Requested Feature & Attachment) -->
+          <div class="glass-card rounded-2xl p-4 border-cyan-800/80 space-y-3 relative overflow-hidden shadow-xl">
+            <div class="absolute -top-6 -right-6 w-20 h-20 bg-cyan-500/10 rounded-full blur-xl pointer-events-none"></div>
 
-            <!-- Run / Pause / Step Controls -->
-            <div class="grid grid-cols-3 gap-2">
-              <button id="btnMotorPlay" onclick="toggleMotorPlay()" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-1.5 transition">
-                <i class="fa-solid fa-play"></i> <span id="btnMotorPlayText">Durdur</span>
-              </button>
-              <button onclick="stepCommutationSingle()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 font-semibold text-xs flex items-center justify-center gap-1 transition" title="1 Oluk Komütasyonu İlerle (+45°)">
-                <i class="fa-solid fa-forward-step"></i> Adım
-              </button>
-              <button onclick="resetDynamicMotor()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold text-xs flex items-center justify-center gap-1 transition" title="Tüm Dinamik Durumu Sıfırla">
-                <i class="fa-solid fa-rotate-left"></i> Sıfırla
-              </button>
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-graduation-cap text-amber-400"></i> Oluk İnceleme & Dönüş Yönü
+              </h3>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-mono">Sınav Deneyi</span>
             </div>
 
-            <!-- Terminal Voltage Slider (Va) with Quick Polarity Switches -->
-            <div class="space-y-1.5">
-              <div class="flex justify-between text-xs">
-                <span class="text-slate-300 font-semibold">Uç Gerilimi ($V_a$):</span>
-                <span id="labelVa" class="font-mono font-bold text-yellow-400">120 V</span>
+            <p class="text-[11px] text-slate-300 leading-snug">
+              Öğrenci bir oluğa tıklayarak akım işaretini değiştirsin ve o iletkene etki eden kuvvet ile toplam momentin nasıl değiştiğini anında görsün.
+            </p>
+
+            <!-- Convention Badges (As in User Attachment) -->
+            <div class="grid grid-cols-2 gap-2 text-center text-[10px] font-mono py-1">
+              <div class="p-2 rounded-xl bg-slate-900 border border-cyan-700/60 flex flex-col items-center">
+                <span class="text-cyan-400 text-sm font-black mb-0.5">⊙</span>
+                <span class="text-white font-bold">Dışarı Akım</span>
+                <span class="text-slate-400 text-[9px]">Gözlemciye doğru (+Z)</span>
               </div>
-              <input type="range" id="sliderVa" min="-240" max="240" step="5" value="120" oninput="setArmatureVoltage(this.value)" class="w-full">
-              <div class="grid grid-cols-3 gap-1.5 text-[10px] font-mono pt-1">
-                <button onclick="setArmatureVoltage(-120)" class="py-1 rounded bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 transition">-120 V (Ters)</button>
-                <button onclick="setArmatureVoltage(0)" class="py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">0 V (Boşta)</button>
-                <button onclick="setArmatureVoltage(120)" class="py-1 rounded bg-cyan-900/60 hover:bg-cyan-900 text-cyan-300 border border-cyan-700 transition">+120 V (Düz)</button>
+              <div class="p-2 rounded-xl bg-slate-900 border border-amber-700/60 flex flex-col items-center">
+                <span class="text-amber-400 text-sm font-black mb-0.5">⊗</span>
+                <span class="text-white font-bold">İçeri Akım</span>
+                <span class="text-slate-400 text-[9px]">Gözlemciden uzağa (-Z)</span>
               </div>
             </div>
 
-            <!-- Load Torque Slider (TL) -->
-            <div class="space-y-1.5 pt-2 border-t border-slate-800">
-              <div class="flex justify-between text-xs">
-                <span class="text-slate-300 font-semibold">Yük Momenti ($T_L$):</span>
-                <span id="labelTL" class="font-mono font-bold text-rose-400">0.20 N·m</span>
+            <!-- 8 Rotor Slot Interactive Buttons Matrix -->
+            <div class="space-y-1 pt-1">
+              <div class="text-[10px] text-slate-400 font-mono flex justify-between">
+                <span>Oluklar (Tıkla & Yönü Değiştir):</span>
+                <span>$\vec{F}_k$ & $T_k$</span>
               </div>
-              <input type="range" id="sliderTL" min="0.0" max="1.5" step="0.05" value="0.20" oninput="setLoadTorque(this.value)" class="w-full">
-              <div class="flex justify-between items-center text-[11px] pt-0.5">
-                <button id="btnToggleLoad" onclick="toggleInstantLoad()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-300 font-bold transition">
-                  <i class="fa-solid fa-weight-scale"></i> Ani Yük Uygula (+0.5 Nm)
+              <div class="grid grid-cols-4 gap-1.5 font-mono text-[11px]" id="slotButtonGrid">
+                <!-- 8 Buttons will be injected or bound -->
+                <button onclick="toggleSlotCurrentSign(0)" id="btnSlot0" class="p-1.5 rounded-lg bg-slate-900 border border-cyan-700/70 hover:border-cyan-400 text-center transition">
+                  <div class="text-[9px] text-slate-400">Oluk 1</div>
+                  <div class="font-bold text-cyan-400 text-xs">⊙</div>
+                </button>
+                <button onclick="toggleSlotCurrentSign(1)" id="btnSlot1" class="p-1.5 rounded-lg bg-slate-900 border border-cyan-700/70 hover:border-cyan-400 text-center transition">
+                  <div class="text-[9px] text-slate-400">Oluk 2</div>
+                  <div class="font-bold text-cyan-400 text-xs">⊙</div>
+                </button>
+                <button onclick="toggleSlotCurrentSign(2)" id="btnSlot2" class="p-1.5 rounded-lg bg-slate-900 border border-cyan-700/70 hover:border-cyan-400 text-center transition">
+                  <div class="text-[9px] text-slate-400">Oluk 3</div>
+                  <div class="font-bold text-cyan-400 text-xs">⊙</div>
+                </button>
+                <button onclick="toggleSlotCurrentSign(3)" id="btnSlot3" class="p-1.5 rounded-lg bg-slate-900 border border-cyan-700/70 hover:border-cyan-400 text-center transition">
+                  <div class="text-[9px] text-slate-400">Oluk 4</div>
+                  <div class="font-bold text-cyan-400 text-xs">⊙</div>
+                </button>
+                <button onclick="toggleSlotCurrentSign(4)" id="btnSlot4" class="p-1.5 rounded-lg bg-slate-900 border border-amber-700/70 hover:border-amber-400 text-center transition">
+                  <div class="text-[9px] text-slate-400">Oluk 5</div>
+                  <div class="font-bold text-amber-400 text-xs">⊗</div>
+                </button>
+                <button onclick="toggleSlotCurrentSign(5)" id="btnSlot5" class="p-1.5 rounded-lg bg-slate-900 border border-amber-700/70 hover:border-amber-400 text-center transition">
+                  <div class="text-[9px] text-slate-400">Oluk 6</div>
+                  <div class="font-bold text-amber-400 text-xs">⊗</div>
+                </button>
+                <button onclick="toggleSlotCurrentSign(6)" id="btnSlot6" class="p-1.5 rounded-lg bg-slate-900 border border-amber-700/70 hover:border-amber-400 text-center transition">
+                  <div class="text-[9px] text-slate-400">Oluk 7</div>
+                  <div class="font-bold text-amber-400 text-xs">⊗</div>
+                </button>
+                <button onclick="toggleSlotCurrentSign(7)" id="btnSlot7" class="p-1.5 rounded-lg bg-slate-900 border border-amber-700/70 hover:border-amber-400 text-center transition">
+                  <div class="text-[9px] text-slate-400">Oluk 8</div>
+                  <div class="font-bold text-amber-400 text-xs">⊗</div>
                 </button>
               </div>
             </div>
 
-            <!-- Stator Magnetic Flux (B) -->
-            <div class="space-y-1 pt-1">
-              <div class="flex justify-between text-xs">
-                <span class="text-slate-400">Kutup Akısı ($B_{max}$):</span>
-                <span id="labelFlux" class="font-mono font-bold text-cyan-400">0.85 T</span>
+            <!-- Dynamic Exam Calculation Summary -->
+            <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] font-mono space-y-1">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Toplam Moment ($T_e$):</span>
+                <span id="slotExpTorque" class="font-bold text-pink-400">+0.38 N·m</span>
+              </div>
+              <div class="flex justify-between items-center border-t border-slate-800/80 pt-1">
+                <span class="text-slate-400">İvmelenme Yönü:</span>
+                <span id="slotExpDirection" class="font-bold text-emerald-400">Saat Yönü (CW)</span>
+              </div>
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="grid grid-cols-2 gap-1.5 text-[10px] font-mono pt-1">
+              <button onclick="resetAllSlotsToDefault()" class="py-1 px-2 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 transition">Varsayılan Akım</button>
+              <button onclick="invertStatorPoles3D()" class="py-1 px-2 rounded bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 transition">Kutupları Çevir (N↔S)</button>
+            </div>
+          </div>
+
+          <!-- CARD 2: DİNAMİK SÜRÜŞ & ELEKTRİKSEL GERİLİM -->
+          <div class="glass-card rounded-2xl p-4 border-slate-800 space-y-3 font-mono text-xs">
+            <h3 class="font-bold text-white uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-800 pb-2">
+              <i class="fa-solid fa-bolt text-yellow-400"></i> Elektriksel & Mekanik Sürüş
+            </h3>
+
+            <!-- Terminal Voltage Slider (Va) -->
+            <div class="space-y-1">
+              <div class="flex justify-between">
+                <span class="text-slate-300">Uç Gerilimi ($V_a$):</span>
+                <span id="labelVa" class="font-bold text-yellow-400">120 V</span>
+              </div>
+              <input type="range" id="sliderVa" min="-240" max="240" step="5" value="120" oninput="setArmatureVoltage(this.value)" class="w-full">
+            </div>
+
+            <!-- Load Torque Slider (TL) -->
+            <div class="space-y-1 pt-1 border-t border-slate-800">
+              <div class="flex justify-between">
+                <span class="text-slate-300">Yük Momenti ($T_L$):</span>
+                <span id="labelTL" class="font-bold text-rose-400">0.20 N·m</span>
+              </div>
+              <input type="range" id="sliderTL" min="0.0" max="1.5" step="0.05" value="0.20" oninput="setLoadTorque(this.value)" class="w-full">
+              <button id="btnToggleLoad" onclick="toggleInstantLoad()" class="w-full mt-1 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-300 font-bold transition">
+                <i class="fa-solid fa-weight-scale mr-1"></i> Ani Yük Darbesi (+0.5 Nm)
+              </button>
+            </div>
+
+            <!-- Stator Magnetic Flux Slider (B) -->
+            <div class="space-y-1 pt-1 border-t border-slate-800">
+              <div class="flex justify-between">
+                <span class="text-slate-300">Stator Akısı ($B_{max}$):</span>
+                <span id="labelFlux" class="font-bold text-cyan-400">0.85 T</span>
               </div>
               <input type="range" id="sliderFlux" min="0.1" max="1.8" step="0.05" value="0.85" oninput="setFieldFlux(this.value)" class="w-full">
             </div>
 
             <!-- Exploded View Slider -->
-            <div class="space-y-1 pt-2 border-t border-slate-800">
-              <div class="flex justify-between text-xs">
-                <span class="text-slate-400 flex items-center gap-1">
-                  <i class="fa-solid fa-arrows-split-up-and-left text-rose-400"></i> Parçalanmış Görünüm:
+            <div class="space-y-1 pt-1 border-t border-slate-800">
+              <div class="flex justify-between">
+                <span class="text-slate-300 flex items-center gap-1">
+                  <i class="fa-solid fa-arrows-split-up-and-left text-rose-400"></i> Parçalanmış CAD:
                 </span>
-                <span id="labelExplode" class="font-mono font-bold text-rose-400">0%</span>
+                <span id="labelExplode" class="font-bold text-rose-400">0%</span>
               </div>
               <input type="range" id="sliderExplode" min="0" max="100" step="1" value="0" oninput="updateExplodedView(this.value)" class="w-full">
             </div>
           </div>
 
-          <!-- Display & Vector Layers Filter Card -->
-          <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-3">
-            <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
-              <i class="fa-solid fa-eye text-indigo-400"></i> Fiziksel Vektör Katmanları
+          <!-- CARD 3: ELEKTROMANYETİK VEKTÖR KATMANLARI -->
+          <div class="glass-card rounded-2xl p-4 border-slate-800 space-y-2.5">
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-800 pb-2">
+              <i class="fa-solid fa-eye text-indigo-400"></i> 3D Vektörel Görselleştirme
             </h3>
             <div class="space-y-2 text-xs">
               <label class="flex items-center space-x-2 cursor-pointer">
                 <input type="checkbox" id="chkShowField" checked onchange="toggleVectorLayer('field', this.checked)" class="rounded bg-slate-800 border-slate-700 text-cyan-500 focus:ring-0">
-                <span class="text-slate-300">Stator Manyetik Alanı ($\vec{B}$)</span>
+                <span class="text-slate-300">Stator Manyetik Akı Çizgileri ($\vec{B}$)</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkShowHeatmap" onchange="toggleVectorLayer('heatmap', this.checked)" class="rounded bg-slate-800 border-slate-700 text-rose-500 focus:ring-0">
+                <span class="text-slate-300">Hava Aralığı Akı Yoğunluk Haritası (Isı Haritası)</span>
               </label>
               <label class="flex items-center space-x-2 cursor-pointer">
                 <input type="checkbox" id="chkShowCurrent" checked onchange="toggleVectorLayer('current', this.checked)" class="rounded bg-slate-800 border-slate-700 text-yellow-500 focus:ring-0">
-                <span class="text-slate-300">İletken Akım Okları ($\vec{I}$)</span>
+                <span class="text-slate-300">Rotor Oluk Akımları (⊙/⊗ İşaretleri)</span>
               </label>
               <label class="flex items-center space-x-2 cursor-pointer">
-                <input type="checkbox" id="chkShowSelfField" checked onchange="toggleVectorLayer('selfField', this.checked)" class="rounded bg-slate-800 border-slate-700 text-amber-500 focus:ring-0">
-                <span class="text-slate-300">İletken Öz Manyetik Alanı (Biot-Savart)</span>
+                <input type="checkbox" id="chkShowCurrentFlow" checked onchange="toggleVectorLayer('currentFlow', this.checked)" class="rounded bg-slate-800 border-slate-700 text-amber-400 focus:ring-0">
+                <span class="text-slate-300">İletken Parçacık Akışı (Akım Dolanımı)</span>
               </label>
               <label class="flex items-center space-x-2 cursor-pointer">
                 <input type="checkbox" id="chkShowForce" checked onchange="toggleVectorLayer('force', this.checked)" class="rounded bg-slate-800 border-slate-700 text-emerald-500 focus:ring-0">
@@ -455,11 +651,15 @@
               </label>
               <label class="flex items-center space-x-2 cursor-pointer">
                 <input type="checkbox" id="chkShowTorque" checked onchange="toggleVectorLayer('torque', this.checked)" class="rounded bg-slate-800 border-slate-700 text-pink-500 focus:ring-0">
-                <span class="text-slate-300">Elektromanyetik Moment ($\vec{T}$)</span>
+                <span class="text-slate-300">Dairesel Mekanik Dönüş Yönü Oku</span>
               </label>
               <label class="flex items-center space-x-2 cursor-pointer">
                 <input type="checkbox" id="chkShowOmega" checked onchange="toggleVectorLayer('omega', this.checked)" class="rounded bg-slate-800 border-slate-700 text-indigo-500 focus:ring-0">
-                <span class="text-slate-300">Açısal Hız Vektörü ($\vec{\omega}$)</span>
+                <span class="text-slate-300">Mil Açısal Hız Vektörü ($\vec{\omega}$)</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkShowLabels" checked onchange="toggleVectorLayer('labels', this.checked)" class="rounded bg-slate-800 border-slate-700 text-teal-400 focus:ring-0">
+                <span class="text-slate-300">3D Teknik Parça Etiketleri</span>
               </label>
             </div>
           </div>
@@ -592,13 +792,19 @@
         
         <!-- Left: Dual Right-Hand Rule Tutorial (Mode A vs Mode B) -->
         <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
-          <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
-            <i class="fa-solid fa-hand text-cyan-400"></i> İki Ayrı Sağ El Kuralı Öğrenme Modu
-          </h3>
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-hand text-cyan-400"></i> İki Ayrı Sağ El Kuralı Öğrenme Modu
+            </h3>
+            <div class="flex space-x-1 font-mono text-xs">
+              <button id="btnRHRModeA" onclick="setRHRMode('A')" class="px-2.5 py-1 rounded bg-cyan-900 border border-cyan-500 text-cyan-200 font-bold">Mod A</button>
+              <button id="btnRHRModeB" onclick="setRHRMode('B')" class="px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-slate-400 font-bold">Mod B</button>
+            </div>
+          </div>
 
           <div class="space-y-3 text-xs sm:text-sm">
             <!-- Mode A -->
-            <div class="p-4 rounded-xl bg-slate-900/80 border border-cyan-900/50 space-y-1.5">
+            <div id="rhrExplA" class="p-4 rounded-xl bg-slate-900/80 border border-cyan-900/50 space-y-1.5">
               <div class="font-bold text-cyan-300 flex items-center gap-2">
                 <span class="w-5 h-5 rounded-full bg-cyan-950 border border-cyan-700 flex items-center justify-center text-[10px]">A</span>
                 Mod A — Akımın Oluşturduğu Öz Manyetik Alan (Biot-Savart / Ampere):
@@ -613,7 +819,7 @@
             </div>
 
             <!-- Mode B -->
-            <div class="p-4 rounded-xl bg-slate-900/80 border border-indigo-900/50 space-y-1.5">
+            <div id="rhrExplB" class="p-4 rounded-xl bg-slate-900/80 border border-indigo-900/50 space-y-1.5">
               <div class="font-bold text-indigo-300 flex items-center gap-2">
                 <span class="w-5 h-5 rounded-full bg-indigo-950 border border-indigo-700 flex items-center justify-center text-[10px]">B</span>
                 Mod B — Açısal Hız Vektörü ($\vec{\omega}$) ve Dönüş Yönü:
@@ -1835,7 +2041,7 @@
   </footer>
 
   <!-- ======================================================= -->
-  <!-- JAVASCRIPT SIMULATION LOGIC & THREE.JS ENGINE v2.0.0 -->
+  <!-- JAVASCRIPT SIMULATION LOGIC & THREE.JS ENGINE v3.0.0 -->
   <!-- ======================================================= -->
   <script>
     // --- GLOBAL SIMULATION STATE & PHYSICAL CONSTANTS ---
@@ -1845,11 +2051,11 @@
       // Dynamic Motor Electrical & Mechanical State (ODE System)
       dyna: {
         Va: 120.0,       // Armature terminal voltage [V]
-        ia: 0.0,         // Armature current [A] (State Variable 1)
-        omega: 0.0,      // Rotor angular velocity [rad/s] (State Variable 2)
-        theta: 0.0,      // Rotor mechanical angle [rad]
-        Ea: 0.0,         // Induced Back-EMF [V]
-        Te: 0.0,         // Electromagnetic torque [N·m]
+        ia: 4.82,        // Armature current [A] (State Variable 1)
+        omega: 125.7,    // Rotor angular velocity [rad/s] (State Variable 2)
+        theta: 0.0,      // Physical mechanical angle [rad]
+        Ea: 85.4,        // Induced Back-EMF [V]
+        Te: 0.38,        // Electromagnetic torque [N·m]
         TL: 0.20,        // Load torque [N·m]
         // Physical Motor Parameters
         Ra: 1.50,        // Armature resistance [Ohms]
@@ -1865,18 +2071,35 @@
       },
       
       isRunning: true,
+      isPaused: false,
+      timeScale: 0.10,   // Visual slow-motion time factor (0.01 to 2.0)
+      visualTheta: 0.0,  // Visual mechanical angle [rad]
+      northTop: true,    // True: North on top (+Y), South on bottom (-Y)
       cameraMode: 'iso',
       explodedRatio: 0.0,
       isolatedPart: null,
       
+      // Slot current signs for the 8 rotor slots: +1 = ⊙ (Out of page / +Z), -1 = ⊗ (Into page / -Z)
+      // Standard initial distribution: Top half [0..3] = ⊙, Bottom half [4..7] = ⊗
+      slotCurrents: [1, 1, 1, 1, -1, -1, -1, -1],
+
       // Vector layer toggles
       showVectors: {
         field: true,
+        heatmap: false,
         current: true,
-        selfField: true,
+        currentFlow: true,
         force: true,
         torque: true,
-        omega: true
+        omega: true,
+        labels: true
+      },
+
+      // Explainer interactive tour
+      explainer: {
+        active: false,
+        step: 0,
+        totalSteps: 8
       },
 
       // Digital Twin 2D Lab state
@@ -1994,70 +2217,22 @@
       },
       'hall_pcb': {
         name: '120° Hall Etkisi Sensör Kartı',
-        material: 'FR4 PCB, 3x Bipolar Hall IC Entegresi',
-        role: 'Rotor mıknatıs kutup konumunu algılayarak elektronik komütasyon sağlar.',
-        page: 'Dr. Hakan Kahveci Notları: Sayfa 10-22 (BLDC)',
-        formula: 'V_H = (R_H / d) · I · B [Volt]'
+        material: 'FR4 Çift Yüzlü PCB, GaAs Hall Sensör Entegreleri',
+        role: 'Rotorun manyetik kutup açısını algılayarak elektronik komütasyon zamanlamasını belirler.',
+        page: 'Dr. Hakan Kahveci Notları: Sayfa 50-54',
+        formula: 'V_H = (I_c · B) / (q · n · d)'
       }
     };
 
-    // --- TAB SWITCHING LOGIC WITH AUTO KATEX RENDERING ---
-    function switchTab(tabId) {
-      state.activeTab = tabId;
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-
-      const target = document.getElementById(tabId);
-      if (target) target.classList.remove('hidden');
-
-      const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
-      if (activeBtn) activeBtn.classList.add('active');
-
-      // Specific tab resize/render calls
-      if (tabId === 'tab-3d-lab') {
-        onWindowResize3D();
-      } else if (tabId === 'tab-direction-lab') {
-        drawDigitalTwinCanvas();
-      } else if (tabId === 'tab-circuits') {
-        drawHBridgeCanvas();
-        drawUniversalCircuitCanvas();
-      } else if (tabId === 'tab-bldc') {
-        drawBldcBridgeCanvas();
-        drawBldcOscilloscope();
-      } else if (tabId === 'tab-universal') {
-        calculateUniversalMotor();
-      } else if (tabId === 'tab-servo') {
-        drawEncoderCanvas();
-        drawResolverCanvas();
-      } else if (tabId === 'tab-stepper') {
-        calculateStepper();
-      }
-
-      renderKaTeX();
-    }
-
-    function renderKaTeX() {
-      if (window.renderMathInElement) {
-        try {
-          renderMathInElement(document.body, {
-            delimiters: [
-              { left: '$$', right: '$$', display: true },
-              { left: '$', right: '$', display: false }
-            ],
-            throwOnError: false
-          });
-        } catch (e) {
-          console.warn('KaTeX render warning:', e);
-        }
-      }
-    }
-
     // =========================================================================
-    // THREE.JS HIGH-END 3D MOTOR WORKSTATION ENGINE
+    // THREE.JS 3D MOTOR WORKSTATION ENGINE v3.0
     // =========================================================================
     let scene3d, camera3d, renderer3d, controls3d;
     let motorAssemblyGroup, statorMeshGroup, poleGroup, rotorMeshGroup, windingsMeshGroup, commMeshGroup, brushMeshGroup, hallMeshGroup, shaftMeshGroup;
-    let vectorArrowGroup, fluxTubesGroup, selfFieldRingsGroup;
+    let vectorArrowGroup, fluxTubesGroup, airgapHeatmapMesh, slotBadgesGroup, conductorParticlesGroup, forceArrowsGroup, rotationRingMesh, omegaVectorArrow, labels3DGroup;
+    let poleNMesh, poleSMesh;
+    let fluxCurveList = [], fluxArrowCones = [];
+    let slotBadges = [], forceArrowHelpers = [], slotParticleList = [];
     let raycaster, mouse;
     let hoveredMesh = null, selectedMesh = null;
 
@@ -2068,11 +2243,11 @@
 
       // 1. Scene setup
       scene3d = new THREE.Scene();
-      scene3d.background = new THREE.Color(0x050b14);
+      scene3d.background = new THREE.Color(0x040812);
 
-      // 2. Camera setup
-      camera3d = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.05, 50);
-      camera3d.position.set(0.32, 0.24, 0.38);
+      // 2. Camera setup - Positioned perfectly for optimal scale
+      camera3d = new THREE.PerspectiveCamera(42, container.clientWidth / container.clientHeight, 0.05, 50);
+      camera3d.position.set(0.28, 0.20, 0.32);
 
       // 3. Renderer with High PBR Quality
       renderer3d = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -2085,26 +2260,30 @@
       controls3d = new THREE.OrbitControls(camera3d, renderer3d.domElement);
       controls3d.enableDamping = true;
       controls3d.dampingFactor = 0.05;
-      controls3d.minDistance = 0.12;
-      controls3d.maxDistance = 1.8;
+      controls3d.minDistance = 0.10;
+      controls3d.maxDistance = 1.5;
       controls3d.target.set(0, 0, 0);
 
-      // 5. Studio Three-Point Lighting
-      const ambLight = new THREE.AmbientLight(0xffffff, 0.65);
+      // 5. Studio Multi-Point High-Contrast Lighting (Ensures interior is fully visible)
+      const ambLight = new THREE.AmbientLight(0xffffff, 0.85);
       scene3d.add(ambLight);
 
-      const keyLight = new THREE.DirectionalLight(0xffffff, 0.95);
+      const keyLight = new THREE.DirectionalLight(0xffffff, 1.1);
       keyLight.position.set(0.6, 0.9, 0.7);
       keyLight.castShadow = true;
       scene3d.add(keyLight);
 
-      const fillLightCyan = new THREE.DirectionalLight(0x38bdf8, 0.55);
+      const frontFill = new THREE.DirectionalLight(0xe0f2fe, 0.75);
+      frontFill.position.set(0, 0.1, 0.8);
+      scene3d.add(frontFill);
+
+      const fillLightCyan = new THREE.DirectionalLight(0x38bdf8, 0.65);
       fillLightCyan.position.set(-0.6, -0.4, -0.4);
       scene3d.add(fillLightCyan);
 
-      const rimLightWarm = new THREE.PointLight(0xf59e0b, 0.8, 1.2);
-      rimLightWarm.position.set(0, 0.25, -0.15);
-      scene3d.add(rimLightWarm);
+      const interiorPointLight = new THREE.PointLight(0xffffff, 0.9, 0.3);
+      interiorPointLight.position.set(0, 0, 0.08);
+      scene3d.add(interiorPointLight);
 
       // 6. Raycaster for Component Picking
       raycaster = new THREE.Raycaster();
@@ -2113,7 +2292,7 @@
       canvas.addEventListener('mousemove', on3DMouseMove);
       canvas.addEventListener('click', on3DMouseClick);
 
-      // 7. Build Industrial 3D Motor
+      // 7. Build Complete 3D Motor & Electromagnetic Overlays
       buildIndustrialMotor();
 
       // 8. Resize listener
@@ -2128,12 +2307,12 @@
       scene3d.add(motorAssemblyGroup);
 
       // PBR Materials
-      const steelMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.85, roughness: 0.28 });
-      const darkLamiMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.75, roughness: 0.42 });
-      const copperMat = new THREE.MeshStandardMaterial({ color: 0xd97706, metalness: 0.90, roughness: 0.20 });
+      const steelMat = new THREE.MeshStandardMaterial({ color: 0x3b4d66, metalness: 0.82, roughness: 0.25 });
+      const darkLamiMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.70, roughness: 0.40 });
+      const copperMat = new THREE.MeshStandardMaterial({ color: 0xd97706, metalness: 0.92, roughness: 0.18 });
       const northMat = new THREE.MeshStandardMaterial({ color: 0xdc2626, metalness: 0.65, roughness: 0.35 }); // Red North
       const southMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, metalness: 0.65, roughness: 0.35 }); // Blue South
-      const brassMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.88, roughness: 0.25 });
+      const brassMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.88, roughness: 0.22 });
       const carbonMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.85 });
 
       // --- A. STATOR OUTER FRAME & COOLING FINS ---
@@ -2158,7 +2337,7 @@
         statorMeshGroup.add(fin);
       }
 
-      // Mounting Feet (Taban Ayakları)
+      // Mounting Feet
       const footGeom = new THREE.BoxGeometry(0.035, 0.012, 0.16);
       const footLeft = new THREE.Mesh(footGeom, steelMat);
       footLeft.position.set(-0.085, -0.098, 0);
@@ -2170,7 +2349,7 @@
       footRight.userData = { id: 'casing' };
       statorMeshGroup.add(footRight);
 
-      // Terminal Connection Box (Klemens Kutusu)
+      // Terminal Connection Box
       const termBoxGeom = new THREE.BoxGeometry(0.045, 0.024, 0.055);
       const termBox = new THREE.Mesh(termBoxGeom, steelMat);
       termBox.position.set(0, 0.108, 0.01);
@@ -2190,11 +2369,11 @@
       motorAssemblyGroup.add(poleGroup);
 
       // North Pole Shoe (Top)
-      const poleNGeom = new THREE.BoxGeometry(0.052, 0.026, 0.12);
-      const poleN = new THREE.Mesh(poleNGeom, northMat);
-      poleN.position.set(0, 0.068, 0);
-      poleN.userData = { id: 'pole_n' };
-      poleGroup.add(poleN);
+      const poleNGeom = new THREE.BoxGeometry(0.056, 0.026, 0.12);
+      poleNMesh = new THREE.Mesh(poleNGeom, northMat);
+      poleNMesh.position.set(0, 0.068, 0);
+      poleNMesh.userData = { id: 'pole_n' };
+      poleGroup.add(poleNMesh);
 
       // Field Coil North
       const coilNGeom = new THREE.TorusGeometry(0.028, 0.010, 14, 28);
@@ -2205,10 +2384,10 @@
       poleGroup.add(coilN);
 
       // South Pole Shoe (Bottom)
-      const poleS = new THREE.Mesh(poleNGeom, southMat);
-      poleS.position.set(0, -0.068, 0);
-      poleS.userData = { id: 'pole_s' };
-      poleGroup.add(poleS);
+      poleSMesh = new THREE.Mesh(poleNGeom, southMat);
+      poleSMesh.position.set(0, -0.068, 0);
+      poleSMesh.userData = { id: 'pole_s' };
+      poleGroup.add(poleSMesh);
 
       const coilS = new THREE.Mesh(coilNGeom, copperMat);
       coilS.rotation.x = Math.PI / 2;
@@ -2230,13 +2409,7 @@
       shaftMesh.userData = { id: 'shaft' };
       shaftMeshGroup.add(shaftMesh);
 
-      // Keyway slot on shaft
-      const keyGeom = new THREE.BoxGeometry(0.003, 0.003, 0.04);
-      const keyMesh = new THREE.Mesh(keyGeom, darkLamiMat);
-      keyMesh.position.set(0, 0.012, 0.11);
-      shaftMeshGroup.add(keyMesh);
-
-      // Ball Bearings
+      // Bearings
       const bearingGeom = new THREE.CylinderGeometry(0.024, 0.024, 0.012, 24);
       const brgFront = new THREE.Mesh(bearingGeom, brassMat);
       brgFront.rotation.x = Math.PI / 2;
@@ -2267,7 +2440,7 @@
         const sy = Math.sin(slotAngle) * 0.040;
 
         // Conductor Rod in slot
-        const condGeom = new THREE.CylinderGeometry(0.005, 0.005, 0.124, 14);
+        const condGeom = new THREE.CylinderGeometry(0.0052, 0.0052, 0.124, 14);
         const cond = new THREE.Mesh(condGeom, copperMat);
         cond.rotation.x = Math.PI / 2;
         cond.position.set(sx, sy, 0);
@@ -2300,7 +2473,7 @@
       commCore.userData = { id: 'commutator' };
       commMeshGroup.add(commCore);
 
-      // Mica Insulating Slots between segments
+      // Mica Insulating Slots
       const micaGeom = new THREE.BoxGeometry(0.001, 0.025, 0.035);
       for (let i = 0; i < 16; i++) {
         const mica = new THREE.Mesh(micaGeom, darkLamiMat);
@@ -2336,7 +2509,7 @@
       brushBlockR.userData = { id: 'brushes' };
       brushMeshGroup.add(brushBlockR);
 
-      // --- F. HALL SENSOR PCB & ENCODER DISC ---
+      // --- F. HALL SENSOR PCB ---
       hallMeshGroup = new THREE.Group();
       motorAssemblyGroup.add(hallMeshGroup);
 
@@ -2347,7 +2520,6 @@
       pcbMesh.userData = { id: 'hall_pcb' };
       hallMeshGroup.add(pcbMesh);
 
-      // 3 Hall Sensor Packages at 0°, 120°, 240°
       for (let i = 0; i < 3; i++) {
         const ang = (i * 120) * (Math.PI / 180);
         const ic = new THREE.Mesh(new THREE.BoxGeometry(0.007, 0.009, 0.005), new THREE.MeshStandardMaterial({ color: 0x111827 }));
@@ -2361,30 +2533,357 @@
         hallMeshGroup.add(led);
       }
 
-      // --- G. VECTOR OVERLAYS (Field B, Current I, Force F, Torque, Omega) ---
+      // =======================================================================
+      // ELECTROMAGNETIC VECTOR LAYERS v3.0 (SUPERIOR VISIBILITY & ACCURACY)
+      // =======================================================================
       vectorArrowGroup = new THREE.Group();
       motorAssemblyGroup.add(vectorArrowGroup);
 
-      // Animated Magnetic Flux Tubes (flowing from North to South)
+      // 1. STATOR MAGNETIC FLUX LINES & ANIMATED ARROWHEADS
+      buildHighVisibilityFluxLines();
+
+      // 2. AIR-GAP FLUX DENSITY HEATMAP MESH
+      buildAirgapHeatmapMesh();
+
+      // 3. 3D ROTOR SLOT BADGES (⊙ / ⊗ Signs and Slot Numbers)
+      build3DSlotBadges();
+
+      // 4. ANIMATED CONDUCTOR CURRENT PARTICLES
+      buildConductorParticles();
+
+      // 5. 3D LORENTZ FORCE VECTORS ON ROTOR SLOTS
+      build3DForceVectors();
+
+      // 6. MECHANICAL ROTATION RING (TORQUE DIRECTION)
+      buildMechanicalRotationRing();
+
+      // 7. AXIAL ANGULAR VELOCITY OMEGA VECTOR ARROW
+      buildAxialOmegaArrow();
+
+      // 8. 3D FLOATING TECHNICAL COMPONENT LABELS
+      build3DComponentLabels();
+    }
+
+    // --- 1. HIGH-VISIBILITY MAGNETIC FLUX LINES ---
+    function buildHighVisibilityFluxLines() {
       fluxTubesGroup = new THREE.Group();
       vectorArrowGroup.add(fluxTubesGroup);
 
-      const fluxTubeMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.6 });
-      for (let i = -3; i <= 3; i++) {
-        const xOffset = i * 0.013;
-        const curve = new THREE.CatmullRomCurve3([
-          new THREE.Vector3(xOffset, 0.062, 0),
-          new THREE.Vector3(xOffset * 0.8, 0.025, 0),
-          new THREE.Vector3(xOffset * 0.8, -0.025, 0),
-          new THREE.Vector3(xOffset, -0.062, 0)
-        ]);
-        const tubeGeom = new THREE.TubeGeometry(curve, 16, 0.0018, 6, false);
-        const tubeMesh = new THREE.Mesh(tubeGeom, fluxTubeMat);
-        fluxTubesGroup.add(tubeMesh);
+      fluxCurveList = [];
+      fluxArrowCones = [];
+
+      const fluxTubeMat = new THREE.MeshStandardMaterial({
+        color: 0x00f5ff,
+        emissive: 0x007799,
+        emissiveIntensity: 0.85,
+        roughness: 0.2,
+        metalness: 0.1,
+        transparent: true,
+        opacity: 0.85
+      });
+
+      const coneMat = new THREE.MeshStandardMaterial({
+        color: 0x38bdf8,
+        emissive: 0x0284c7,
+        emissiveIntensity: 1.0,
+        roughness: 0.1
+      });
+
+      // 9 distributed flux paths across the pole shoe width and depth
+      const xOffsets = [-0.030, -0.020, -0.010, 0, 0.010, 0.020, 0.030];
+      const zOffsets = [-0.028, 0, 0.028];
+
+      xOffsets.forEach(xOff => {
+        zOffsets.forEach(zOff => {
+          // Curve from North pole (Y > 0) to South pole (Y < 0) through airgap
+          const curve = new THREE.CatmullRomCurve3([
+            new THREE.Vector3(xOff, 0.066, zOff),
+            new THREE.Vector3(xOff * 0.85, 0.035, zOff * 0.9),
+            new THREE.Vector3(xOff * 0.70, 0.0, zOff * 0.8),
+            new THREE.Vector3(xOff * 0.85, -0.035, zOff * 0.9),
+            new THREE.Vector3(xOff, -0.066, zOff)
+          ]);
+          fluxCurveList.push(curve);
+
+          // Thick prominent tube (radius 0.0032 = 3.2 mm)
+          const tubeGeom = new THREE.TubeGeometry(curve, 24, 0.0028, 8, false);
+          const tubeMesh = new THREE.Mesh(tubeGeom, fluxTubeMat);
+          fluxTubesGroup.add(tubeMesh);
+
+          // 2 directional arrowheads along each tube
+          for (let k = 0; k < 2; k++) {
+            const coneGeom = new THREE.ConeGeometry(0.0055, 0.014, 10);
+            coneGeom.rotateX(Math.PI / 2); // Default pointing +Z
+            const cone = new THREE.Mesh(coneGeom, coneMat);
+            fluxTubesGroup.add(cone);
+            fluxArrowCones.push({
+              mesh: cone,
+              curve: curve,
+              baseOffset: k * 0.5
+            });
+          }
+        });
+      });
+    }
+
+    // --- 2. AIR-GAP FLUX DENSITY HEATMAP MESH ---
+    function buildAirgapHeatmapMesh() {
+      const radius = 0.048;
+      const height = 0.126;
+      const radialSegs = 48;
+      const geom = new THREE.CylinderGeometry(radius, radius, height, radialSegs, 1, true);
+      geom.rotateX(Math.PI / 2);
+
+      // Create vertex colors based on B(theta) = Bmax * cos(theta_e)
+      const count = geom.attributes.position.count;
+      const colors = new Float32Array(count * 3);
+      const pos = geom.attributes.position;
+
+      for (let i = 0; i < count; i++) {
+        const x = pos.getX(i);
+        const y = pos.getY(i);
+        const angle = Math.atan2(y, x);
+        const bNorm = Math.abs(Math.sin(angle)); // High under poles (Y=+/-), low at neutral (X=+/-)
+
+        // Color gradient: Blue (0.0T) -> Green (0.5T) -> Red (1.0T)
+        let r, g, b;
+        if (bNorm < 0.5) {
+          const t = bNorm / 0.5;
+          r = 0.1 * (1 - t) + 0.1 * t;
+          g = 0.3 * (1 - t) + 0.9 * t;
+          b = 0.9 * (1 - t) + 0.2 * t;
+        } else {
+          const t = (bNorm - 0.5) / 0.5;
+          r = 0.1 * (1 - t) + 0.95 * t;
+          g = 0.9 * (1 - t) + 0.15 * t;
+          b = 0.2 * (1 - t) + 0.1 * t;
+        }
+
+        colors[i * 3] = r;
+        colors[i * 3 + 1] = g;
+        colors[i * 3 + 2] = b;
+      }
+
+      geom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+      const mat = new THREE.MeshBasicMaterial({
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.65,
+        side: THREE.DoubleSide
+      });
+
+      airgapHeatmapMesh = new THREE.Mesh(geom, mat);
+      airgapHeatmapMesh.visible = state.showVectors.heatmap;
+      vectorArrowGroup.add(airgapHeatmapMesh);
+    }
+
+    // --- 3. 3D ROTOR SLOT BADGES (⊙ and ⊗ Signs) ---
+    function build3DSlotBadges() {
+      slotBadgesGroup = new THREE.Group();
+      rotorMeshGroup.add(slotBadgesGroup);
+
+      slotBadges = [];
+
+      for (let i = 0; i < 8; i++) {
+        const angle = (i / 8) * Math.PI * 2;
+        const r = 0.040;
+        const x = Math.cos(angle) * r;
+        const y = Math.sin(angle) * r;
+        const z = 0.068; // Front face
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 128;
+        canvas.height = 128;
+        const texture = new THREE.CanvasTexture(canvas);
+
+        const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true });
+        const sprite = new THREE.Sprite(spriteMat);
+        sprite.position.set(x, y, z);
+        sprite.scale.set(0.020, 0.020, 1);
+        sprite.userData = { slotIndex: i };
+        slotBadgesGroup.add(sprite);
+
+        slotBadges.push({
+          sprite: sprite,
+          canvas: canvas,
+          ctx: canvas.getContext('2d'),
+          texture: texture,
+          slotIndex: i
+        });
+      }
+
+      updateAllSlotBadges();
+    }
+
+    function updateAllSlotBadges() {
+      slotBadges.forEach((b, i) => {
+        const ctx = b.ctx;
+        const isOut = (state.slotCurrents[i] === 1);
+        ctx.clearRect(0, 0, 128, 128);
+
+        // Circular background
+        ctx.beginPath();
+        ctx.arc(64, 64, 58, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.90)';
+        ctx.fill();
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = isOut ? '#06b6d4' : '#f97316';
+        ctx.stroke();
+
+        // Slot number at top
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = 'bold 22px JetBrains Mono, monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(`Oluk ${i + 1}`, 64, 30);
+
+        // Current Symbol
+        ctx.font = 'bold 52px JetBrains Mono, monospace';
+        ctx.fillStyle = isOut ? '#22d3ee' : '#fb923c';
+        ctx.fillText(isOut ? '⊙' : '⊗', 64, 76);
+
+        // Subtitle
+        ctx.font = 'bold 18px JetBrains Mono, monospace';
+        ctx.fillStyle = isOut ? '#67e8f9' : '#fdba74';
+        ctx.fillText(isOut ? 'DIŞ' : 'İÇ', 64, 110);
+
+        b.texture.needsUpdate = true;
+      });
+    }
+
+    // --- 4. ANIMATED CONDUCTOR CURRENT PARTICLES ---
+    function buildConductorParticles() {
+      conductorParticlesGroup = new THREE.Group();
+      rotorMeshGroup.add(conductorParticlesGroup);
+      slotParticleList = [];
+
+      const pGeom = new THREE.SphereGeometry(0.0022, 8, 8);
+      const cyanMat = new THREE.MeshBasicMaterial({ color: 0x22d3ee });
+      const amberMat = new THREE.MeshBasicMaterial({ color: 0xfb923c });
+
+      for (let i = 0; i < 8; i++) {
+        const angle = (i / 8) * Math.PI * 2;
+        const r = 0.040;
+        const x = Math.cos(angle) * r;
+        const y = Math.sin(angle) * r;
+
+        for (let p = 0; p < 3; p++) {
+          const zInit = -0.05 + p * 0.05;
+          const isOut = (state.slotCurrents[i] === 1);
+          const pMesh = new THREE.Mesh(pGeom, isOut ? cyanMat : amberMat);
+          pMesh.position.set(x, y, zInit);
+          conductorParticlesGroup.add(pMesh);
+
+          slotParticleList.push({
+            mesh: pMesh,
+            slotIndex: i,
+            baseAngle: angle,
+            r: r,
+            z: zInit,
+            cyanMat: cyanMat,
+            amberMat: amberMat
+          });
+        }
       }
     }
 
-    // --- RAYCASTING & COMPONENT INSPECTOR ---
+    // --- 5. 3D LORENTZ FORCE VECTORS ON ROTOR SLOTS ---
+    function build3DForceVectors() {
+      forceArrowsGroup = new THREE.Group();
+      motorAssemblyGroup.add(forceArrowsGroup);
+      forceArrowHelpers = [];
+
+      for (let i = 0; i < 8; i++) {
+        // Arrow pointing tangentially from each slot
+        const dir = new THREE.Vector3(1, 0, 0);
+        const origin = new THREE.Vector3(0, 0, 0.068);
+        const arrow = new THREE.ArrowHelper(dir, origin, 0.035, 0x10b981, 0.010, 0.006);
+        arrow.line.material.linewidth = 3;
+        forceArrowsGroup.add(arrow);
+        forceArrowHelpers.push(arrow);
+      }
+    }
+
+    // --- 6. MECHANICAL ROTATION RING (TORQUE DIRECTION) ---
+    function buildMechanicalRotationRing() {
+      const ringGeom = new THREE.TorusGeometry(0.056, 0.0025, 12, 36);
+      const ringMat = new THREE.MeshStandardMaterial({
+        color: 0xec4899,
+        emissive: 0xbe185d,
+        emissiveIntensity: 0.85,
+        roughness: 0.2
+      });
+      rotationRingMesh = new THREE.Mesh(ringGeom, ringMat);
+      rotationRingMesh.position.set(0, 0, 0.070);
+      vectorArrowGroup.add(rotationRingMesh);
+
+      // Add 4 directional arrow cones along the ring
+      for (let i = 0; i < 4; i++) {
+        const ang = (i / 4) * Math.PI * 2;
+        const coneGeom = new THREE.ConeGeometry(0.005, 0.012, 8);
+        coneGeom.rotateZ(-Math.PI / 2);
+        const cone = new THREE.Mesh(coneGeom, ringMat);
+        cone.position.set(Math.cos(ang) * 0.056, Math.sin(ang) * 0.056, 0);
+        cone.rotation.z = ang;
+        rotationRingMesh.add(cone);
+      }
+    }
+
+    // --- 7. AXIAL ANGULAR VELOCITY OMEGA VECTOR ARROW ---
+    function buildAxialOmegaArrow() {
+      const dir = new THREE.Vector3(0, 0, -1); // Points into screen for CW
+      const origin = new THREE.Vector3(0, 0, 0.12);
+      omegaVectorArrow = new THREE.ArrowHelper(dir, origin, 0.065, 0x818cf8, 0.018, 0.010);
+      omegaVectorArrow.line.material.linewidth = 4;
+      vectorArrowGroup.add(omegaVectorArrow);
+    }
+
+    // --- 8. 3D FLOATING TECHNICAL COMPONENT LABELS ---
+    function build3DComponentLabels() {
+      labels3DGroup = new THREE.Group();
+      motorAssemblyGroup.add(labels3DGroup);
+
+      const labelData = [
+        { text: 'Stator Gövdesi', pos: [0, 0.115, 0] },
+        { text: 'N Kutup Pabucu', pos: [0, 0.075, 0.03] },
+        { text: 'S Kutup Pabucu', pos: [0, -0.075, 0.03] },
+        { text: '8 Oluklu Lamine Rotor', pos: [0.055, 0.02, 0] },
+        { text: 'Bakır Endüvi Sargıları', pos: [-0.050, 0.02, 0.02] },
+        { text: 'Kolektör Dilimleri', pos: [0.035, 0.02, 0.096] },
+        { text: 'Grafit Fırçalar', pos: [-0.045, 0, 0.096] },
+        { text: 'Transmisyon Mili', pos: [0, 0, 0.15] }
+      ];
+
+      labelData.forEach(item => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 256;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+        ctx.roundRect(4, 4, 248, 56, 12);
+        ctx.fill();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 24px JetBrains Mono, monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(item.text, 128, 32);
+
+        const tex = new THREE.CanvasTexture(canvas);
+        const mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
+        const sprite = new THREE.Sprite(mat);
+        sprite.position.set(item.pos[0], item.pos[1], item.pos[2]);
+        sprite.scale.set(0.050, 0.0125, 1);
+        labels3DGroup.add(sprite);
+      });
+    }
+
+    // =========================================================================
+    // RAYCASTING & COMPONENT INSPECTOR
+    // =========================================================================
     function on3DMouseMove(event) {
       const container = document.getElementById('canvas3dContainer');
       const rect = container.getBoundingClientRect();
@@ -2423,37 +2922,45 @@
 
       if (intersects.length > 0) {
         let obj = intersects[0].object;
+
+        // Check if user clicked a rotor slot badge
+        if (obj.userData && obj.userData.slotIndex !== undefined) {
+          toggleSlotCurrentSign(obj.userData.slotIndex);
+          return;
+        }
+
         while (obj && !obj.userData.id && obj.parent) {
           obj = obj.parent;
         }
         if (obj && obj.userData.id && COMPONENT_DB[obj.userData.id]) {
-          showComponentInspector(obj.userData.id);
-          highlightSelectedPart(obj);
+          showComponentInspector(obj.userData.id, obj);
         }
       }
     }
 
-    function showComponentInspector(partId) {
-      const info = COMPONENT_DB[partId];
-      if (!info) return;
+    function showComponentInspector(partId, meshObj) {
+      selectedMesh = meshObj;
+      const data = COMPONENT_DB[partId];
+      if (!data) return;
 
-      document.getElementById('inspPartName').innerText = info.name;
-      document.getElementById('inspPartMaterial').innerText = info.material;
-      document.getElementById('inspPartFunction').innerText = info.role;
-      document.getElementById('inspPartPage').innerText = info.page;
-      document.getElementById('inspPartFormula').innerText = info.formula;
+      const card = document.getElementById('componentInspectorCard');
+      document.getElementById('inspPartName').innerText = data.name;
+      document.getElementById('inspPartMaterial').innerText = data.material;
+      document.getElementById('inspPartFunction').innerText = data.role;
+      document.getElementById('inspPartPage').innerText = data.page;
+      document.getElementById('inspPartFormula').innerText = data.formula;
+      card.classList.remove('hidden');
 
-      document.getElementById('componentInspectorCard').classList.remove('hidden');
-      renderKaTeX();
+      if (window.renderMathInElement) {
+        renderMathInElement(document.getElementById('inspPartFormula'), {
+          delimiters: [{ left: '$', right: '$', display: false }]
+        });
+      }
     }
 
     function closeComponentInspector() {
       document.getElementById('componentInspectorCard').classList.add('hidden');
-      restoreAllParts();
-    }
-
-    function highlightSelectedPart(mesh) {
-      selectedMesh = mesh;
+      selectedMesh = null;
     }
 
     function isolateInspectedPart() {
@@ -2464,104 +2971,126 @@
           child.visible = (child.userData.id === targetId);
         }
       });
+      state.isolatedPart = targetId;
     }
 
     function restoreAllParts() {
       motorAssemblyGroup.traverse(child => {
         if (child.isMesh) child.visible = true;
       });
+      state.isolatedPart = null;
     }
 
-    // --- 10 STANDARDIZED CAMERA PRESETS & TRANSITIONS ---
+    // =========================================================================
+    // CAMERA PRESETS & VIEWPORTS
+    // =========================================================================
     function setCameraPreset(mode) {
       state.cameraMode = mode;
+      const duration = 800;
+      const startTime = performance.now();
+      const startPos = camera3d.position.clone();
+      let targetPos = new THREE.Vector3(0.28, 0.20, 0.32);
+
+      // Reset parts visibility
       restoreAllParts();
+      if (statorMeshGroup) statorMeshGroup.visible = true;
+      if (fluxTubesGroup) fluxTubesGroup.visible = state.showVectors.field;
 
-      if (mode === 'iso') {
-        tweenCamera(0.32, 0.24, 0.38, 0, 0, 0);
-      } else if (mode === 'front') {
-        tweenCamera(0, 0, 0.42, 0, 0, 0);
-      } else if (mode === 'rear') {
-        tweenCamera(0, 0, -0.42, 0, 0, 0);
-      } else if (mode === 'top') {
-        tweenCamera(0, 0.45, 0.001, 0, 0, 0);
-      } else if (mode === 'side') {
-        tweenCamera(0.45, 0, 0, 0, 0, 0);
-      } else if (mode === 'long_section') {
-        tweenCamera(0.30, 0.15, 0.35, 0, 0, 0);
-        if (statorMeshGroup) statorMeshGroup.position.x = 0.06; // Open half section
-      } else if (mode === 'cross_section') {
-        tweenCamera(0, 0, 0.28, 0, 0, 0);
-      } else if (mode === 'exploded') {
-        setExplodedRatio(0.65);
-      } else if (mode === 'transparent') {
-        tweenCamera(0.30, 0.20, 0.35, 0, 0, 0);
-        statorMeshGroup.traverse(c => {
-          if (c.material) { c.material.transparent = true; c.material.opacity = 0.25; }
-        });
-      } else if (mode === 'rotor_isolated') {
-        statorMeshGroup.visible = false;
-        poleGroup.visible = false;
-        brushMeshGroup.visible = false;
-        hallMeshGroup.visible = false;
-        tweenCamera(0.24, 0.16, 0.28, 0, 0, 0);
+      switch (mode) {
+        case 'iso':
+          targetPos.set(0.28, 0.20, 0.32);
+          break;
+        case 'front':
+          targetPos.set(0, 0, 0.36);
+          break;
+        case 'rear':
+          targetPos.set(0, 0, -0.36);
+          break;
+        case 'top':
+          targetPos.set(0, 0.36, 0.02);
+          break;
+        case 'side':
+          targetPos.set(0.36, 0, 0);
+          break;
+        case 'long_section':
+          targetPos.set(0.28, 0.12, 0.25);
+          if (statorMeshGroup) statorMeshGroup.children[0].visible = false;
+          break;
+        case 'cross_section':
+          targetPos.set(0, 0, 0.30);
+          if (statorMeshGroup) statorMeshGroup.children[0].visible = false;
+          break;
+        case 'exploded':
+          targetPos.set(0.32, 0.24, 0.36);
+          updateExplodedView(50);
+          document.getElementById('sliderExplode').value = 50;
+          break;
+        case 'transparent':
+          targetPos.set(0.26, 0.18, 0.30);
+          statorMeshGroup.traverse(child => {
+            if (child.isMesh && child.material) {
+              child.material.transparent = true;
+              child.material.opacity = 0.25;
+            }
+          });
+          break;
+        case 'rotor_isolated':
+          targetPos.set(0.22, 0.14, 0.26);
+          statorMeshGroup.visible = false;
+          poleGroup.visible = false;
+          break;
+        case 'field_focus':
+          targetPos.set(0.05, 0.05, 0.32);
+          statorMeshGroup.visible = false;
+          break;
+        case 'force_focus':
+          targetPos.set(0, 0, 0.28);
+          statorMeshGroup.visible = false;
+          poleGroup.visible = false;
+          break;
       }
-    }
 
-    function tweenCamera(x, y, z, tx, ty, tz) {
-      if (statorMeshGroup) statorMeshGroup.position.x = 0;
-      camera3d.position.set(x, y, z);
-      controls3d.target.set(tx, ty, tz);
-      controls3d.update();
+      function tweenCamera(now) {
+        const progress = Math.min((now - startTime) / duration, 1.0);
+        const ease = 0.5 - Math.cos(progress * Math.PI) / 2;
+        camera3d.position.lerpVectors(startPos, targetPos, ease);
+        controls3d.target.set(0, 0, 0);
+        controls3d.update();
+        if (progress < 1.0) requestAnimationFrame(tweenCamera);
+      }
+      requestAnimationFrame(tweenCamera);
     }
 
     function resetCameraView() {
       document.getElementById('selectCameraMode').value = 'iso';
       setCameraPreset('iso');
-      setExplodedRatio(0.0);
+      updateExplodedView(0);
+      document.getElementById('sliderExplode').value = 0;
     }
 
     function toggle3DFullscreen() {
       const container = document.getElementById('canvas3dContainer');
       if (!document.fullscreenElement) {
-        container.requestFullscreen().catch(err => alert(`Fullscreen hatası: ${err.message}`));
+        container.requestFullscreen().catch(() => {});
       } else {
         document.exitFullscreen();
       }
     }
 
-    function onWindowResize3D() {
-      const container = document.getElementById('canvas3dContainer');
-      if (!container || !renderer3d || !camera3d) return;
+    function updateExplodedView(percent) {
+      state.explodedRatio = percent / 100.0;
+      document.getElementById('labelExplode').innerText = percent + '%';
+      const d = state.explodedRatio * 0.12;
 
-      const w = container.clientWidth;
-      const h = container.clientHeight || 580;
-      camera3d.aspect = w / h;
-      camera3d.updateProjectionMatrix();
-      renderer3d.setSize(w, h);
-    }
-
-    function setExplodedRatio(ratio) {
-      state.explodedRatio = ratio;
-      const label = document.getElementById('labelExplode');
-      const slider = document.getElementById('sliderExplode');
-      if (label) label.innerText = Math.round(ratio * 100) + '%';
-      if (slider) slider.value = Math.round(ratio * 100);
-
-      const dist = ratio * 0.14;
-      if (statorMeshGroup) statorMeshGroup.position.z = -dist * 0.6;
-      if (poleGroup) poleGroup.position.z = -dist * 0.35;
-      if (commMeshGroup) commMeshGroup.position.z = dist * 0.7;
-      if (brushMeshGroup) brushMeshGroup.position.z = dist * 0.9;
-      if (hallMeshGroup) hallMeshGroup.position.z = -dist * 0.95;
-    }
-
-    function updateExplodedView(val) {
-      setExplodedRatio(parseFloat(val) / 100.0);
+      if (statorMeshGroup) statorMeshGroup.position.z = -d * 0.6;
+      if (poleGroup) poleGroup.position.y = (state.northTop ? 1 : -1) * d * 0.5;
+      if (brushMeshGroup) brushMeshGroup.position.z = d * 0.8;
+      if (commMeshGroup) commMeshGroup.position.z = d * 0.4;
+      if (shaftMeshGroup) shaftMeshGroup.position.z = d * 0.2;
     }
 
     // =========================================================================
-    // REAL-TIME COUPLED ODE NUMERICAL INTEGRATOR (60 HZ)
+    // MAIN SIMULATION & PHYSICS LOOP (DECOUPLED REAL-TIME + SLOW MOTION)
     // =========================================================================
     let lastSimTimestamp = performance.now();
 
@@ -2572,32 +3101,35 @@
       lastSimTimestamp = timestamp;
 
       // 1. Solve Coupled Electrical & Mechanical ODEs if motor is running
-      if (state.isRunning) {
+      if (state.isRunning && !state.isPaused) {
         stepODEPhysics(dt);
       }
 
-      // 2. Rotate 3D Rotor Mesh & Commutator
+      // 2. Advance Visual Angle with Visual Time Scale (Slow Motion Decoupling)
+      if (state.isRunning && !state.isPaused) {
+        state.visualTheta += state.dyna.omega * dt * state.timeScale;
+        state.visualTheta = (state.visualTheta % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+      }
+
+      // 3. Update 3D Rotor Mesh Orientation
       if (rotorMeshGroup) {
-        rotorMeshGroup.rotation.z = state.dyna.theta;
+        rotorMeshGroup.rotation.z = state.visualTheta;
       }
 
-      // 3. Pulse Magnetic Flux Tubes in 3D
-      if (fluxTubesGroup && fluxTubesGroup.visible) {
-        fluxTubesGroup.children.forEach((tube, idx) => {
-          tube.material.opacity = 0.5 + Math.sin(timestamp * 0.006 + idx) * 0.25;
-        });
-      }
+      // 4. Update Electromagnetic Vectors and Forces at Current Angle
+      updateElectromagneticVectors(dt, timestamp);
 
-      // 4. Update HUD and Controls
+      // 5. Update HUD and Controls
       updateLiveHUDReadouts();
 
-      // 5. Render Three.js Scene
+      // 6. Render Three.js Scene
       if (controls3d) controls3d.update();
       if (renderer3d && scene3d && camera3d) {
         renderer3d.render(scene3d, camera3d);
       }
     }
 
+    // Coupled State-Space ODE Physics (60 Hz Integration)
     function stepODEPhysics(dt) {
       const d = state.dyna;
       
@@ -2608,7 +3140,6 @@
       const dia_dt = (d.Va - d.Ra * d.ia - d.Ea) / d.La;
 
       // Calculate Net Electromagnetic Torque from slot integration
-      // Te = Kt * ia (with armature reaction effect)
       d.Te = d.Kt * d.ia;
 
       // Angular acceleration: d(omega)/dt = (Te - Bm*omega - TL) / J
@@ -2619,11 +3150,157 @@
       d.omega += domega_dt * dt;
       d.theta += d.omega * dt;
 
-      // Keep theta bounded [0, 2pi)
+      // Bound theta
       if (d.theta > Math.PI * 2000) d.theta %= (Math.PI * 2);
 
-      // Record to ring buffers for live oscilloscopes
+      // Record to history buffers
       recordHistory(d);
+    }
+
+    // --- ELECTROMAGNETIC VECTOR UPDATES (FORCE, FLUX, CONES, TORQUE) ---
+    function updateElectromagneticVectors(dt, timestamp) {
+      const d = state.dyna;
+      const isFieldVisible = state.showVectors.field;
+      const isForceVisible = state.showVectors.force;
+      const isCurrentVisible = state.showVectors.current;
+      const isFlowVisible = state.showVectors.currentFlow;
+      const isTorqueVisible = state.showVectors.torque;
+      const isOmegaVisible = state.showVectors.omega;
+
+      // 1. Move Animated Flux Arrowheads along curves
+      if (fluxTubesGroup) {
+        fluxTubesGroup.visible = isFieldVisible;
+        if (isFieldVisible) {
+          const flowDir = state.northTop ? 1 : -1;
+          const animSpeed = 0.35; // Visual flow speed
+
+          fluxArrowCones.forEach((item, idx) => {
+            let s = (item.baseOffset + (timestamp * 0.001 * animSpeed * flowDir)) % 1.0;
+            if (s < 0) s += 1.0;
+            const pt = item.curve.getPointAt(s);
+            item.mesh.position.copy(pt);
+
+            const tangent = item.curve.getTangentAt(s);
+            if (!state.northTop) tangent.negate();
+            item.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), tangent);
+          });
+        }
+      }
+
+      // 2. Animate Conductor Current Particles
+      if (conductorParticlesGroup) {
+        conductorParticlesGroup.visible = isFlowVisible;
+        if (isFlowVisible) {
+          const pSpeed = 0.08; // Visual particle speed
+          slotParticleList.forEach(p => {
+            const isOut = (state.slotCurrents[p.slotIndex] === 1);
+            p.mesh.material = isOut ? p.cyanMat : p.amberMat;
+            const dir = isOut ? 1 : -1;
+            p.z += dir * pSpeed * dt;
+            if (p.z > 0.058) p.z = -0.058;
+            if (p.z < -0.058) p.z = 0.058;
+            p.mesh.position.z = p.z;
+          });
+        }
+      }
+
+      // 3. Update Slot Badges Visibility
+      if (slotBadgesGroup) {
+        slotBadgesGroup.visible = isCurrentVisible;
+      }
+
+      // 4. Update Lorentz Force Vectors on 8 Slots
+      if (forceArrowsGroup) {
+        forceArrowsGroup.visible = isForceVisible;
+        if (isForceVisible) {
+          let totalComputedTorque = 0;
+
+          for (let i = 0; i < 8; i++) {
+            const arrow = forceArrowHelpers[i];
+            const baseAngle = (i / 8) * Math.PI * 2;
+            const worldAngle = baseAngle + state.visualTheta;
+            const r = 0.040;
+            const sx = Math.cos(worldAngle) * r;
+            const sy = Math.sin(worldAngle) * r;
+
+            arrow.position.set(sx, sy, 0.068);
+
+            // Local B flux density (vertical downwards from N to S if northTop)
+            const bSign = state.northTop ? -1 : 1;
+            const localB = d.Bmax * Math.abs(Math.sin(worldAngle)); // Peak near poles
+
+            // Slot current direction: +1 for ⊙ (+Z), -1 for ⊗ (-Z)
+            const slotI = state.slotCurrents[i];
+
+            // Lorentz Force: F = I * (l x B)
+            // l = (0, 0, slotI), B = (0, bSign * localB, 0)
+            // l x B = (0, 0, slotI) x (0, bSign*localB, 0) = (-slotI * bSign * localB, 0, 0)
+            // At the top (+Y): slotI = +1, bSign = -1 -> F_x = - (+1)*(-1)*B = +B -> Points to +X (Right, CW!)
+            // At the bottom (-Y): slotI = -1, bSign = -1 -> F_x = - (-1)*(-1)*B = -B -> Points to -X (Left, CW!)
+            
+            // Tangential unit vector around circumference: (-sin(worldAngle), cos(worldAngle), 0)
+            // Tangential force component:
+            const tangentialDir = -slotI * bSign * Math.sign(sy || 0.001);
+            const fx = -Math.sin(worldAngle) * tangentialDir;
+            const fy = Math.cos(worldAngle) * tangentialDir;
+
+            const forceDir = new THREE.Vector3(fx, fy, 0).normalize();
+            arrow.setDirection(forceDir);
+
+            // Scale arrow length
+            const fMag = Math.max(0.015, Math.min(0.045, 0.025 * (localB / 0.85)));
+            arrow.setLength(fMag, 0.008, 0.005);
+
+            // Torque contribution: r * F_tangential
+            const torqueContrib = r * fMag * 10.0 * tangentialDir;
+            totalComputedTorque += torqueContrib;
+          }
+
+          // Update Exam Card Torque Readout
+          const elExpTorque = document.getElementById('slotExpTorque');
+          const elExpDir = document.getElementById('slotExpDirection');
+          if (elExpTorque) elExpTorque.innerText = (totalComputedTorque >= 0 ? '+' : '') + totalComputedTorque.toFixed(2) + ' N·m';
+          if (elExpDir) {
+            if (totalComputedTorque > 0.05) {
+              elExpDir.innerText = 'Saat Yönü (CW)';
+              elExpDir.className = 'font-bold text-emerald-400';
+            } else if (totalComputedTorque < -0.05) {
+              elExpDir.innerText = 'Saat Yönünün Tersi (CCW)';
+              elExpDir.className = 'font-bold text-rose-400';
+            } else {
+              elExpDir.innerText = 'Denge / Nötr (0 Nm)';
+              elExpDir.className = 'font-bold text-amber-400';
+            }
+          }
+        }
+      }
+
+      // 5. Mechanical Rotation Ring Rotation
+      if (rotationRingMesh) {
+        rotationRingMesh.visible = isTorqueVisible;
+        if (isTorqueVisible) {
+          const rotDir = (d.omega >= 0) ? -1 : 1; // Visual rotation
+          rotationRingMesh.rotation.z -= rotDir * 1.5 * dt;
+        }
+      }
+
+      // 6. Axial Omega Vector Arrow (Right-Hand Rule)
+      if (omegaVectorArrow) {
+        omegaVectorArrow.visible = isOmegaVisible;
+        if (isOmegaVisible) {
+          const isCW = (d.omega >= 0);
+          // If CW: points inward (-Z); if CCW: points outward (+Z)
+          const omegaDir = new THREE.Vector3(0, 0, isCW ? -1 : 1);
+          omegaVectorArrow.setDirection(omegaDir);
+          const omegaLen = Math.max(0.035, Math.min(0.080, 0.050 * (Math.abs(d.omega) / 125.0)));
+          omegaVectorArrow.setLength(omegaLen, 0.014, 0.008);
+        }
+      }
+
+      // 7. 3D Labels Visibility
+      if (labels3DGroup) {
+        labels3DGroup.visible = state.showVectors.labels;
+      }
     }
 
     function recordHistory(d) {
@@ -2671,20 +3348,16 @@
       for (let x = 0; x < w; x += 35) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
       for (let y = 0; y < h; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
 
-      // Zero axis line
       const zeroY = h - ((0 - minVal) / (maxVal - minVal)) * h;
       ctx.strokeStyle = '#475569';
-      ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.moveTo(0, zeroY); ctx.lineTo(w, zeroY); ctx.stroke();
 
       if (buffer.length < 2) return;
 
-      // Draw Trace
+      const dx = w / (state.history.maxPoints - 1);
       ctx.strokeStyle = color;
       ctx.lineWidth = 2.5;
       ctx.beginPath();
-
-      const dx = w / (state.history.maxPoints - 1);
       buffer.forEach((val, i) => {
         const norm = Math.max(0, Math.min(1, (val - minVal) / (maxVal - minVal)));
         const y = h - norm * h;
@@ -2693,7 +3366,6 @@
       });
       ctx.stroke();
 
-      // Readout label
       const latest = buffer[buffer.length - 1] || 0;
       ctx.fillStyle = color;
       ctx.font = 'bold 12px JetBrains Mono';
@@ -2764,35 +3436,51 @@
       const d = state.dyna;
       const rpm = (d.omega * 60) / (2 * Math.PI);
       const isCW = d.omega >= 0;
-      const deg = ((d.theta * 180 / Math.PI) % 360 + 360) % 360;
+      const visualDeg = ((state.visualTheta * 180 / Math.PI) % 360 + 360) % 360;
 
-      // HUD elements
+      // Update Top Nav Telemetry Badges
       const elRpm = document.getElementById('globalRpmVal');
       const elDir = document.getElementById('globalDirVal');
       const elIa = document.getElementById('globalIaVal');
       const elTe = document.getElementById('globalTeVal');
+
+      if (elRpm) elRpm.innerText = Math.abs(rpm).toFixed(0) + ' d/d';
+      if (elDir) elDir.innerText = isCW ? 'CW' : 'CCW';
+      if (elIa) elIa.innerText = d.ia.toFixed(2) + ' A';
+      if (elTe) elTe.innerText = d.Te.toFixed(2) + ' N·m';
+
+      // 3D Viewport HUD
       const hudRotor = document.getElementById('hudRotorAngle');
       const hudElec = document.getElementById('hudElecAngle');
       const hudCurrent = document.getElementById('hudCurrent');
       const hudTorque = document.getElementById('hudTorque');
       const hudOmega = document.getElementById('hudOmega');
       const hudForce = document.getElementById('hudForce');
+      const hudDirText = document.getElementById('hudDirectionText');
 
-      if (elRpm) elRpm.innerText = Math.abs(rpm).toFixed(0) + ' d/d';
-      if (elDir) elDir.innerText = isCW ? 'CW' : 'CCW';
-      if (elIa) elIa.innerText = d.ia.toFixed(2) + ' A';
-      if (elTe) elTe.innerText = d.Te.toFixed(2) + ' N·m';
-      if (hudRotor) hudRotor.innerText = deg.toFixed(1) + '°';
-      if (hudElec) hudElec.innerText = ((deg * 2) % 360).toFixed(1) + '°';
+      if (hudRotor) hudRotor.innerText = visualDeg.toFixed(1) + '°';
+      if (hudElec) hudElec.innerText = ((visualDeg * 2) % 360).toFixed(1) + '°';
       if (hudCurrent) hudCurrent.innerText = d.ia.toFixed(2) + ' A';
       if (hudTorque) hudTorque.innerText = d.Te.toFixed(2) + ' N·m';
       if (hudOmega) hudOmega.innerText = d.omega.toFixed(1) + ' rad/s';
+      if (hudForce) hudForce.innerText = (d.ia * d.conductorL * d.Bmax).toFixed(2) + ' N';
+      if (hudDirText) {
+        hudDirText.innerText = isCW ? 'Saat Yönü (CW)' : 'Saat Yönünün Tersi (CCW)';
+        hudDirText.className = isCW ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
+      }
 
-      // Lorentz Force on single slot: F = B * ia * L
-      const Fsingle = d.Bmax * d.ia * d.conductorL;
-      if (hudForce) hudForce.innerText = Fsingle.toFixed(2) + ' N';
+      // Bottom control bar sync
+      const sliderAngle = document.getElementById('sliderRotorAngle');
+      const sliderLabel = document.getElementById('sliderAngleLabel');
+      const footerSpeed = document.getElementById('footerPhysSpeed');
 
-      // Gauges
+      if (sliderAngle && document.activeElement !== sliderAngle) {
+        sliderAngle.value = visualDeg.toFixed(1);
+      }
+      if (sliderLabel) sliderLabel.innerText = visualDeg.toFixed(1);
+      if (footerSpeed) footerSpeed.innerText = `${Math.abs(rpm).toFixed(0)} d/d (${Math.abs(d.omega).toFixed(1)} rad/s)`;
+
+      // Gauges in bottom row
       const gIa = document.getElementById('gaugeIa');
       const gRpm = document.getElementById('gaugeRpm');
       const gOmega = document.getElementById('gaugeOmega');
@@ -2801,20 +3489,240 @@
       const gPm = document.getElementById('gaugePm');
       const gEff = document.getElementById('gaugeEff');
 
-      const Pin = d.Va * d.ia;
-      const Pm = d.Te * d.omega;
-      const eff = (Pin > 0 && Pm > 0) ? Math.min(98.5, (Pm / Pin) * 100) : 0;
+      const Pin = Math.abs(d.Va * d.ia);
+      const Pout = Math.max(0, d.Te * d.omega);
+      const eff = Pin > 1.0 ? Math.min(99.0, (Pout / Pin) * 100.0) : 0;
 
       if (gIa) gIa.innerText = d.ia.toFixed(2) + ' A';
       if (gRpm) gRpm.innerText = Math.abs(rpm).toFixed(0) + ' d/d';
       if (gOmega) gOmega.innerText = d.omega.toFixed(1) + ' rad/s';
       if (gEa) gEa.innerText = d.Ea.toFixed(1) + ' V';
       if (gTe) gTe.innerText = d.Te.toFixed(2) + ' N·m';
-      if (gPm) gPm.innerText = Pm.toFixed(1) + ' W';
+      if (gPm) gPm.innerText = Pout.toFixed(1) + ' W';
       if (gEff) gEff.innerText = eff.toFixed(1) + ' %';
     }
 
-    // --- INTERACTIVE SLIDERS & DYNAMICS TRIGGERS ---
+    // =========================================================================
+    // SLOW MOTION & INTERACTIVE PLAYBACK CONTROLS
+    // =========================================================================
+    function setTimeScale(val) {
+      state.timeScale = parseFloat(val);
+    }
+
+    function toggleMotorPlay() {
+      state.isPaused = !state.isPaused;
+      state.isRunning = !state.isPaused;
+      const btn = document.getElementById('btnPlayPauseText');
+      const icon = document.querySelector('#btnPlayPause3D i');
+      const led = document.getElementById('badgeMotorLed');
+      const status = document.getElementById('globalMotorStatus');
+
+      if (!state.isPaused) {
+        if (btn) btn.innerText = 'Duraklat';
+        if (icon) icon.className = 'fa-solid fa-pause';
+        if (led) led.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
+        if (status) { status.innerText = 'ÇALIŞIYOR'; status.className = 'font-bold text-emerald-400'; }
+      } else {
+        if (btn) btn.innerText = 'Başlat';
+        if (icon) icon.className = 'fa-solid fa-play';
+        if (led) led.className = 'w-2.5 h-2.5 rounded-full bg-amber-400';
+        if (status) { status.innerText = 'DURAKLATILDI'; status.className = 'font-bold text-amber-400'; }
+      }
+    }
+
+    function stepRotorAngle(deltaDeg) {
+      state.isPaused = true;
+      state.isRunning = false;
+      const btn = document.getElementById('btnPlayPauseText');
+      if (btn) btn.innerText = 'Başlat';
+
+      state.visualTheta += (deltaDeg * Math.PI / 180.0);
+      state.visualTheta = (state.visualTheta % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+
+      if (rotorMeshGroup) rotorMeshGroup.rotation.z = state.visualTheta;
+      updateLiveHUDReadouts();
+    }
+
+    function onManualRotorAngleInput(degVal) {
+      state.isPaused = true;
+      state.isRunning = false;
+      const btn = document.getElementById('btnPlayPauseText');
+      if (btn) btn.innerText = 'Başlat';
+
+      state.visualTheta = parseFloat(degVal) * (Math.PI / 180.0);
+      if (rotorMeshGroup) rotorMeshGroup.rotation.z = state.visualTheta;
+      updateLiveHUDReadouts();
+    }
+
+    // =========================================================================
+    // OLUK İNCELEME VE DÖNÜŞ YÖNÜ DENEYİ (EXAM EXPERIMENT ENGINE)
+    // =========================================================================
+    function toggleSlotCurrentSign(slotIndex) {
+      state.slotCurrents[slotIndex] *= -1;
+      updateAllSlotBadges();
+
+      // Update UI Button
+      const btn = document.getElementById(`btnSlot${slotIndex}`);
+      if (btn) {
+        const isOut = (state.slotCurrents[slotIndex] === 1);
+        btn.className = isOut 
+          ? 'p-1.5 rounded-lg bg-slate-900 border border-cyan-700/70 hover:border-cyan-400 text-center transition'
+          : 'p-1.5 rounded-lg bg-slate-900 border border-amber-700/70 hover:border-amber-400 text-center transition';
+        btn.querySelector('.text-xs').className = isOut ? 'font-bold text-cyan-400 text-xs' : 'font-bold text-amber-400 text-xs';
+        btn.querySelector('.text-xs').innerText = isOut ? '⊙' : '⊗';
+      }
+    }
+
+    function resetAllSlotsToDefault() {
+      state.slotCurrents = [1, 1, 1, 1, -1, -1, -1, -1];
+      updateAllSlotBadges();
+      for (let i = 0; i < 8; i++) {
+        const btn = document.getElementById(`btnSlot${i}`);
+        if (btn) {
+          const isOut = (state.slotCurrents[i] === 1);
+          btn.className = isOut 
+            ? 'p-1.5 rounded-lg bg-slate-900 border border-cyan-700/70 hover:border-cyan-400 text-center transition'
+            : 'p-1.5 rounded-lg bg-slate-900 border border-amber-700/70 hover:border-amber-400 text-center transition';
+          btn.querySelector('.text-xs').className = isOut ? 'font-bold text-cyan-400 text-xs' : 'font-bold text-amber-400 text-xs';
+          btn.querySelector('.text-xs').innerText = isOut ? '⊙' : '⊗';
+        }
+      }
+    }
+
+    function invertStatorPoles3D() {
+      state.northTop = !state.northTop;
+
+      // Swap pole colors
+      if (poleNMesh && poleSMesh) {
+        poleNMesh.material.color.setHex(state.northTop ? 0xdc2626 : 0x2563eb);
+        poleSMesh.material.color.setHex(state.northTop ? 0x2563eb : 0xdc2626);
+      }
+
+      // Also sync digital twin state
+      state.twin.northTop = state.northTop;
+      drawDigitalTwinCanvas();
+    }
+
+    // =========================================================================
+    // "BANA AÇIKLA" 8-STEP INTERACTIVE EDUCATIONAL TOUR
+    // =========================================================================
+    const EXPLAINER_STEPS = [
+      {
+        title: "1. Stator Elektro-Mıknatıs Kutupları",
+        content: "Stator gövdesi üzerinde bulunan kutup pabuçları ana manyetik alanı oluşturur. Üstte Kuzey (N - Kırmızı), altta Güney (S - Mavi) kutbu yer alır. Manyetik alan çizgileri daima Kuzey kutbundan çıkar, hava aralığını geçerek Güney kutbuna girer.",
+        formula: "\\vec{B} = B_{max} (-\\hat{j})\\quad (\\text{Yukarıdan Aşa\u011fıya Do\u011fru})",
+        cam: 'front'
+      },
+      {
+        title: "2. Manyetik Akı Çizgileri ve Yönü",
+        content: "N kutbundan S kutbuna doğru akan parlak mavi çizgiler manyetik akıyı temsil eder. Üzerlerindeki hareketli oklar manyetik akı yoğunluğu vektörünün (\\vec{B}) doğrultusunu gösterir. Bu çizgiler rotor lamine sacı boyunca en düşük relüktanslı yolu izler.",
+        formula: "\\Phi = \\iint \\vec{B} \\cdot d\\vec{A} \\quad [\\text{Weber}]",
+        cam: 'field_focus'
+      },
+      {
+        title: "3. Rotor Oluk Akımları (⊙ ve ⊗)",
+        content: "Rotor üzerindeki 8 olukta bakır iletkenler bulunur. Fırça-kolektör düzeni sayesinde üst yarıdaki oluklardan akım gözlemciye doğru (⊙ Dışarı, Turkuaz), alt yarıdaki oluklardan ise ekrandan içeriye doğru (⊗ İçeri, Turuncu) akar.",
+        formula: "I_{üst} = +I_a\\ (\\odot), \\quad I_{alt} = -I_a\\ (\\otimes)",
+        cam: 'front'
+      },
+      {
+        title: "4. Lorentz Kuvveti: $\\vec{F} = i(\\vec{l} \\times \\vec{B})$",
+        content: "Akım taşıyan iletken manyetik alan içerisindeyken Lorentz kuvveti etkisinde kalır. Üst oluktaki iletken için (+Z içe) ve (B aşağı) vektörel çarpımı sağa doğru (+X) teğetsel bir kuvvet üretir.",
+        formula: "\\vec{F}_1 = i (l \\hat{k} \\times (-B \\hat{j})) = +i l B \\hat{i} \\quad (\\mathbf{Sa\u011fa\\ Do\u011fru})",
+        cam: 'force_focus'
+      },
+      {
+        title: "5. Moment Kolu ve Elektromanyetik Tork",
+        content: "Oluktaki iletkenin mil merkezine olan dik mesafesi moment kolunu (r) oluşturur. Kuvvet ile moment kolunun vektörel çarpımı $\\vec{T}_k = \\vec{r}_k \\times \\vec{F}_k$ teğetsel döndürme momentini meydana getirir.",
+        formula: "T_1 = r \\cdot F_{1,te\u011fet} = r \\cdot i \\cdot l \\cdot B \\quad [\\text{N}\\cdot\\text{m}]",
+        cam: 'force_focus'
+      },
+      {
+        title: "6. Bütün Olukların Moment Toplamı ($T_e$)",
+        content: "Alt yarıdaki iletkenlerde akım ters yönde (⊗) olduğu için kuvvet de sola doğru (-X) oluşur. Hem üstteki sağa kuvvet hem alttaki sola kuvvet aynı yönde döndürme üretir. 8 oluğun momenti toplanarak net motor momenti ($T_e$) elde edilir.",
+        formula: "T_e = \\sum_{k=1}^{8} (\\vec{r}_k \\times \\vec{F}_k)_z > 0 \\quad [\\text{Pozitif Net Tork}]",
+        cam: 'iso'
+      },
+      {
+        title: "7. Rotor Hareketi ve Dönüş Yönü (Saat Yönü / CW)",
+        content: "Net moment pozitif olduğu için rotor saat ibreleri yönünde (Clockwise - CW) ivmelenir. Motorun çevresindeki dairesel pembe ok fiziksel mekanik dönüş yönünü göstermektedir.",
+        formula: "J \\frac{d\\omega}{dt} = T_e - B_m \\omega - T_L \\implies \\frac{d\\omega}{dt} > 0\\ (\\text{CW Hızlanma})",
+        cam: 'iso'
+      },
+      {
+        title: "8. Açısal Hız Vektörü (\\vec{\\omega}) ve Sağ El Kuralı",
+        content: "Sağ el kuralına göre: Dört parmak rotorun fiziksel dönüş yönünü (saat yönü) sardığında, dik açılan başparmak dönme ekseni boyunca içe doğru (-Z) açısal hız vektörünü (\\vec{\\omega}) gösterir. Çevresel ok ile mil ekseni oku bu yüzden farklıdır.",
+        formula: "\\vec{\\omega} = -\\omega \\hat{k}\\quad (\\text{Mil Ekseninde Ekrandan \u0130\u00e7eriye Do\u011fru})",
+        cam: 'iso'
+      }
+    ];
+
+    function startExplainerTour() {
+      state.explainer.active = true;
+      state.explainer.step = 0;
+      state.isPaused = true;
+      document.getElementById('explainerOverlay').classList.remove('hidden');
+      showExplainerStep(0);
+    }
+
+    function showExplainerStep(idx) {
+      state.explainer.step = idx;
+      const step = EXPLAINER_STEPS[idx];
+      document.getElementById('explainerStepBadge').innerText = `Adım ${idx + 1}/8`;
+      document.getElementById('explainerStepTitle').innerText = step.title;
+      document.getElementById('explainerStepContent').innerText = step.content;
+      document.getElementById('explainerStepFormula').innerText = `$$${step.formula}$$`;
+
+      // Render KaTeX for formula
+      if (window.renderMathInElement) {
+        renderMathInElement(document.getElementById('explainerStepFormula'), {
+          delimiters: [{ left: '$$', right: '$$', display: true }]
+        });
+      }
+
+      // Camera preset
+      if (step.cam) setCameraPreset(step.cam);
+
+      // Dots
+      const dotsContainer = document.getElementById('explainerStepDots');
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < 8; i++) {
+        const dot = document.createElement('span');
+        dot.className = (i === idx) 
+          ? 'w-2 h-2 rounded-full bg-cyan-400' 
+          : 'w-2 h-2 rounded-full bg-slate-700';
+        dotsContainer.appendChild(dot);
+      }
+
+      document.getElementById('btnExplainerPrev').disabled = (idx === 0);
+      document.getElementById('btnExplainerNext').innerHTML = (idx === 7) 
+        ? 'Tamamla <i class="fa-solid fa-check ml-1"></i>' 
+        : 'Sonraki <i class="fa-solid fa-chevron-right ml-1"></i>';
+    }
+
+    function nextExplainerStep() {
+      if (state.explainer.step < 7) {
+        showExplainerStep(state.explainer.step + 1);
+      } else {
+        closeExplainerTour();
+      }
+    }
+
+    function prevExplainerStep() {
+      if (state.explainer.step > 0) {
+        showExplainerStep(state.explainer.step - 1);
+      }
+    }
+
+    function closeExplainerTour() {
+      state.explainer.active = false;
+      document.getElementById('explainerOverlay').classList.add('hidden');
+      resetCameraView();
+    }
+
+    // =========================================================================
+    // SLIDERS & DYNAMICS CONTROLS
+    // =========================================================================
     function setArmatureVoltage(val) {
       state.dyna.Va = parseFloat(val);
       const el = document.getElementById('labelVa');
@@ -2847,30 +3755,6 @@
       if (sl) sl.value = state.dyna.TL;
     }
 
-    function toggleMotorPlay() {
-      state.isRunning = !state.isRunning;
-      const btn = document.getElementById('btnMotorPlayText');
-      const led = document.getElementById('badgeMotorLed');
-      const status = document.getElementById('globalMotorStatus');
-      if (state.isRunning) {
-        if (btn) btn.innerText = 'Durdur';
-        if (led) led.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
-        if (status) { status.innerText = 'ÇALIŞIYOR'; status.className = 'font-bold text-emerald-400'; }
-      } else {
-        if (btn) btn.innerText = 'Başlat';
-        if (led) led.className = 'w-2.5 h-2.5 rounded-full bg-amber-400';
-        if (status) { status.innerText = 'DURDURULDU'; status.className = 'font-bold text-amber-400'; }
-      }
-    }
-
-    function stepCommutationSingle() {
-      state.isRunning = false;
-      state.dyna.theta += (Math.PI / 4.0); // +45 degrees (1 slot)
-      if (rotorMeshGroup) rotorMeshGroup.rotation.z = state.dyna.theta;
-      toggleMotorPlay();
-      toggleMotorPlay();
-    }
-
     function resetDynamicMotor() {
       const d = state.dyna;
       d.ia = 0;
@@ -2878,6 +3762,7 @@
       d.theta = 0;
       d.Ea = 0;
       d.Te = 0;
+      state.visualTheta = 0;
       state.history.ia = [];
       state.history.rpm = [];
       state.history.Te = [];
@@ -2885,12 +3770,14 @@
       state.history.Pm = [];
       state.history.Ea = [];
       if (rotorMeshGroup) rotorMeshGroup.rotation.z = 0;
+      updateLiveHUDReadouts();
     }
 
     function triggerDynaScenario(type) {
       if (type === 'directStart') {
         resetDynamicMotor();
         setArmatureVoltage(120);
+        state.isPaused = false;
         state.isRunning = true;
       } else if (type === 'loadStep') {
         toggleInstantLoad();
@@ -2898,7 +3785,7 @@
         setArmatureVoltage(-state.dyna.Va);
       } else if (type === 'dynamicBraking') {
         setArmatureVoltage(0);
-        state.dyna.Ra = 4.0; // simulate braking resistor
+        state.dyna.Ra = 4.0;
         setTimeout(() => { state.dyna.Ra = 1.5; }, 1500);
       }
     }
@@ -2940,6 +3827,25 @@
     function toggleVectorLayer(layer, isChecked) {
       state.showVectors[layer] = isChecked;
       if (layer === 'field' && fluxTubesGroup) fluxTubesGroup.visible = isChecked;
+      if (layer === 'heatmap') {
+        if (airgapHeatmapMesh) airgapHeatmapMesh.visible = isChecked;
+        const legend = document.getElementById('heatmapLegendBox');
+        if (legend) legend.style.display = isChecked ? 'block' : 'none';
+      }
+      if (layer === 'current' && slotBadgesGroup) slotBadgesGroup.visible = isChecked;
+      if (layer === 'currentFlow' && conductorParticlesGroup) conductorParticlesGroup.visible = isChecked;
+      if (layer === 'force' && forceArrowsGroup) forceArrowsGroup.visible = isChecked;
+      if (layer === 'torque' && rotationRingMesh) rotationRingMesh.visible = isChecked;
+      if (layer === 'omega' && omegaVectorArrow) omegaVectorArrow.visible = isChecked;
+      if (layer === 'labels' && labels3DGroup) labels3DGroup.visible = isChecked;
+    }
+
+    function onWindowResize3D() {
+      const container = document.getElementById('canvas3dContainer');
+      if (!container || !renderer3d || !camera3d) return;
+      camera3d.aspect = container.clientWidth / container.clientHeight;
+      camera3d.updateProjectionMatrix();
+      renderer3d.setSize(container.clientWidth, container.clientHeight);
     }
 
     // =========================================================================
@@ -2995,6 +3901,7 @@
       ctx.fill();
       ctx.stroke();
 
+      ctx.fillStyle = '#ffffff';
       ctx.fillText(isNTop ? 'KUTUP (S)' : 'KUTUP (N)', cx, cy + statorR - 20);
 
       // 4. Flux Lines B
@@ -3030,9 +3937,10 @@
 
       // Shaft
       ctx.beginPath();
-      ctx.arc(cx, cy, 11, 0, Math.PI * 2);
-      ctx.fillStyle = '#94a3b8';
+      ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+      ctx.fillStyle = '#475569';
       ctx.fill();
+      ctx.stroke();
 
       // 6. Slots (Slot 1 at top-left, Slot 2 at bottom-right)
       const slotD = rotorR * 0.65;
@@ -3062,6 +3970,7 @@
       ctx.arc(s2x, s2y, 14, 0, Math.PI * 2);
       ctx.fillStyle = '#0f172a';
       ctx.fill();
+      ctx.lineWidth = 2;
       ctx.strokeStyle = '#f59e0b';
       ctx.stroke();
 
@@ -3086,326 +3995,239 @@
       ctx.strokeStyle = '#38bdf8';
       ctx.stroke();
 
+      const tipAngle = isCW ? 0.8 : -0.8;
+      const tx = cx + Math.cos(tipAngle) * (rotorR + 18);
+      const ty = cy + Math.sin(tipAngle) * (rotorR + 18);
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath();
+      ctx.arc(tx, ty, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Text status badge
       const badge = document.getElementById('twinDirBadge');
       if (badge) {
-        if (isCW) {
-          badge.className = 'text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-700 text-emerald-300';
-          badge.innerHTML = '<i class="fa-solid fa-rotate-right"></i> DÖNÜŞ: CW (Saat Yönü)';
-        } else {
-          badge.className = 'text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-rose-950 border border-rose-700 text-rose-300';
-          badge.innerHTML = '<i class="fa-solid fa-rotate-left"></i> DÖNÜŞ: CCW (Saat Yönünün Tersi)';
-        }
+        badge.innerHTML = isCW 
+          ? '<i class="fa-solid fa-rotate-right"></i> DÖNÜŞ: CW (Saat Yönü)'
+          : '<i class="fa-solid fa-rotate-left"></i> DÖNÜŞ: CCW (Saat Yönünün Tersi)';
+        badge.className = isCW
+          ? 'text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-700 text-emerald-300'
+          : 'text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-rose-950 border border-rose-700 text-rose-300';
       }
     }
 
-    function drawCanvasArrow(ctx, fx, fy, tx, ty, color, label) {
-      const angle = Math.atan2(ty - fy, tx - fx);
+    function drawCanvasArrow(ctx, fromx, fromy, tox, toy, color, label) {
+      const headlen = 8;
+      const dx = tox - fromx;
+      const dy = toy - fromy;
+      const angle = Math.atan2(dy, dx);
       ctx.strokeStyle = color;
       ctx.fillStyle = color;
       ctx.lineWidth = 3;
-
       ctx.beginPath();
-      ctx.moveTo(fx, fy);
-      ctx.lineTo(tx, ty);
+      ctx.moveTo(fromx, fromy);
+      ctx.lineTo(tox, toy);
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.moveTo(tx, ty);
-      ctx.lineTo(tx - 9 * Math.cos(angle - Math.PI / 6), ty - 9 * Math.sin(angle - Math.PI / 6));
-      ctx.lineTo(tx - 9 * Math.cos(angle + Math.PI / 6), ty - 9 * Math.sin(angle + Math.PI / 6));
+      ctx.moveTo(tox, toy);
+      ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
       ctx.closePath();
       ctx.fill();
 
-      ctx.font = 'bold 12px JetBrains Mono';
-      ctx.fillText(label, tx + (tx > fx ? 8 : -16), ty - 4);
+      if (label) {
+        ctx.font = 'bold 12px JetBrains Mono';
+        ctx.fillText(label, tox + (dx > 0 ? 8 : -22), toy - 4);
+      }
     }
 
-    function twinFlipPoles() {
+    function toggleTwinPoles() {
       state.twin.northTop = !state.twin.northTop;
+      state.northTop = state.twin.northTop;
       drawDigitalTwinCanvas();
+      if (poleNMesh && poleSMesh) {
+        poleNMesh.material.color.setHex(state.northTop ? 0xdc2626 : 0x2563eb);
+        poleSMesh.material.color.setHex(state.northTop ? 0x2563eb : 0xdc2626);
+      }
     }
 
-    function twinFlipCurrent() {
+    function toggleTwinCurrent() {
       state.twin.currentOutSlot1 = !state.twin.currentOutSlot1;
       drawDigitalTwinCanvas();
     }
 
-    function twinReset() {
-      state.twin.northTop = true;
-      state.twin.currentOutSlot1 = true;
-      drawDigitalTwinCanvas();
-    }
+    function setRHRMode(mode) {
+      const btnA = document.getElementById('btnRHRModeA');
+      const btnB = document.getElementById('btnRHRModeB');
+      const textA = document.getElementById('rhrExplA');
+      const textB = document.getElementById('rhrExplB');
 
-    // =========================================================================
-    // H-BRIDGE & CIRCUITS LAB ENGINES
-    // =========================================================================
-    function drawHBridgeCanvas() {
-      const canvas = document.getElementById('hbridgeCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const w = canvas.width = canvas.parentElement.clientWidth || 450;
-      const h = canvas.height = canvas.parentElement.clientHeight || 300;
-
-      ctx.clearRect(0, 0, w, h);
-
-      const topY = 40;
-      const botY = 260;
-      const leftX = 80;
-      const rightX = w - 80;
-      const midY = (topY + botY) / 2;
-
-      // DC Rails
-      ctx.strokeStyle = '#ef4444';
-      ctx.lineWidth = 4;
-      ctx.beginPath(); ctx.moveTo(40, topY); ctx.lineTo(w - 40, topY); ctx.stroke();
-      ctx.fillStyle = '#ef4444'; ctx.font = 'bold 12px JetBrains Mono';
-      ctx.fillText('+VDC (120V)', 45, topY - 10);
-
-      ctx.strokeStyle = '#3b82f6';
-      ctx.beginPath(); ctx.moveTo(40, botY); ctx.lineTo(w - 40, botY); ctx.stroke();
-      ctx.fillStyle = '#3b82f6';
-      ctx.fillText('GND', 45, botY + 20);
-
-      const mode = state.hbridge.mode;
-      const s1 = (mode === 'forward');
-      const s4 = (mode === 'forward' || mode === 'brake');
-      const s2 = (mode === 'reverse' || mode === 'brake');
-      const s3 = (mode === 'reverse');
-
-      // 4 Switches
-      drawCircuitSwitch(ctx, leftX, 85, s1, 'S1');
-      drawCircuitSwitch(ctx, rightX, 85, s3, 'S3');
-      drawCircuitSwitch(ctx, leftX, 215, s2, 'S2');
-      drawCircuitSwitch(ctx, rightX, 215, s4, 'S4');
-
-      // Center Motor Circle
-      ctx.beginPath();
-      ctx.arc(w / 2, midY, 26, 0, Math.PI * 2);
-      ctx.fillStyle = '#1e293b'; ctx.fill();
-      ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3; ctx.stroke();
-      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 14px JetBrains Mono'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('M', w / 2, midY);
-
-      // Connecting wires to Motor
-      ctx.strokeStyle = '#64748b'; ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(leftX, midY); ctx.lineTo(w / 2 - 26, midY); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(rightX, midY); ctx.lineTo(w / 2 + 26, midY); ctx.stroke();
-
-      // Highlight active current flow path
-      if (s1 && s4) {
-        ctx.strokeStyle = '#10b981'; ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.moveTo(leftX, topY); ctx.lineTo(leftX, midY); ctx.lineTo(rightX, midY); ctx.lineTo(rightX, botY);
-        ctx.stroke();
-      } else if (s2 && s3) {
-        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.moveTo(rightX, topY); ctx.lineTo(rightX, midY); ctx.lineTo(leftX, midY); ctx.lineTo(leftX, botY);
-        ctx.stroke();
+      if (mode === 'A') {
+        if (btnA) btnA.className = 'px-3 py-1.5 rounded-lg bg-cyan-900 border border-cyan-500 text-cyan-200 font-bold text-xs transition';
+        if (btnB) btnB.className = 'px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 font-bold text-xs transition';
+        if (textA) textA.classList.remove('hidden');
+        if (textB) textB.classList.add('hidden');
+      } else {
+        if (btnA) btnA.className = 'px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 font-bold text-xs transition';
+        if (btnB) btnB.className = 'px-3 py-1.5 rounded-lg bg-indigo-900 border border-indigo-500 text-indigo-200 font-bold text-xs transition';
+        if (textA) textA.classList.add('hidden');
+        if (textB) textB.classList.remove('hidden');
       }
     }
 
-    function drawCircuitSwitch(ctx, x, y, isOn, name) {
-      ctx.save();
-      ctx.fillStyle = isOn ? 'rgba(16, 185, 129, 0.25)' : 'rgba(30, 41, 59, 0.85)';
-      ctx.strokeStyle = isOn ? '#10b981' : '#64748b';
-      ctx.lineWidth = isOn ? 3 : 1.5;
-      ctx.beginPath();
-      ctx.roundRect(x - 22, y - 16, 44, 32, 6);
-      ctx.fill(); ctx.stroke();
-
-      ctx.fillStyle = isOn ? '#34d399' : '#94a3b8';
-      ctx.font = 'bold 11px JetBrains Mono';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText(name, x, y - 4);
-      ctx.font = '9px JetBrains Mono';
-      ctx.fillText(isOn ? 'ON' : 'OFF', x, y + 8);
-      ctx.restore();
-    }
-
+    // =========================================================================
+    // CIRCUIT LAB (H-BRIDGE & 3-PHASE BLDC INVERTER)
+    // =========================================================================
     function setHBridgeMode(mode) {
       state.hbridge.mode = mode;
-      const modes = ['fwd', 'rev', 'brake', 'coast'];
-      modes.forEach(m => {
-        const btn = document.getElementById(`btnHb${m.charAt(0).toUpperCase() + m.slice(1)}`);
-        if (btn) btn.className = 'py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition font-mono';
+      ['btnHbFwd', 'btnHbRev', 'btnHbBrake', 'btnHbCoast'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.className = 'py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition';
       });
 
-      const label = document.getElementById('hbridgeStateLabel');
+      const btnFwd = document.getElementById('btnHbFwd');
+      const btnRev = document.getElementById('btnHbRev');
+      const btnBrake = document.getElementById('btnHbBrake');
+      const btnCoast = document.getElementById('btnHbCoast');
+      const stateLbl = document.getElementById('hbridgeStateLabel');
+
       if (mode === 'forward') {
-        document.getElementById('btnHbFwd').className = 'py-2 rounded-lg bg-emerald-900/60 border border-emerald-500 text-emerald-300 font-bold transition font-mono';
-        label.innerText = 'İLERİ SÜRÜŞ (S1 & S4 ON)';
-        label.className = 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-950 border border-emerald-700 text-emerald-300';
+        if (btnFwd) btnFwd.className = 'py-2 rounded-lg bg-emerald-900/60 border border-emerald-500 text-emerald-300 font-bold transition';
+        if (stateLbl) { stateLbl.innerText = 'İLERİ (CW)'; stateLbl.className = 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-950 border border-emerald-700 text-emerald-300'; }
         setArmatureVoltage(120 * state.hbridge.dutyCycle);
       } else if (mode === 'reverse') {
-        document.getElementById('btnHbRev').className = 'py-2 rounded-lg bg-amber-900/60 border border-amber-500 text-amber-300 font-bold transition font-mono';
-        label.innerText = 'GERİ SÜRÜŞ (S2 & S3 ON)';
-        label.className = 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-amber-950 border border-amber-700 text-amber-300';
+        if (btnRev) btnRev.className = 'py-2 rounded-lg bg-amber-900/60 border border-amber-500 text-amber-300 font-bold transition';
+        if (stateLbl) { stateLbl.innerText = 'GERİ (CCW)'; stateLbl.className = 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-amber-950 border border-amber-700 text-amber-300'; }
         setArmatureVoltage(-120 * state.hbridge.dutyCycle);
       } else if (mode === 'brake') {
-        document.getElementById('btnHbBrake').className = 'py-2 rounded-lg bg-rose-900/60 border border-rose-500 text-rose-300 font-bold transition font-mono';
-        label.innerText = 'DİNAMİK FRENLEME (S2 & S4 ON)';
-        label.className = 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-rose-950 border border-rose-700 text-rose-300';
-        setArmatureVoltage(0);
+        if (btnBrake) btnBrake.className = 'py-2 rounded-lg bg-rose-900/60 border border-rose-500 text-rose-300 font-bold transition';
+        if (stateLbl) { stateLbl.innerText = 'FRENLEME'; stateLbl.className = 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-rose-950 border border-rose-700 text-rose-300'; }
+        triggerDynaScenario('dynamicBraking');
       } else if (mode === 'coast') {
-        document.getElementById('btnHbCoast').className = 'py-2 rounded-lg bg-slate-700 border border-slate-500 text-white font-bold transition font-mono';
-        label.innerText = 'BOŞTA / KESİMDE (TÜM ANAHTARLAR OFF)';
-        label.className = 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-400';
+        if (btnCoast) btnCoast.className = 'py-2 rounded-lg bg-slate-700 border border-slate-500 text-white font-bold transition';
+        if (stateLbl) { stateLbl.innerText = 'SERBEST (COAST)'; stateLbl.className = 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-400'; }
         setArmatureVoltage(0);
       }
       drawHBridgeCanvas();
     }
 
-    function setPwmDuty(val) {
+    function setHBridgePWM(val) {
       state.hbridge.dutyCycle = parseFloat(val) / 100.0;
-      document.getElementById('labelPwmVal').innerText = val + ' %';
-      const veff = 120 * state.hbridge.dutyCycle;
-      document.getElementById('labelVeff').innerText = veff.toFixed(1) + ' V (@120V)';
-      if (state.hbridge.mode === 'forward') setArmatureVoltage(veff);
-      else if (state.hbridge.mode === 'reverse') setArmatureVoltage(-veff);
+      const elPwm = document.getElementById('labelPwmVal');
+      if (elPwm) elPwm.innerText = val + ' %';
+      if (state.hbridge.mode === 'forward') setArmatureVoltage(120 * state.hbridge.dutyCycle);
+      else if (state.hbridge.mode === 'reverse') setArmatureVoltage(-120 * state.hbridge.dutyCycle);
+      drawHBridgeCanvas();
     }
 
-    function drawUniversalCircuitCanvas() {
-      const canvas = document.getElementById('universalCircuitCanvas');
+    function drawHBridgeCanvas() {
+      const canvas = document.getElementById('hbridgeCanvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const w = canvas.width = canvas.parentElement.clientWidth || 450;
-      const h = canvas.height = canvas.parentElement.clientHeight || 300;
+      const h = canvas.height = canvas.parentElement.clientHeight || 270;
 
       ctx.clearRect(0, 0, w, h);
 
-      // Simple Universal Motor Circuit Schematic
-      ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth = 2.5;
+      const q1On = (state.hbridge.mode === 'forward');
+      const q4On = (state.hbridge.mode === 'forward');
+      const q2On = (state.hbridge.mode === 'reverse');
+      const q3On = (state.hbridge.mode === 'reverse');
 
-      // Supply symbol
-      ctx.beginPath();
-      ctx.arc(60, 150, 20, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.fillStyle = '#38bdf8';
-      ctx.font = 'bold 12px JetBrains Mono';
+      // Vcc Rail
+      ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(40, 30); ctx.lineTo(w - 40, 30); ctx.stroke();
+      ctx.fillStyle = '#ef4444'; ctx.font = 'bold 12px JetBrains Mono';
+      ctx.fillText('+Vdc (120V)', w / 2 - 35, 22);
+
+      // GND Rail
+      ctx.strokeStyle = '#64748b';
+      ctx.beginPath(); ctx.moveTo(40, h - 30); ctx.lineTo(w - 40, h - 30); ctx.stroke();
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('GND (0V)', w / 2 - 25, h - 14);
+
+      // Switches Q1, Q2, Q3, Q4
+      drawSwitch(ctx, 110, 75, 'Q1 (A+)', q1On);
+      drawSwitch(ctx, 110, h - 75, 'Q2 (A-)', q2On);
+      drawSwitch(ctx, w - 110, 75, 'Q3 (B+)', q3On);
+      drawSwitch(ctx, w - 110, h - 75, 'Q4 (B-)', q4On);
+
+      // Center Motor Circle
+      const mx = w / 2, my = h / 2;
+      ctx.beginPath(); ctx.arc(mx, my, 28, 0, Math.PI * 2);
+      ctx.fillStyle = '#0f172a'; ctx.fill();
+      ctx.lineWidth = 3; ctx.strokeStyle = '#38bdf8'; ctx.stroke();
+      ctx.fillStyle = '#38bdf8'; ctx.font = 'bold 16px JetBrains Mono';
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText(state.univ.isAC ? '~ AC' : '= DC', 60, 150);
+      ctx.fillText('M', mx, my);
 
-      // Stator Field Winding (Coil symbol)
-      ctx.fillStyle = '#f59e0b';
-      ctx.fillText('Kutup Rf, Lf', 160, 80);
-      ctx.strokeStyle = '#f59e0b';
-      ctx.beginPath(); ctx.moveTo(60, 130); ctx.lineTo(60, 100); ctx.lineTo(130, 100); ctx.stroke();
-      // 3 loops
-      for (let i = 0; i < 4; i++) {
-        ctx.beginPath(); ctx.arc(140 + i * 16, 100, 8, Math.PI, 0); ctx.stroke();
-      }
-      ctx.beginPath(); ctx.moveTo(140 + 4 * 16, 100); ctx.lineTo(240, 100); ctx.stroke();
+      // Wiring to motor
+      ctx.strokeStyle = q1On || q2On ? '#facc15' : '#475569';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(110, 75); ctx.lineTo(110, my); ctx.lineTo(mx - 28, my); ctx.stroke();
 
-      // DPDT Armature Switch
-      ctx.fillStyle = '#ec4899';
-      ctx.fillText(state.univ.armatureReversed ? 'DPDT: TERS' : 'DPDT: DÜZ', 290, 80);
+      ctx.strokeStyle = q3On || q4On ? '#facc15' : '#475569';
+      ctx.beginPath(); ctx.moveTo(w - 110, 75); ctx.lineTo(w - 110, my); ctx.lineTo(mx + 28, my); ctx.stroke();
+    }
 
-      // Rotor Armature Circle
+    function drawSwitch(ctx, x, y, label, isOn) {
+      ctx.strokeStyle = isOn ? '#10b981' : '#64748b';
+      ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.arc(330, 150, 24, 0, Math.PI * 2);
-      ctx.strokeStyle = '#38bdf8'; ctx.stroke();
-      ctx.fillStyle = '#ffffff'; ctx.fillText('M', 330, 150);
+      ctx.moveTo(x, y - 20);
+      if (isOn) ctx.lineTo(x, y + 20);
+      else ctx.lineTo(x + 14, y + 16);
+      ctx.stroke();
 
-      // Return wire
-      ctx.strokeStyle = '#38bdf8';
-      ctx.beginPath(); ctx.moveTo(330, 174); ctx.lineTo(330, 200); ctx.lineTo(60, 200); ctx.lineTo(60, 170); ctx.stroke();
-    }
-
-    function toggleUnivSupplyType() {
-      state.univ.isAC = !state.univ.isAC;
-      const btn = document.getElementById('btnUnivSupplyToggle');
-      if (btn) btn.innerText = state.univ.isAC ? 'Besleme: 120V AC (60 Hz)' : 'Besleme: 120V DC';
-      drawUniversalCircuitCanvas();
-    }
-
-    function toggleUnivArmatureSwitch() {
-      state.univ.armatureReversed = !state.univ.armatureReversed;
-      const btn = document.getElementById('btnUnivArmatureToggle');
-      if (btn) btn.innerText = state.univ.armatureReversed ? 'Armatür DPDT: TERS' : 'Armatür DPDT: DÜZ';
-      const desc = document.getElementById('univCircuitDesc');
-      if (state.univ.armatureReversed) {
-        desc.innerHTML = '<strong class="text-rose-400">Armatür Akımı Terslendi:</strong> Manyetik kutup akısı aynı kalırken sadece endüvi akımı terslendi $\\implies$ <strong class="text-rose-400">DÖNÜŞ YÖNÜ TERSİNE DÖNER (CCW)!</strong>';
-      } else {
-        desc.innerHTML = '<strong class="text-emerald-400">Armatür Düz Bağlı:</strong> Standart ileri yönlü saat ibreleri (CW) torku üretilir.';
-      }
-      drawUniversalCircuitCanvas();
-      renderKaTeX();
+      ctx.fillStyle = isOn ? '#34d399' : '#94a3b8';
+      ctx.font = '10px JetBrains Mono';
+      ctx.textAlign = 'center';
+      ctx.fillText(label, x + (isOn ? 25 : 30), y);
     }
 
     // =========================================================================
-    // BLDC LAB & OSCILLOSCOPE ENGINES
+    // BLDC COMMUTATION & 3-PHASE INVERTER
     // =========================================================================
-    const bldcSteps = [
-      { step: 1, angle: '0°-60°', h1: 1, h2: 0, h3: 1, pos: 'A', neg: 'B', name: 'A+ B-' },
-      { step: 2, angle: '60°-120°', h1: 1, h2: 0, h3: 0, pos: 'A', neg: 'C', name: 'A+ C-' },
-      { step: 3, angle: '120°-180°', h1: 1, h2: 1, h3: 0, pos: 'B', neg: 'C', name: 'B+ C-' },
-      { step: 4, angle: '180°-240°', h1: 0, h2: 1, h3: 0, pos: 'B', neg: 'A', name: 'B+ A-' },
-      { step: 5, angle: '240°-300°', h1: 0, h2: 1, h3: 1, pos: 'C', neg: 'A', name: 'C+ A-' },
-      { step: 6, angle: '300°-360°', h1: 0, h2: 0, h3: 1, pos: 'C', neg: 'B', name: 'C+ B-' }
+    const BLDC_TABLE = [
+      { step: 1, hall: '101', hi: 'A+', lo: 'B-', desc: 'Q1 ve Q4 İletimde' },
+      { step: 2, hall: '100', hi: 'A+', lo: 'C-', desc: 'Q1 ve Q6 İletimde' },
+      { step: 3, hall: '110', hi: 'B+', lo: 'C-', desc: 'Q3 ve Q6 İletimde' },
+      { step: 4, hall: '010', hi: 'B+', lo: 'A-', desc: 'Q3 ve Q2 İletimde' },
+      { step: 5, hall: '011', hi: 'C+', lo: 'A-', desc: 'Q5 ve Q2 İletimde' },
+      { step: 6, hall: '001', hi: 'C+', lo: 'B-', desc: 'Q5 ve Q4 İletimde' }
     ];
 
     function drawBldcBridgeCanvas() {
       const canvas = document.getElementById('bldcBridgeCanvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
-      const w = canvas.width = canvas.parentElement.clientWidth || 650;
-      const h = canvas.height = canvas.parentElement.clientHeight || 320;
+      const w = canvas.width = canvas.parentElement.clientWidth || 450;
+      const h = canvas.height = canvas.parentElement.clientHeight || 270;
 
       ctx.clearRect(0, 0, w, h);
 
-      const cur = bldcSteps[state.bldc.step - 1];
+      const cur = BLDC_TABLE[state.bldc.step - 1];
+      const stepLbl = document.getElementById('bldcCurrentStepLabel');
+      if (stepLbl) stepLbl.innerText = `Adım ${cur.step}/6 (${cur.hi} / ${cur.lo})`;
 
-      // Highlight truth table row
-      for (let i = 1; i <= 6; i++) {
-        const row = document.getElementById(`row-step-${i}`);
-        if (row) row.className = (i === state.bldc.step) ? 'bg-cyan-950/70 text-cyan-300 font-bold border-l-4 border-cyan-400' : '';
+      for (let s = 1; s <= 6; s++) {
+        const row = document.getElementById(`row-step-${s}`);
+        if (row) {
+          row.className = (s === state.bldc.step) 
+            ? 'bg-cyan-950/50 text-cyan-300 font-bold' 
+            : '';
+        }
       }
 
-      const label = document.getElementById('bldcCurrentStepLabel');
-      if (label) label.innerText = `Adım ${cur.step} (${cur.name})`;
+      const cols = [w * 0.25, w * 0.50, w * 0.75];
+      const labelsTop = ['Q1 (A+)', 'Q3 (B+)', 'Q5 (C+)'];
+      const labelsBot = ['Q2 (A-)', 'Q4 (B-)', 'Q6 (C-)'];
 
-      // DC Rails
-      ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 4;
-      ctx.beginPath(); ctx.moveTo(50, 40); ctx.lineTo(w - 50, 40); ctx.stroke();
-      ctx.fillStyle = '#ef4444'; ctx.font = 'bold 12px JetBrains Mono';
-      ctx.fillText('+VDC', 55, 30);
-
-      ctx.strokeStyle = '#3b82f6';
-      ctx.beginPath(); ctx.moveTo(50, 280); ctx.lineTo(w - 50, 280); ctx.stroke();
-      ctx.fillStyle = '#3b82f6';
-      ctx.fillText('GND', 55, 300);
-
-      // 3 Inverter Legs
-      const legSpacing = (w - 100) / 4;
-      const phases = ['A', 'B', 'C'];
-
-      phases.forEach((ph, idx) => {
-        const legX = 50 + (idx + 1) * legSpacing;
-        const isUpperOn = (cur.pos === ph);
-        const isLowerOn = (cur.neg === ph);
-
-        // Leg wire
-        ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(legX, 40); ctx.lineTo(legX, 280); ctx.stroke();
-
-        // Upper MOSFET
-        drawCircuitSwitch(ctx, legX, 90, isUpperOn, `${ph}+ (Q${idx*2+1})`);
-        // Lower MOSFET
-        drawCircuitSwitch(ctx, legX, 230, isLowerOn, `${ph}- (Q${idx*2+2})`);
-
-        // Phase output tap
-        ctx.fillStyle = '#ffffff'; ctx.font = 'bold 13px JetBrains Mono';
-        ctx.fillText(`Faz ${ph}`, legX + 15, 160);
-
-        if (isUpperOn) {
-          ctx.strokeStyle = '#10b981'; ctx.lineWidth = 4;
-          ctx.beginPath(); ctx.moveTo(legX, 40); ctx.lineTo(legX, 160); ctx.stroke();
-        } else if (isLowerOn) {
-          ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 4;
-          ctx.beginPath(); ctx.moveTo(legX, 160); ctx.lineTo(legX, 280); ctx.stroke();
-        }
+      cols.forEach((cx, i) => {
+        const topOn = (i === 0 && cur.hi === 'A+') || (i === 1 && cur.hi === 'B+') || (i === 2 && cur.hi === 'C+');
+        const botOn = (i === 0 && cur.lo === 'A-') || (i === 1 && cur.lo === 'B-') || (i === 2 && cur.lo === 'C-');
+        drawSwitch(ctx, cx, 65, labelsTop[i], topOn);
+        drawSwitch(ctx, cx, h - 65, labelsBot[i], botOn);
       });
     }
 
@@ -3413,41 +4235,46 @@
       const canvas = document.getElementById('bldcOscilloscopeCanvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
-      const w = canvas.width = canvas.parentElement.clientWidth || 800;
-      const h = canvas.height = canvas.parentElement.clientHeight || 220;
+      const w = canvas.width = canvas.parentElement.clientWidth || 450;
+      const h = canvas.height = canvas.parentElement.clientHeight || 180;
 
       ctx.clearRect(0, 0, w, h);
 
-      // Grid
-      ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
-      for (let x = 0; x < w; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
-      for (let y = 0; y < h; y += 35) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+      // Draw 3 trapezoidal Back-EMF waves (120 deg apart)
+      const colors = ['#38bdf8', '#f59e0b', '#ec4899'];
+      const names = ['Faz A', 'Faz B', 'Faz C'];
 
-      const midY = h / 2;
-      const colors = ['#38bdf8', '#34d399', '#f59e0b'];
-      const phaseOffsets = [0, (2 * Math.PI) / 3, (4 * Math.PI) / 3];
-
-      for (let p = 0; p < 3; p++) {
-        ctx.strokeStyle = colors[p]; ctx.lineWidth = 2.5;
+      for (let ph = 0; ph < 3; ph++) {
+        const phaseShift = (ph * 2 * Math.PI) / 3;
+        ctx.strokeStyle = colors[ph];
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
+        const midY = (ph + 0.5) * (h / 3);
+
         for (let x = 0; x < w; x++) {
-          const theta = (x / w) * (Math.PI * 4) + phaseOffsets[p];
+          const theta = (x / w) * Math.PI * 4 + phaseShift;
           const sinVal = Math.sin(theta);
-          let trapVal = (sinVal > 0.5) ? 1 : ((sinVal < -0.5) ? -1 : sinVal / 0.5);
-          const y = midY - trapVal * 45;
+          const trapVal = Math.max(-1, Math.min(1, sinVal * 1.6));
+          const y = midY - trapVal * 20;
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
         ctx.stroke();
+
+        ctx.fillStyle = colors[ph];
+        ctx.font = 'bold 10px JetBrains Mono';
+        ctx.fillText(names[ph], 15, midY - 12);
       }
 
-      // Cursor marker for current step
-      const curX = ((state.bldc.step - 0.5) / 6) * (w / 2);
-      ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]);
-      ctx.beginPath(); ctx.moveTo(curX, 0); ctx.lineTo(curX, h); ctx.stroke();
+      // Current step indicator
+      const stepX = ((state.bldc.step - 0.5) / 6) * w;
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(stepX, 0); ctx.lineTo(stepX, h); ctx.stroke();
       ctx.setLineDash([]);
-      ctx.fillStyle = '#ef4444'; ctx.font = 'bold 11px JetBrains Mono';
-      ctx.fillText(`Adım ${state.bldc.step}`, curX + 5, 20);
+      ctx.fillStyle = '#10b981'; ctx.font = 'bold 11px JetBrains Mono';
+      ctx.fillText(`Adım ${state.bldc.step}`, stepX + 5, 20);
     }
 
     function nextBldcStep() {
@@ -3584,44 +4411,28 @@
 
       channels.forEach((ch, idx) => {
         const yBase = idx * rowH + rowH * 0.75;
-        ctx.fillStyle = ch.color; ctx.font = 'bold 11px JetBrains Mono';
-        ctx.fillText(ch.name, 15, idx * rowH + 20);
+        ctx.strokeStyle = ch.color;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
 
-        ctx.strokeStyle = ch.color; ctx.lineWidth = 2.5; ctx.beginPath();
-        for (let x = 80; x < w; x++) {
+        for (let x = 0; x < w; x++) {
           let val = 0;
           if (ch.isZ) {
-            const phase = ((x * 0.02 + t * 0.2) % (Math.PI * 8));
-            val = (phase > 0 && phase < 0.4) ? 1 : 0;
+            const zPeriod = w * 0.8;
+            val = ((x + t * 40) % zPeriod < 12) ? 1 : 0;
           } else {
-            val = Math.sin((x * 0.05) + t + ch.offset) > 0 ? 1 : 0;
+            val = Math.sin((x / 14) + t + ch.offset) > 0 ? 1 : 0;
           }
-          const y = yBase - val * 35;
-          if (x === 80) ctx.moveTo(x, y);
+          const y = yBase - val * (rowH * 0.55);
+          if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
         ctx.stroke();
+
+        ctx.fillStyle = ch.color;
+        ctx.font = 'bold 11px JetBrains Mono';
+        ctx.fillText(ch.name, 15, yBase - rowH * 0.60);
       });
-    }
-
-    function setEncoderDir(dir) {
-      state.encoder.dir = dir;
-      const badge = document.getElementById('encoderDirBadge');
-      if (dir === 1) {
-        badge.innerText = "CW (A, B'den 90° Önce)";
-        badge.className = 'text-xs font-mono font-bold px-2.5 py-0.5 rounded bg-cyan-950 border border-cyan-800 text-cyan-300';
-      } else {
-        badge.innerText = "CCW (B, A'dan 90° Önce)";
-        badge.className = 'text-xs font-mono font-bold px-2.5 py-0.5 rounded bg-rose-950 border border-rose-800 text-rose-300';
-      }
-      drawEncoderCanvas();
-    }
-
-    function updateEncoderSim() {
-      const ppr = parseInt(document.getElementById('selectEncoderPpr').value);
-      state.encoder.ppr = ppr;
-      document.getElementById('enc4xCount').innerText = (ppr * 4).toLocaleString() + ' darbe/tur';
-      document.getElementById('encPulseFreq').innerText = ((ppr * 1200) / 60000).toFixed(1) + ' kHz';
     }
 
     function drawResolverCanvas() {
@@ -3629,205 +4440,236 @@
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       const w = canvas.width = canvas.parentElement.clientWidth || 450;
-      const h = canvas.height = canvas.parentElement.clientHeight || 270;
+      const h = canvas.height = canvas.parentElement.clientHeight || 240;
 
       ctx.clearRect(0, 0, w, h);
-      const t = performance.now() * 0.002;
-      const rowH = h / 2;
+      const t = performance.now() * 0.005;
+      const theta = (t * 0.15) % (Math.PI * 2);
 
-      ctx.fillStyle = '#38bdf8'; ctx.font = 'bold 11px JetBrains Mono';
-      ctx.fillText('V_sin = sin(θ)·sin(ω_c t)', 15, 20);
+      // Carrier frequency ~ 10kHz modulated by sin/cos
       ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2; ctx.beginPath();
       for (let x = 0; x < w; x++) {
-        const carrier = Math.sin(x * 0.25);
-        const mod = Math.sin(t * 0.5 + x * 0.015);
-        const y = rowH * 0.5 - (carrier * mod) * 35;
-        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        const carrier = Math.sin(x * 0.35 + t * 10);
+        const modSin = Math.sin(theta);
+        const y = h * 0.35 - (carrier * modSin * 35);
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
       }
       ctx.stroke();
+      ctx.fillStyle = '#38bdf8'; ctx.font = 'bold 11px JetBrains Mono';
+      ctx.fillText(`V_sin = V_c · sin(θ) [θ = ${(theta * 180 / Math.PI).toFixed(0)}°]`, 15, 25);
 
-      ctx.fillStyle = '#a855f7';
-      ctx.fillText('V_cos = cos(θ)·sin(ω_c t)', 15, rowH + 20);
-      ctx.strokeStyle = '#a855f7'; ctx.beginPath();
+      ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2; ctx.beginPath();
       for (let x = 0; x < w; x++) {
-        const carrier = Math.sin(x * 0.25);
-        const mod = Math.cos(t * 0.5 + x * 0.015);
-        const y = rowH * 1.5 - (carrier * mod) * 35;
-        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        const carrier = Math.sin(x * 0.35 + t * 10);
+        const modCos = Math.cos(theta);
+        const y = h * 0.75 - (carrier * modCos * 35);
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
       }
       ctx.stroke();
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText(`V_cos = V_c · cos(θ)`, 15, h * 0.50 + 25);
     }
 
     // =========================================================================
-    // STEPPER MOTOR ENGINE
+    // STEPPER MOTOR SIMULATOR
     // =========================================================================
-    function calculateStepper() {
-      const m = parseInt(document.getElementById('sliderStepM').value);
-      const nr = parseInt(document.getElementById('sliderStepNr').value);
-      const rpm = parseInt(document.getElementById('sliderStepRpm').value);
-
-      document.getElementById('labelStepM').innerText = m + ' Faz';
-      document.getElementById('labelStepNr').innerText = nr + ' Diş';
-      document.getElementById('labelStepRpm').innerText = rpm + ' d/d';
-
-      let stepAngle = 360.0 / (m * nr);
-      let stepsPerRev = m * nr;
-      if (state.stepper.mode === 'half') { stepAngle /= 2.0; stepsPerRev *= 2; }
-      else if (state.stepper.mode === 'micro') { stepAngle /= 8.0; stepsPerRev *= 8; }
-
-      const fStep = (rpm * stepsPerRev) / 60.0;
-      document.getElementById('resStepAngle').innerText = stepAngle.toFixed(3) + '°';
-      document.getElementById('resStepCount').innerText = stepsPerRev.toLocaleString() + ' adım/tur';
-      document.getElementById('resStepFreq').innerText = (fStep >= 1000) ? (fStep / 1000).toFixed(2) + ' kHz' : fStep.toFixed(0) + ' Hz';
-      document.getElementById('resStepPeriod').innerText = ((1.0 / fStep) * 1e6).toFixed(1) + ' µs';
-
-      drawStepperCanvas();
-    }
-
-    function setStepperDriveMode(mode) {
+    function setStepperMode(mode) {
       state.stepper.mode = mode;
-      const modes = ['wave', 'full', 'half', 'micro'];
-      modes.forEach(m => {
-        const btn = document.getElementById(`btnStep${m.charAt(0).toUpperCase() + m.slice(1)}`);
-        if (btn) btn.className = (m === mode) ? 'py-2 rounded-lg bg-amber-900/60 border border-amber-500 text-amber-300 font-bold transition' : 'py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition';
+      ['btnStepFull', 'btnStepHalf', 'btnStepMicro'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.className = 'py-1.5 rounded bg-slate-800 border border-slate-700 text-slate-400 font-bold transition';
       });
-      calculateStepper();
+
+      if (mode === 'full') {
+        document.getElementById('btnStepFull').className = 'py-1.5 rounded bg-cyan-900 border border-cyan-500 text-cyan-200 font-bold transition';
+      } else if (mode === 'half') {
+        document.getElementById('btnStepHalf').className = 'py-1.5 rounded bg-cyan-900 border border-cyan-500 text-cyan-200 font-bold transition';
+      } else if (mode === 'micro') {
+        document.getElementById('btnStepMicro').className = 'py-1.5 rounded bg-cyan-900 border border-cyan-500 text-cyan-200 font-bold transition';
+      }
+      calculateStepperValues();
     }
 
-    function drawStepperCanvas() {
-      const canvas = document.getElementById('stepperCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const w = canvas.width = canvas.parentElement.clientWidth || 450;
-      const h = canvas.height = canvas.parentElement.clientHeight || 320;
+    function calculateStepperValues() {
+      const m = state.stepper.m;
+      const nr = state.stepper.nr;
+      const rpm = state.stepper.rpm;
 
-      ctx.clearRect(0, 0, w, h);
-      const cx = w / 2, cy = h / 2;
-      const r = Math.min(w, h) * 0.40;
+      let stepAngle = 360.0 / (2 * m * nr); // 1.8 deg
+      let stepsPerRev = 360.0 / stepAngle; // 200
 
-      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.strokeStyle = '#334155'; ctx.lineWidth = 10; ctx.stroke();
-
-      for (let i = 0; i < 8; i++) {
-        const ang = (i / 8) * Math.PI * 2;
-        const px = cx + Math.cos(ang) * (r - 12);
-        const py = cy + Math.sin(ang) * (r - 12);
-        const isActive = (i % 2 === 0);
-        ctx.fillStyle = isActive ? '#f59e0b' : '#1e293b';
-        ctx.beginPath(); ctx.arc(px, py, 11, 0, Math.PI * 2); ctx.fill();
-        ctx.strokeStyle = isActive ? '#fbbf24' : '#475569'; ctx.stroke();
-        ctx.fillStyle = isActive ? '#000000' : '#94a3b8'; ctx.font = 'bold 9px JetBrains Mono'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText(String.fromCharCode(65 + (i % 4)), px, py);
+      if (state.stepper.mode === 'half') {
+        stepAngle /= 2.0;
+        stepsPerRev *= 2.0;
+      } else if (state.stepper.mode === 'micro') {
+        stepAngle /= 16.0;
+        stepsPerRev *= 16.0;
       }
 
-      const rotorR = r * 0.55;
-      ctx.fillStyle = '#475569'; ctx.beginPath(); ctx.arc(cx, cy, rotorR, 0, Math.PI * 2); ctx.fill();
+      const pulseFreq = (rpm * stepsPerRev) / 60.0;
 
-      // 50 teeth
-      ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
-      for (let i = 0; i < 50; i++) {
-        const tAng = (i / 50) * Math.PI * 2;
-        ctx.beginPath();
-        ctx.moveTo(cx + Math.cos(tAng) * (rotorR - 4), cy + Math.sin(tAng) * (rotorR - 4));
-        ctx.lineTo(cx + Math.cos(tAng) * (rotorR + 5), cy + Math.sin(tAng) * (rotorR + 5));
-        ctx.stroke();
+      const elAngle = document.getElementById('resStepAngle');
+      const elSpr = document.getElementById('resStepCount');
+      const elFreq = document.getElementById('resStepFreq');
+
+      if (elAngle) elAngle.innerText = stepAngle.toFixed(4) + '°';
+      if (elSpr) elSpr.innerText = stepsPerRev.toFixed(0);
+      if (elFreq) elFreq.innerText = pulseFreq.toFixed(1) + ' Hz';
+    }
+
+    // =========================================================================
+    // EXAM PROBLEM BANK SOLUTION TOGGLES
+    // =========================================================================
+    function toggleExamSolution(qNum) {
+      const sol = document.getElementById(`examSol${qNum}`);
+      if (!sol) return;
+      sol.classList.toggle('hidden');
+    }
+
+    // =========================================================================
+    // DOCUMENT MANAGER (INDEXEDDB STORAGE FOR USER LECTURE NOTES)
+    // =========================================================================
+    let dbInstance = null;
+
+    function initDocManagerDB() {
+      const req = indexedDB.open('OzelElektrikMakinalariDocsDB', 1);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains('documents')) {
+          db.createObjectStore('documents', { keyPath: 'id', autoIncrement: true });
+        }
+      };
+      req.onsuccess = (e) => {
+        dbInstance = e.target.result;
+        loadSavedDocuments();
+      };
+    }
+
+    function handleDocFileUpload(files) {
+      if (!files || !files.length || !dbInstance) return;
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const docRecord = {
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            dataUrl: e.target.result,
+            uploadDate: new Date().toLocaleDateString('tr-TR')
+          };
+          const tx = dbInstance.transaction('documents', 'readwrite');
+          tx.objectStore('documents').add(docRecord);
+          tx.oncomplete = () => loadSavedDocuments();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function loadSavedDocuments() {
+      if (!dbInstance) return;
+      const listEl = document.getElementById('docListContainer');
+      if (!listEl) return;
+      listEl.innerHTML = '';
+
+      const tx = dbInstance.transaction('documents', 'readonly');
+      const store = tx.objectStore('documents');
+      const req = store.getAll();
+
+      req.onsuccess = () => {
+        const docs = req.result || [];
+        if (docs.length === 0) {
+          listEl.innerHTML = '<div class="text-slate-500 text-xs text-center py-4">Kayıtlı kullanıcı belgesi yok.</div>';
+          return;
+        }
+        docs.forEach(doc => {
+          const item = document.createElement('div');
+          item.className = 'flex items-center justify-between p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono';
+          item.innerHTML = `
+            <div class="flex items-center space-x-2 truncate">
+              <i class="fa-solid fa-file-pdf text-rose-400"></i>
+              <span class="text-slate-200 truncate font-semibold">${doc.name}</span>
+              <span class="text-[10px] text-slate-500">(${(doc.size / 1024).toFixed(0)} KB)</span>
+            </div>
+            <div class="flex space-x-1.5">
+              <a href="${doc.dataUrl}" download="${doc.name}" class="px-2 py-1 rounded bg-cyan-900/60 hover:bg-cyan-900 text-cyan-300 transition text-[11px]"><i class="fa-solid fa-download"></i></a>
+              <button onclick="deleteDocRecord(${doc.id})" class="px-2 py-1 rounded bg-rose-900/60 hover:bg-rose-900 text-rose-300 transition text-[11px]"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          `;
+          listEl.appendChild(item);
+        });
+      };
+    }
+
+    function deleteDocRecord(id) {
+      if (!dbInstance) return;
+      const tx = dbInstance.transaction('documents', 'readwrite');
+      tx.objectStore('documents').delete(id);
+      tx.oncomplete = () => loadSavedDocuments();
+    }
+
+    // =========================================================================
+    // TAB SWITCHING & GLOBAL NAVIGATION
+    // =========================================================================
+    function switchMainTab(tabId) {
+      state.activeTab = tabId;
+
+      // Update Tab Buttons
+      const tabBtns = document.querySelectorAll('.nav-tab-btn');
+      tabBtns.forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabId) {
+          btn.className = 'nav-tab-btn active px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center space-x-2 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30';
+        } else {
+          btn.className = 'nav-tab-btn px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center space-x-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent';
+        }
+      });
+
+      // Show/Hide Sections
+      const sections = document.querySelectorAll('.tab-content');
+      sections.forEach(sec => {
+        if (sec.id === tabId) sec.classList.remove('hidden');
+        else sec.classList.add('hidden');
+      });
+
+      // Redraw canvases on tab enter
+      if (tabId === 'tab-direction-lab') {
+        setTimeout(drawDigitalTwinCanvas, 50);
+      } else if (tabId === 'tab-circuits-lab') {
+        setTimeout(() => { drawHBridgeCanvas(); drawBldcBridgeCanvas(); drawBldcOscilloscope(); }, 50);
+      } else if (tabId === 'tab-universal-lab') {
+        setTimeout(calculateUniversalMotor, 50);
+      } else if (tabId === 'tab-servo') {
+        setTimeout(() => { drawEncoderCanvas(); drawResolverCanvas(); }, 50);
+      } else if (tabId === 'tab-stepper') {
+        setTimeout(calculateStepperValues, 50);
+      }
+
+      // Re-trigger KaTeX rendering
+      setTimeout(renderKaTeX, 100);
+    }
+
+    function renderKaTeX() {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ],
+          throwOnError: false
+        });
       }
     }
 
     // =========================================================================
-    // ACTIVE LEARNING & EXAM BANK CONTROLS
+    // SYSTEM INITIALIZATION ON LOAD
     // =========================================================================
-    function toggleSolution(solId, btn) {
-      const el = document.getElementById(solId);
-      if (!el) return;
-      if (el.classList.contains('hidden')) {
-        el.classList.remove('hidden');
-        btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Çözümü Gizle';
-      } else {
-        el.classList.add('hidden');
-        btn.innerHTML = '<i class="fa-solid fa-eye"></i> Çözümü Göster';
-      }
-    }
-
-    function sendQuestionToSim(qId) {
-      if (qId === 1) {
-        switchTab('tab-direction-lab');
-      } else if (qId === 2) {
-        state.bldc.step = 3; // [1, 1, 0] step
-        switchTab('tab-bldc');
-      } else if (qId === 3) {
-        switchTab('tab-universal');
-      } else if (qId === 4) {
-        state.encoder.ppr = 4096;
-        document.getElementById('selectEncoderPpr').value = '4096';
-        updateEncoderSim();
-        switchTab('tab-servo');
-      } else if (qId === 5) {
-        document.getElementById('sliderStepM').value = 4;
-        document.getElementById('sliderStepNr').value = 50;
-        document.getElementById('sliderStepRpm').value = 1200;
-        calculateStepper();
-        switchTab('tab-stepper');
-      }
-    }
-
-    // =========================================================================
-    // DOCUMENT MANAGER & INDEXEDDB LOCAL STORAGE
-    // =========================================================================
-    function handleUserDocUpload() {
-      const title = document.getElementById('inputDocTitle').value.trim();
-      const author = document.getElementById('inputDocAuthor').value.trim();
-      const simTab = document.getElementById('selectDocSim').value;
-      const fileInput = document.getElementById('inputFileUpload');
-
-      if (!title || fileInput.files.length === 0) {
-        alert('Lütfen bir başlık girin ve dosya seçin.');
-        return;
-      }
-
-      const file = fileInput.files[0];
-      const container = document.getElementById('docListContainer');
-
-      const card = document.createElement('div');
-      card.className = 'p-4 rounded-xl bg-slate-900 border border-slate-700 flex flex-wrap items-center justify-between gap-3';
-      card.innerHTML = `
-        <div class="space-y-1">
-          <div class="flex items-center space-x-2">
-            <span class="px-2 py-0.5 rounded bg-teal-950 border border-teal-800 text-teal-300 text-[10px] font-bold font-mono">KULLANICI NOTU</span>
-            <span class="font-bold text-white text-sm">${title}</span>
-          </div>
-          <div class="text-xs text-slate-400 font-mono">
-            Yazar: <strong class="text-slate-200">${author || 'Muhammet Raşit Taflan'}</strong> • Dosya: <strong>${file.name}</strong> (${(file.size / 1024).toFixed(1)} KB)
-          </div>
-          <div class="text-[11px] text-cyan-400 font-mono pt-1">
-            <button onclick="switchTab('${simTab}')" class="hover:underline flex items-center gap-1">
-              <i class="fa-solid fa-arrow-right"></i> İlgili Simülasyona Git
-            </button>
-          </div>
-        </div>
-        <div class="text-xs font-mono text-emerald-400 font-bold">
-          <i class="fa-solid fa-circle-check"></i> Yüklendi
-        </div>
-      `;
-      container.appendChild(card);
-      alert(`"${title}" başarıyla ders kütüphanesine eklendi.`);
-      document.getElementById('inputDocTitle').value = '';
-    }
-
-    // --- DOM CONTENT LOADED INITIALIZATION ---
     window.addEventListener('DOMContentLoaded', () => {
-      // 1. Initialize 3D CAD Motor
-      setTimeout(init3DScene, 120);
+      // 1. Initialize 3D Engine
+      init3DScene();
 
-      // 2. Initialize 2D Labs
-      drawDigitalTwinCanvas();
-      drawHBridgeCanvas();
-      drawUniversalCircuitCanvas();
-      drawBldcBridgeCanvas();
-      drawBldcOscilloscope();
-      calculateUniversalMotor();
-      drawEncoderCanvas();
-      drawResolverCanvas();
-      calculateStepper();
+      // 2. Initialize Doc Manager IndexedDB
+      initDocManagerDB();
 
       // 3. Initial KaTeX Math Rendering
       setTimeout(renderKaTeX, 600);
