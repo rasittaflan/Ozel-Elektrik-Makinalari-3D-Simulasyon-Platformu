@@ -1,0 +1,281 @@
+    <!-- ======================================================= -->
+    <!-- TAB 6: ÜNİVERSAL MOTOR AC/DC DAVRANIŞ LABORATUVARI -->
+    <!-- ======================================================= -->
+    <section id="tab-universal" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-amber-400">
+          <i class="fa-solid fa-plug"></i>
+          <span>Bölüm 2 • Sayfa 30-44 • Üniversal (AC/DC Seri) Motorlar</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Üniversal Motor AC & DC Çalışma Davranışı, Empedans Üçgeni ve Dönüş Yönü
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Üniversal motor, seri bağlı endüvi ve kutup sargıları sayesinde hem DC hem de AC şebekede dönebilen özel bir makinedir.
+          AC şebekede akım yön değiştirince hem armatür akımı $I_a$ hem de kutup akısı $\Phi$ aynı anda tersine döndüğünden 
+          tork $T = k \cdot \Phi \cdot I_a \propto I_a^2$ daima pozitif kalır.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Phasor Diagram Canvas -->
+        <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <i class="fa-solid fa-chart-line text-emerald-400"></i> AC Gerilim Üçgeni (Fazör Diyagramı)
+            </h3>
+            <span class="text-xs font-mono text-cyan-400">$$V_{ac}^2 = (E_a + IR)^2 + (IX_L)^2$$</span>
+          </div>
+
+          <div class="relative w-full h-[310px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="universalPhasorCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300">
+            • DC'de endüktif reaktans sıfır ($X_L = 0$) olduğu için reaktif gerilim düşümü ortadan kalkar; motor AC'ye kıyasla daha yüksek devirde döner ve daha yüksek verimle çalışır.
+          </div>
+        </div>
+
+        <!-- Problem Solver (Page 34-35 Exact Numbers) -->
+        <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <i class="fa-solid fa-calculator text-amber-400"></i> Sayfa 34-35 Problem Hesaplayıcısı
+            </h3>
+            <span class="text-xs font-mono text-amber-400">120V / 2000 d/d Örneği</span>
+          </div>
+
+          <div class="space-y-3 text-xs font-mono">
+            <div>
+              <div class="flex justify-between text-slate-400">
+                <span>Besleme Gerilimi ($V$):</span>
+                <span id="labelUnivV" class="text-white font-bold">120 V</span>
+              </div>
+              <input type="range" id="sliderUnivV" min="60" max="240" step="5" value="120" oninput="calculateUniversalMotor()" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-slate-400">
+                <span>Çekilen Akım ($I$):</span>
+                <span id="labelUnivI" class="text-yellow-400 font-bold">1.5 A</span>
+              </div>
+              <input type="range" id="sliderUnivI" min="0.5" max="5.0" step="0.1" value="1.5" oninput="calculateUniversalMotor()" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-slate-400">
+                <span>Toplam Direnç ($R = R_a + R_f$):</span>
+                <span id="labelUnivR" class="text-slate-300 font-bold">20.0 Ω</span>
+              </div>
+              <input type="range" id="sliderUnivR" min="5" max="50" step="1" value="20" oninput="calculateUniversalMotor()" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-slate-400">
+                <span>Toplam Reaktans ($X_L = \omega L$):</span>
+                <span id="labelUnivX" class="text-cyan-400 font-bold">32.0 Ω</span>
+              </div>
+              <input type="range" id="sliderUnivX" min="5" max="80" step="1" value="32" oninput="calculateUniversalMotor()" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-slate-400">
+                <span>AC Çalışma Devri ($n_{ac}$):</span>
+                <span id="labelUnivNac" class="text-emerald-400 font-bold">2000 d/d</span>
+              </div>
+              <input type="range" id="sliderUnivNac" min="1000" max="5000" step="100" value="2000" oninput="calculateUniversalMotor()" class="w-full">
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2 text-xs font-mono">
+            <div class="text-cyan-400 font-bold border-b border-slate-800 pb-1">Hesaplama Çıktıları:</div>
+            <div class="grid grid-cols-2 gap-2 text-slate-300">
+              <div>AC Zıt EMK ($E_{ac}$): <strong id="resUnivEac" class="text-white">79.8 V</strong></div>
+              <div>DC Zıt EMK ($E_{dc}$): <strong id="resUnivEdc" class="text-white">90.0 V</strong></div>
+              <div>Güç Faktörü ($\cos\varphi$): <strong id="resUnivCosPhi" class="text-amber-400">0.916</strong></div>
+              <div>DC Devir Sayısı ($n_{dc}$): <strong id="resUnivNdc" class="text-emerald-400">2255 d/d</strong></div>
+              <div>Giriş Gücü ($P_{gir}$): <strong id="resUnivPin" class="text-indigo-400">165.0 W</strong></div>
+              <div>Verim ($\eta$): <strong id="resUnivEff" class="text-teal-400">72.7 %</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- TAB 7: SERVO SİSTEMLER, ENKODER & RESOLVER LAB -->
+    <!-- ======================================================= -->
+    <section id="tab-servo" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-purple-400">
+          <i class="fa-solid fa-gauge-high"></i>
+          <span>Bölüm 3 • Sayfa 45-53 • Servo Motor Konum Algılayıcıları</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Servo Motorlar, Artımsal/Mutlak Enkoderler ve Resolver Laboratuvarı
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Servo sistemlerde hassas konum ve hız geri beslemesi için kullanılan artımsal (incremental) optik enkoderler ile 
+          döner transformatör prensibiyle çalışan resolver algılayıcılarının dalga şekilleri ve çözünürlük hesapları.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Encoder Simulator -->
+        <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <i class="fa-solid fa-compact-disc text-cyan-400"></i> Artımsal Enkoder Kuadratür Sinyalleri (A, B, Z)
+            </h3>
+            <span id="encoderDirBadge" class="text-xs font-mono font-bold px-2.5 py-0.5 rounded bg-cyan-950 border border-cyan-800 text-cyan-300">
+              CW (A, B'den 90° Önce)
+            </span>
+          </div>
+
+          <div class="relative w-full h-[270px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="encoderCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs font-mono">
+            <div>
+              <label class="text-slate-400">Çözünürlük (PPR):</label>
+              <select id="selectEncoderPpr" onchange="updateEncoderSim()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+                <option value="1000">1000 PPR (0.360°)</option>
+                <option value="2048">2048 PPR (0.176°)</option>
+                <option value="4096">4096 PPR (0.088° - Q4 Sorusu)</option>
+                <option value="4200" selected>4200 PPR (0.0857° - Defter)</option>
+                <option value="8192">8192 PPR (0.044°)</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-slate-400">Dönüş Yönü:</label>
+              <div class="grid grid-cols-2 gap-1 mt-1">
+                <button id="btnEncCW" onclick="setEncoderDir(1)" class="py-2 rounded-lg bg-cyan-900 border border-cyan-500 text-cyan-300 font-bold transition">CW</button>
+                <button id="btnEncCCW" onclick="setEncoderDir(-1)" class="py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 font-bold transition">CCW</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-300 flex justify-between">
+            <div>Kuadratür 4X Darbe: <strong id="enc4xCount" class="text-cyan-400">16,800 darbe/tur</strong></div>
+            <div>Pals Frekansı: <strong id="encPulseFreq" class="text-emerald-400">84.0 kHz</strong> (@1200 d/d)</div>
+          </div>
+        </div>
+
+        <!-- Resolver Simulator -->
+        <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <i class="fa-solid fa-atom text-purple-400"></i> Resolver Modülasyonu & Açı Tespiti
+            </h3>
+            <span class="text-xs font-mono text-purple-400">Döner Transformatör</span>
+          </div>
+
+          <div class="relative w-full h-[270px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="resolverCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-2 text-xs font-mono text-slate-300">
+            <div class="text-purple-400 font-bold">Resolver Çıkış Denklemleri:</div>
+            <div class="space-y-1 text-[11px]">
+              <div>• Rotor Taşıyıcı Uyarım: $V_{ref} = V_m \sin(\omega_c t)$ (5 - 10 kHz)</div>
+              <div>• Sinüs Çıkışı: $V_{sin} = V_m \sin(\theta) \cdot \sin(\omega_c t)$</div>
+              <div>• Kosinüs Çıkışı: $V_{cos} = V_m \cos(\theta) \cdot \sin(\omega_c t)$</div>
+              <div class="text-emerald-400 font-bold">• Mutlak Rotor Açısı: $\theta = \arctan\left(\frac{V_{sin}}{V_{cos}}\right)$</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- TAB 8: ADIM MOTORLARI (STEP MOTORS) LAB -->
+    <!-- ======================================================= -->
+    <section id="tab-stepper" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-orange-400">
+          <i class="fa-solid fa-gears"></i>
+          <span>Bölüm 4 • Sayfa 54-64 • Adım Motorları & Sürüş Yöntemleri</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Adım Motorları (Step Motors), Mikro Adımlama ve Frekans-Hız Laboratuvarı
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Değişken Relüktanslı (VR), Sabit Mıknatıslı (PM) ve Hibrit (Hybrid) adım motorlarında faz uyarım sıraları ve 
+          adım açısı $\theta_s = \frac{360^\circ}{m \cdot N_r}$ bağıntısının doğrulanması.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Stepper Canvas -->
+        <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <i class="fa-solid fa-circle-dot text-amber-400"></i> Rotor Dişleri & Faz Sargıları Canlı Uyarma
+            </h3>
+            <span id="stepModeBadge" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-amber-950 border border-amber-800 text-amber-300">
+              Tam Adım (Full-Step)
+            </span>
+          </div>
+
+          <div class="relative w-full h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="stepperCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <div class="space-y-2 text-xs font-mono">
+            <div class="grid grid-cols-4 gap-2">
+              <button onclick="setStepperDriveMode('wave')" id="btnStepWave" class="py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">Dalga (1 Faz)</button>
+              <button onclick="setStepperDriveMode('full')" id="btnStepFull" class="py-2 rounded-lg bg-amber-900/60 border border-amber-500 text-amber-300 font-bold transition">Tam Adım (2 Faz)</button>
+              <button onclick="setStepperDriveMode('half')" id="btnStepHalf" class="py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">Yarım Adım</button>
+              <button onclick="setStepperDriveMode('micro')" id="btnStepMicro" class="py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">Mikro Adım (1/8)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stepper Calculator -->
+        <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <i class="fa-solid fa-calculator text-cyan-400"></i> Adım Açısı & Frekans-Hız Hesaplayıcısı
+            </h3>
+            <span class="text-xs font-mono text-cyan-400">Defter Sayfa 58-60 (Q5)</span>
+          </div>
+
+          <div class="space-y-3 text-xs font-mono">
+            <div>
+              <div class="flex justify-between text-slate-400">
+                <span>Faz Sayısı ($m$):</span>
+                <span id="labelStepM" class="text-cyan-400 font-bold">4 Faz</span>
+              </div>
+              <input type="range" id="sliderStepM" min="2" max="5" step="1" value="4" oninput="calculateStepper()" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-slate-400">
+                <span>Rotor Diş Sayısı ($N_r$):</span>
+                <span id="labelStepNr" class="text-amber-400 font-bold">50 Diş</span>
+              </div>
+              <input type="range" id="sliderStepNr" min="10" max="100" step="5" value="50" oninput="calculateStepper()" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-slate-400">
+                <span>Hedef Motor Hızı ($n$):</span>
+                <span id="labelStepRpm" class="text-emerald-400 font-bold">1200 d/d</span>
+              </div>
+              <input type="range" id="sliderStepRpm" min="60" max="3000" step="60" value="1200" oninput="calculateStepper()" class="w-full">
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2 text-xs font-mono">
+            <div class="text-amber-400 font-bold border-b border-slate-800 pb-1">Hesaplanan Değerler:</div>
+            <div class="grid grid-cols-2 gap-2 text-slate-300">
+              <div>Adım Açısı ($\theta_s$): <strong id="resStepAngle" class="text-white">1.80°</strong></div>
+              <div>Tur Başına Adım ($S$): <strong id="resStepCount" class="text-white">200 adım/tur</strong></div>
+              <div>Gereken Frekans ($f_{step}$): <strong id="resStepFreq" class="text-emerald-400">4000 Hz (4 kHz)</strong></div>
+              <div>Adım Periyodu ($T_{step}$): <strong id="resStepPeriod" class="text-cyan-400">250 µs</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>

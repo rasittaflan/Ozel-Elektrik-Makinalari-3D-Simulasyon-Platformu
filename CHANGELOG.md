@@ -5,6 +5,42 @@ All notable changes to this project are documented in this file.
 
 ---
 
+## [2.0.0] - 2026-11-10
+
+### Added / Eklenenler
+- TR: 3D CAD Motor Laboratuvarı için Three.js Raycasting bileşen dedektörü geliştirildi; motor parçalarına (Stator, Rotor, Komütatör, Fırçalar, vb.) tıklandığında Dr. Hakan Kahveci ders notu sayfa numarası, malzeme cinsi, elektromekanik işlevi ve formülünü gösteren canlı Mühendislik İnceleme Kartı eklendi.
+- EN: Implemented a Three.js Raycasting component inspector for the 3D CAD Motor Lab; clicking any component displays its engineering card with lecture note page citation, material, electromechanical function, and governing formula.
+- TR: 10 standart endüstriyel kamera modu (İzometrik, Ön, Arka, Üst, Mil Ekseni, Boyuna Kesit, Enine Kesit, Parçalanmış CAD, X-Ray Şeffaf Stator, İzole Rotor) eklendi.
+- EN: Added 10 standardized industrial CAD camera views (Isometric, Front, Back, Top, Shaft Axis, Longitudinal Section, Cross Section, Exploded CAD, Transparent X-Ray Stator, Isolated Rotor).
+- TR: Gerçek zamanlı bağlı diferansiyel denklem (ODE) durum-uzay motoru eklendi: $L_a \frac{di_a}{dt} = V_a - R_a i_a - K_e \omega$ ve $J \frac{d\omega}{dt} = K_t i_a - B_m \omega - T_L$ denklemleri Runge-Kutta 4 (RK4) sayısal integrasyon yöntemiyle çözüldü.
+- EN: Added real-time coupled state-space ODE dynamic simulation engine solving electrical and mechanical equations via Runge-Kutta 4 (RK4) integration.
+- TR: 4 kanallı canlı kayan osiloskop (Armatür Akımı $i_a$, Açısal Hız $\omega$, Elektromanyetik Moment $T_e$, Ters EMK $E_a$) ve önceden tanımlı dinamik mühendislik senaryoları (Tam Yükte Kalkış, Ani Yük Darbesi, Rejeneratif Frenleme, Gerilim Basamağı) entegre edildi.
+- EN: Integrated 4-channel live scrolling oscilloscope ($i_a$, $\omega$, $T_e$, $E_a$) and preset dynamic engineering scenarios (Full Load Startup, Impact Load Step, Regenerative Braking, Voltage Step).
+- TR: Sağ El Kuralı için Mod A (Akımın oluşturduğu manyetik alan dolanımı) ve Mod B (Açısal hız vektörü ve dönüş yönü) karşılaştırmalı eğitim modları geliştirildi.
+- EN: Implemented dual Right-Hand Rule teaching modules: Mode A (Biot-Savart field circulation) vs Mode B (Angular velocity vector $\vec{\omega}$ vs rotor rotation).
+- TR: Dr. Hakan Kahveci'nin el yazısı 1. sayfasındaki çizim ile 3D/2D simülatörün yan yana incelenebildiği Dijital İkiz çalışma alanı oluşturuldu.
+- EN: Created a side-by-side Digital Twin workspace comparing the original handwritten scan of Page 1 with the real-time vector simulation.
+- TR: İnteraktif Devre Laboratuvarı: Çift yönlü H-Köprü sürücüsü (PWM kontrollü), 3-Fazlı BLDC inverter devresi ve Üniversal Motor DPDT polarite yön anahtarlama şemaları eklendi.
+- EN: Interactive Circuit Lab: Bi-directional H-Bridge with PWM control, 3-Phase BLDC inverter schematic, and Universal Motor DPDT reversing switch.
+- TR: Kullanıcı ders notları, PDF ve ek çizimleri için tarayıcıda kalıcı yerel depolama sunan IndexedDB Belge Yöneticisi eklendi.
+- EN: Added IndexedDB Document Manager providing persistent local storage for user-uploaded lecture notes and schematics.
+- TR: 11 zorunlu elektromanyetik ve elektromekanik testin yürütüldüğü ve belgelendiği `MUHENDISLIK_DOGRULAMA_RAPORU.md` hazırlandı.
+- EN: Published `MUHENDISLIK_DOGRULAMA_RAPORU.md` documenting 11 mandatory electromagnetic and electromechanical physics verification tests.
+
+### Fixed / Düzeltilenler
+- TR: v1.0.0 sürümünde Python dizge üretimindeki kaçış karakteri hatasından kaynaklanan LaTeX bozulmaları (`\vec` -> `\x0b`, `\frac` -> `\x0c`, `\approx` -> `\x07`) mimari modülerleştirilerek ve doğrudan UTF-8 birleştirmesi yapılarak sıfırlandı (0 bozuk karakter).
+- EN: Fixed LaTeX corruption bugs in v1.0.0 where escape characters converted `\vec`, `\frac`, `\approx` into ASCII control bytes (`\x0b`, `\x0c`, `\x07`) by re-architecting into clean UTF-8 modular sections.
+- TR: DOM element ID bağlamalarındaki eksiklikler giderildi; 156 HTML ID'si ile 107 JS referansı arasında %100 tam örtüşme sağlandı.
+- EN: Fixed all DOM element ID references; achieved 100% complete match between 156 defined HTML IDs and 107 JS references with zero orphaned bindings.
+
+### Changed / Değiştirilenler
+- TR: Proje kaynak kodu `src_v2/sections/` altında 8 modüle ayrıldı ve otomatik montaj betiği `src_v2/assemble_v2.py` oluşturuldu.
+- EN: Re-architected project source code into 8 modular files under `src_v2/sections/` and created automated build script `src_v2/assemble_v2.py`.
+- TR: Tüm çıktılar `R:\Dijital_Arsiv`, Masaüstü ve İndirilenler klasörlerine kopyalandı, GitHub deposu ve GitHub Pages senkronize edildi.
+- EN: Synchronized all builds across `R:\Dijital_Arsiv`, Desktop, Downloads, and pushed to GitHub repository and GitHub Pages.
+
+---
+
 ## [1.0.0] - 2026-11-10
 
 ### Added / Eklenenler

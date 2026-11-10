@@ -1,11 +1,12 @@
-# Özel Elektrik Makinaları: 3D Hibrit Simülasyon & Aktif Öğrenme Laboratuvarı
-## Special Electrical Machines: 3D Hybrid Simulation & Active Learning Platform
+# Özel Elektrik Makinaları: 3D CAD & Dinamik ODE Simülasyon Platformu
+## Special Electrical Machines: 3D CAD & Dynamic ODE Simulation Platform
 
 <div align="center">
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-GitHub_Pages-0284c7?style=for-the-badge&logo=google-chrome&logoColor=white)](https://rasittaflan.github.io/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/rasittaflan/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu)
-[![KTÜ EEE](https://img.shields.io/badge/KTÜ-Electrical_%26_Electronics_Engineering-0369a1?style=for-the-badge&logo=mortarboard&logoColor=white)](https://www.ktu.edu.tr/eee)
+[![KTÜ EEE](https://img.shields.io/badge/KT%C3%9C-Electrical_%26_Electronics_Engineering-0369a1?style=for-the-badge&logo=mortarboard&logoColor=white)](https://www.ktu.edu.tr/eee)
+[![Version](https://img.shields.io/badge/Version-v2.0.0--PRO-10b981?style=for-the-badge)](https://github.com/rasittaflan/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu/releases)
 
 <br/>
 
@@ -17,95 +18,122 @@
 ---
 
 **Proje Sahibi / Project Owner:** Muhammet Raşit Taflan  
-**Ders / Course:** KTÜ Elektrik-Elektronik Mühendisliği — Özel Elektrik Makinaları (Dr. Hakan Kahveci Ders Notları)  
-**Sürüm / Version:** v1.0.0  
+**Ders / Course:** KTÜ Elektrik-Elektronik Mühendisliği — Özel Elektrik Makinaları  
+**Akademik Kaynak / Academic Source:** Dr. Hakan Kahveci Ders Notları (81 Sayfa)  
+**Sürüm / Version:** v2.0.0-PRO  
 **Tarih / Date:** Kasım 2026 / November 2026  
 
 ---
 
-## TR: Proje Hakkında
+## TR: Proje Hakkında (v2.0.0)
 
-Bu proje; Dr. Hakan Kahveci'nin 81 sayfalık "ÖZEL ELEKTRİK MAKİNALARI" ders notları derinlemesine incelenerek oluşturulmuş, yüksek çözünürlüklü 3D WebGL (Three.js), etkileşimli vektörel 2D laboratuvarlar, dinamik osiloskoplar ve çözümlü sınav soruları bankası içeren yeni nesil bir mühendislik simülasyon ve ders çalışma platformudur.
+Bu proje; Dr. Hakan Kahveci'nin Karadeniz Teknik Üniversitesi Elektrik-Elektronik Mühendisliği bölümünde anlattığı 81 sayfalık **"ÖZEL ELEKTRİK MAKİNALARI"** ders notlarının derinlemesine analiziyle geliştirilmiş; salt görsel animasyonların ötesinde, gerçek zamanlı diferansiyel denklem (ODE) çözücüsü, Three.js tabanlı CAD seviyesinde bileşen inceleyicisi, 10 standart kamera modu, 4 kanallı canlı osiloskop, interaktif güç elektroniği devreleri ve 11 mühendislik fizik testiyle doğrulanmış yeni nesil bir **Sanal Elektrik Makineleri Laboratuvarı ve Aktif Öğrenme Platformudur**.
 
-### Temel Özellikler
-1. **3D Fotogerçekçi Motor & Vektör Laboratuvarı (Three.js):**
-   - Soğutma kanatlı çelik stator gövdesi, N ve S kutup pabuçları ve bakır sargıları.
-   - 8 oluklu lamine sac rotor göbeği, oluklara gömülü 3D bakır sargı döngüleri.
-   - Dilimli pirinç komütatör, yaylı grafit kömür fırçalar, rulmanlar ve 120° Hall PCB'si.
-   - Canlı Vektörler: Manyetik Akı ($\vec{B}$), İletken Akımı ($\vec{I}$), Lorentz Teğet Kuvveti ($\vec{F} = I(\vec{l}\times\vec{B})$), Açısal Hız ($\vec{\omega}$) ve 3D Vidalama Kuralı Gizmosu.
-   - Parçalanmış Görünüm (Exploded View $\%0 - \%100$), Şeffaf Gövde (X-Ray) ve Çeyrek Kesit modları.
-2. **Dönüş Yönü & Vidalama Kuralı Laboratuvarı (Defter Sayfa 1 Dijital İkizi):**
-   - El yazısı ders notundaki çizimin etkileşimli 2D simülatörü.
-   - Oluk 1 ($\odot$) ve Oluk 2 ($\otimes$) akımları, aşağı yönlü $\vec{B}$ alanı, vidalama kuralı ile soldan sağa kuvvet ve Saat Yönünde (CW) dönüş ispatı.
-   - Polarite tersleme deneyleri ($N\leftrightarrow S$, akım tersleme, çift tersleme).
-3. **BLDC & 6-Adım Elektronik Komütasyon Laboratuvarı:**
-   - 6 MOSFET'li 3-faz evirici köprüsü ($A^+, A^-, B^+, B^-, C^+, C^-$) iletim yolları.
-   - 120° Hall sensör ($H_1, H_2, H_3$) doğruluk tablosu ve sektör tayini.
-   - 3-Faz yamuk ters EMK ve akım dalga şekillerini çizen canlı dijital osiloskop.
-4. **Üniversal Motor AC/DC Davranış Laboratuvarı (Sayfa 34-35 Sorusu):**
-   - $120\text{V}, 60\text{Hz}, 2000\text{ d/d}, R=20\,\Omega, X_L=32\,\Omega$ orijinal defter sorusu.
-   - Dinamik gerilim üçgeni fazör diyagramı ($V_{ac}^2 = (E_a + IR)^2 + (IX_L)^2$).
-   - DC'ye bağlandığında devrin $2251\text{ d/d}$'ye çıkışının formülleri, $\cos\varphi$ ve verim hesabı.
-5. **Servo Sistemler: Enkoder & Resolver Laboratuvarı:**
-   - 4096 PPR artımsal enkoder optik diski, 90° kuadratür faz farkı ile yön tespiti (CW/CCW), 4X kenar sayımı ($16,384\text{ darbe/tur}$) ve Z index palsi.
-   - Resolver: Döner transformatör taşıyıcı uyarımı, $V_{sin}, V_{cos}$ sinyalleri ve $\theta = \arctan(V_{sin} / V_{cos})$ mutlak açı çözücü.
-6. **Adım Motorları (Step Motors) Laboratuvarı:**
-   - VR, PM ve Hibrit adım motoru topolojileri.
-   - Dalga (Wave), Tam Adım, Yarım Adım ve Mikro Adım (1/8) sürüşü.
-   - $\theta_s = \frac{360^\circ}{m \cdot N_r}$, $S = m \cdot N_r$, $f = \frac{n \cdot S}{60}$ dinamik frekans ve hız hesaplayıcısı.
-7. **Sınav Soruları & İnteraktif Çözüm Bankası:**
-   - Hakan Kahveci'nin defterindeki 5 temel sınav sorusu, adım adım KaTeX çözümleri ve tek tıkla simülatöre aktarma entegrasyonu.
-
----
-
-## EN: About The Project
-
-This repository hosts a state-of-the-art interactive engineering simulation and learning workstation engineered from the comprehensive analysis of Dr. Hakan Kahveci's 81-page lecture notes on **Special Electrical Machines**.
-
-### Core Modules
-- **3D Photorealistic Motor Simulation:** Built with Three.js WebGL, featuring stator laminations, cooling fins, salient poles, copper coils, commutator segments, carbon brushes, Hall PCB, animated flux lines ($\vec{B}$), current vectors ($\vec{I}$), and Lorentz force vectors ($\vec{F} = I(\vec{l}\times\vec{B})$) with exploded and cutaway views.
-- **Direction of Rotation & Right-Hand Rule Lab:** Exact digital twin of notebook page 1 demonstrating how $\vec{F} = i(\vec{l}\times\vec{B})$ drives clockwise (CW) rotation.
-- **BLDC 6-Step Inverter Commutation:** 3-phase inverter bridge with active conduction path illumination, 120° Hall truth table, and multichannel trapezoidal Back-EMF oscilloscope.
-- **Universal Motor AC/DC Phasor Lab:** Interactive solver for the $120\text{V}, 60\text{Hz}$ problem (Pages 34-35), demonstrating speed increase under DC and unidirectional AC torque.
-- **Servo Encoders & Resolvers:** 4096 PPR quadrature incremental decoding, X4 multiplier, carrier-modulated resolver demodulator.
-- **Stepper Motors:** VR, PM, and Hybrid stepper topologies with microstepping and speed-frequency calculator.
-- **Exam Problem Bank:** 5 fully solved university examination problems with interactive parameter sliders and KaTeX mathematical formulations.
+### Temel Yenilikler (v2.0.0):
+1. **3D CAD Motor Laboratuvarı (Three.js WebGL & Raycasting):**
+   - **Mühendislik İnceleme Kartı:** Kullanıcı motordaki herhangi bir parçaya (stator saç paketi, kutup pabuçları, 8 oluklu lamine sac rotor, bakır sargılar, komütatör, yaylı grafit fırçalar, mil, rulmanlar, 120° Hall PCB'si) tıkladığında; parçanın malzeme türü, çalışma sıcaklığı, elektromekanik görevi, ders notundaki sayfa referansı ve fiziksel formülü dinamik kartta gösterilir.
+   - **10 Endüstriyel Kamera Modu:** İzometrik, Ön, Arka, Üst, Mil Ekseni, Boyuna Kesit, Enine Kesit, Parçalanmış CAD Görünümü (%0-%100 kesintisiz slider), X-Ray Şeffaf Stator ve Yalnızca Rotor/Sargı modu.
+   - **Canlı Vektör Görselleştirmeleri:** Akım yönleri ($\odot$ ve $\otimes$), Stator manyetik alanı ($\vec{B}$), İletkenin kendi manyetik alanı, Lorentz teğet kuvvetleri ($\vec{F} = i(\vec{l}\times\vec{B})$), Elektromanyetik moment ($\vec{T}_e$) ve Açısal hız vektörü ($\vec{\omega}$).
+2. **Ders Notu Sayfa 1 Dijital İkizi & Vidalama Kuralı:**
+   - Dr. Hakan Kahveci'nin defterindeki ilk motor dönüş yönü çiziminin taranmış orijinal hali ile dijital simülatörü yan yana sunulur.
+   - **Mod A:** Akımın oluşturduğu manyetik alan dolanımı (Biot-Savart kuralı).
+   - **Mod B:** Dönüş yönü ve açısal hız vektörü ilişkisi ($\vec{\omega}$).
+   - Her oluktaki kuvvet ve moment ayrı ayrı hesaplanarak saatin ibreleri yönünde (CW) dönüşün vektörel ispatı gösterilir.
+3. **Gerçek Zamanlı Motor Dinamiği (Durum-Uzay ODE Çözücüsü):**
+   - Gerçek coupled diferansiyel denklemler Runge-Kutta 4 (RK4) sayısal integrasyonu ile çözülür:
+     $$L_a \frac{di_a}{dt} = V_a - R_a i_a - K_e \omega$$
+     $$J \frac{d\omega}{dt} = K_t i_a - B_m \omega - T_L$$
+   - **4 Kanallı Osiloskop:** $i_a(t)$, $\omega(t)$, $T_e(t)$ ve $E_a(t)$ dalga şekilleri 150 örnek noktalı halka tamponlarla canlı çizilir.
+   - **Dinamik Senaryolar:** Tam Yükte Kalkış ($T_L = 2\,\text{N}\cdot\text{m}$), Boşta Kalkış ($T_L = 0$), Ani Yük Darbesi ($T_L \rightarrow 5\,\text{N}\cdot\text{m}$), Rejeneratif Frenleme ve Gerilim Basamağı.
+4. **İnteraktif Güç Elektroniği & Devre Laboratuvarı:**
+   - **H-Köprüsü:** 4 MOSFET anahtarlaması ve PWM görev periyodu kontrolü ile çift yönlü sürüş simülasyonu.
+   - **3-Fazlı BLDC İnverter:** 6 adımlı komütasyon mantığı, 120° Hall sensör tablosu ve 3 fazlı ters EMK gerilimleri.
+   - **Üniversal Motor Yön Anahtarı:** DPDT tersleme anahtarı ile alan ve endüvi akım kutuplarının bağımsız yönetimi.
+5. **Üniversal Motor, Servo/Enkoder & Adım Motoru Laboratuvarları:**
+   - **Üniversal Motor:** Sayfa 34-35 sayısal problemi ($120\,\text{V}, 60\,\text{Hz}$ AC vs DC), empedans üçgeni, reaktans gerilim düşümü ve devir artış hesabı.
+   - **Servo & Enkoder/Resolver:** 4096 PPR kuadratür artımsal enkoder (A/B 90° faz farkı, Z sıfır indeksi) ve analog resolver taşıyıcı sinyal demodülasyonu.
+   - **Adım Motoru:** VR, PM ve Hibrit motor modelleri; Dalga, Tam Adım ($1.8^\circ$), Yarım Adım ($0.9^\circ$) ve 1/16 Mikro Adım ($0.1125^\circ$) sürüşü.
+6. **Üniversite Sınav Bankası & Belge Yöneticisi:**
+   - Dr. Hakan Kahveci'nin defterindeki 5 temel sınav sorusu; gizle/göster detaylı KaTeX çözümleri ve dinamik parametre kaydırıcılarıyla.
+   - IndexedDB tabanlı Belge Yöneticisi: Kullanıcı ders notu PDF'leri ve çizimlerini tarayıcıda kalıcı olarak saklayabilir.
 
 ---
 
-## Dizin Yapısı / Directory Layout
+## EN: About The Project (v2.0.0)
+
+This platform is a next-generation **Virtual Electrical Machines CAD & Dynamic ODE Simulation Laboratory** built upon the detailed syllabus and handwritten lecture notes of Dr. Hakan Kahveci (Karadeniz Technical University, Department of Electrical & Electronics Engineering).
+
+### Highlights:
+- **CAD Raycasting Component Inspector:** Interactive inspection of all motor parts with live engineering cards, material specs, formulas, and note page citations.
+- **10 Industrial Viewport Modes:** Isometric, Front, Back, Top, Shaft View, Longitudinal Section, Cross Section, Exploded View (0-100%), Transparent Stator, Isolated Rotor.
+- **Runge-Kutta 4 (RK4) State-Space ODE Dynamics:** Coupled electrical and mechanical differential equations solved at 60 Hz with 4-channel live oscilloscopes ($i_a, \omega, T_e, E_a$).
+- **Digital Twin of Page 1:** Side-by-side comparison with the original KTÜ lecture scan proving clockwise (CW) torque via $\vec{F} = i(\vec{l}\times\vec{B})$ and $\vec{T} = \vec{r}\times\vec{F}$.
+- **Interactive Circuits:** Bi-directional MOSFET H-bridge with PWM, 6-step BLDC inverter, and DPDT universal motor reverser.
+- **11 Verified Engineering Physics Tests:** 100% verified against analytical models in `MUHENDISLIK_DOGRULAMA_RAPORU.md`.
+
+---
+
+## 🔬 Doğrulama ve Test Raporu / Verification & Test Suite
+
+Platform, `MUHENDISLIK_DOGRULAMA_RAPORU.md` dosyasında belgelenen **11 zorunlu elektromekanik fizik testinin tamamını sıfır hatayla geçmiştir:**
+1. Lorentz Kuvveti ve CW Dönüş Yönü Testi: **GEÇTİ**
+2. Endüvi Akım Yönü Tersleme Testi: **GEÇTİ**
+3. Stator Kutup Tersleme Testi: **GEÇTİ**
+4. Çift Tersleme (AC Üniversal Motor) Testi: **GEÇTİ**
+5. Sıfır Hızda Sıfır Ters EMK Güvencesi: **GEÇTİ**
+6. Elektromekanik Güç Korunumu ($P_{mech} = P_{elek}$): **GEÇTİ**
+7. Kararlı Durum Dinamik ODE Dengesi: **GEÇTİ**
+8. BLDC 6-Adımlı Komütasyon Dizisi Testi: **GEÇTİ**
+9. Kuadratür Enkoder 4X Çözünürlük (4096 CPR) Testi: **GEÇTİ**
+10. Adım Motoru 1/16 Mikro Adım Matematiği Testi: **GEÇTİ**
+11. Üniversal Motor AC Fazör Empedansı Testi: **GEÇTİ**
+
+---
+
+## 📁 Proje Dizin Yapısı / Repository Architecture
 
 ```
 06_Ozel_Elektrik_Makinalari_3D_Simulasyon_Platformu/
-│
-├── Ozel_Elektrik_Makinalari_Simulatoru.html          # Ana interaktif simülatör (Tek dosya / Standalone)
-├── Ozel_Elektrik_Makinalari_Simulatoru_KARARLI.html  # Doğrulanmış kararlı sürüm
-├── README.md                                         # Proje dokümantasyonu (TR/EN)
-├── CHANGELOG.md                                      # İki dilli sürüm geçmişi
-├── Ozel_Elektrik_Makinalari_v1.0.0.zip               # Tüm kaynakları içeren arşiv paketi
-│
-├── kaynak_dokumanlar/                                # Orijinal ders notu ve el yazısı çizimler
-│   ├── OZEL_ELEKTRIK_MAKINALARI_HAKAN_KAHVECI.pdf    # 81 sayfalık ders notu PDF'i
-│   └── Hakan_Kahveci_Sayfa1_Vidalama_Kurali.jpg      # Sayfa 1 vidalama kuralı notu
-│
-├── src/                                              # Modüler Python üretim kodları
-│   ├── assemble.py                                   # Modülleri birleştiren ana derleyici
-│   └── sections/                                     # Arayüz, 3D ve fizik motoru modülleri
-│       ├── part1_nav_overview.py
-│       ├── part2_3d_lab.py
-│       ├── part3_direction_bldc.py
-│       ├── part4_universal_servo.py
-│       ├── part5_stepper_exam_notes.py
-│       └── part6_javascript.py
-│
-└── analiz_ve_ocr/                                    # 81 sayfanın OCR ve analiz çıktıları
-    ├── ocr_results.txt
-    └── slice_ocr_all.txt
+├── index.html                               # GitHub Pages & Ana Simülasyon Web Dosyası
+├── Ozel_Elektrik_Makinalari_Simulatoru.html # Tek Parça Bağımsız v2.0.0 Simülatörü
+├── Ozel_Elektrik_Makinalari_v1.0.0_BACKUP.html # v1.0.0 Güvenli Arşiv Yedeği
+├── Ozel_Elektrik_Makinalari_v2.0.0.zip      # Tüm Projeyi İçeren Dağıtım Paketi
+├── MUHENDISLIK_DOGRULAMA_RAPORU.md          # 11 Mühendislik Fizik Testi Raporu
+├── TEKNIK_DENETIM_RAPORU.md                 # v1.0.0 Denetim ve Hata Raporu
+├── README.md                                # Proje Dokümantasyonu (TR/EN)
+├── CHANGELOG.md                             # İki Dilli Sürüm Değişiklik Günlüğü
+├── src_v2/                                  # v2.0.0 Modüler Kaynak Kodları
+│   ├── assemble_v2.py                       # Otomatik Montaj ve KaTeX Denetim Aracı
+│   ├── verify_simulation.py                 # Otomatik Fizik & DOM Doğrulama Paketi
+│   └── sections/                            # Bağımsız Modüller
+│       ├── sec1_head_nav.html               # Başlık, Meta, Telemetri Rozetleri & Sekmeler
+│       ├── sec2_3d_lab.html                 # 3D CAD Motor Sahnesi & Raycasting Kartı
+│       ├── sec3_direction_twin.html         # Defter Sayfa 1 Dijital İkizi & Vidalama Kuralı
+│       ├── sec4_dynamics_ode.html           # Durum-Uzay ODE Motoru & 4 Kanallı Osiloskop
+│       ├── sec5_circuits_bldc.html          # H-Köprüsü, BLDC İnverter & Komütasyon
+│       ├── sec6_universal_servo_stepper.html# Üniversal Fazör, 4096 Enkoder & Mikro Adım
+│       ├── sec7_exam_docs_notes.html        # Sınav Bankası, Belge Yöneticisi & Formüller
+│       └── sec8_javascript_engine.js        # Three.js CAD, RK4 Entegratör & UI Mantığı
+└── assets/                                  # Orijinal Taranmış Görseller & Ders PDF'i
+    ├── hakan_kahveci_defter_s1.jpg          # Orijinal Defter Sayfa 1 Taraması
+    └── OZEL_ELEKTRIK_MAKINALARI_HAKAN_KAHVECI.pdf # 81 Sayfalık Ders Kitabı
 ```
 
 ---
 
-## Çalıştırma / How to Run
+## 🚀 Çalıştırma Talimatları / How to Run
 
-1. `Ozel_Elektrik_Makinalari_Simulatoru.html` dosyasına çift tıklayarak herhangi bir modern web tarayıcısında (Chrome, Edge, Firefox, Brave) doğrudan çalıştırabilirsiniz.
-2. İnternet bağlantısı olmasa dahi tarayıcı önbelleği üzerinden çalışabilecek şekilde optimize edilmiştir.
+1. **Canlı İnternet Üzerinden:**  
+   Herhangi bir modern tarayıcıda (Chrome, Edge, Firefox, Safari) doğrudan aşağıdaki bağlantıyı açınız:  
+   👉 **[https://rasittaflan.github.io/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu/](https://rasittaflan.github.io/Ozel-Elektrik-Makinalari-3D-Simulasyon-Platformu/)**
+
+2. **Yerel Olarak (Offline / Çevrimdışı):**  
+   Masaüstünüzdeki `Ozel_Elektrik_Makinalari_Simulatoru.html` veya `index.html` dosyasına çift tıklayınız. Kurulum veya yerel sunucu gerekmez; tüm kütüphaneler (Three.js, KaTeX, Tailwind CSS) gömülü ve CDN önbelleklemeli çalışmaktadır.
+
+---
+
+## 👨‍💻 Geliştirici & Lisans / Developer & License
+
+- **Geliştirici:** Muhammet Raşit Taflan (KTÜ Elektrik-Elektronik Mühendisliği)
+- **Akademik Referans:** Dr. Hakan Kahveci, *Özel Elektrik Makinaları Ders Notları*, KTÜ EEE.
+- **Lisans:** MIT Lisansı — Eğitim ve akademik araştırma amacıyla serbestçe kullanılabilir.

@@ -1,0 +1,487 @@
+    <!-- ======================================================= -->
+    <!-- TAB 9: SINAV SORULARI & AKTİF ÖĞRENME BANKASI -->
+    <!-- ======================================================= -->
+    <section id="tab-exam-bank" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-rose-400">
+          <i class="fa-solid fa-file-signature"></i>
+          <span>Dr. Hakan Kahveci Özel Elektrik Makinaları • Vize & Final Soru Bankası</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Sınav Soruları Bankası, Adım Adım Akademik Çözümler & Dinamik Parametreler
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Aşağıdaki sorular Dr. Hakan Kahveci'nin ders notlarından bire bir alınmış ve modellenmiştir.
+          Öğrenci olarak ister çözümü gizleyip kendi kendinizi test edebilir, ister parametreleri değiştirerek yeni soru türetebilir,
+          isterseniz <strong>"Simülatörde Göster"</strong> düğmesiyle verileri 3D laboratuvara aktarabilirsiniz.
+        </p>
+      </div>
+
+      <!-- 5 Comprehensive Questions -->
+      <div class="space-y-6">
+        
+        <!-- Question 1: Notebook Page 1 (Uploaded Image Twin) -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4" id="qcard-1">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-800 flex items-center justify-center font-bold text-xs text-cyan-300">S1</span>
+              <div>
+                <h3 class="text-base font-bold text-white">Motor Hangi Yöne Döner? Manyetik Kutup ve Akım Vektörü ile Yön İspatı</h3>
+                <span class="text-[11px] font-mono text-cyan-400">Dr. Hakan Kahveci Notları: Sayfa 1 Birebir Soru</span>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="toggleSolution('sol-1', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 transition">
+                <i class="fa-solid fa-eye-slash"></i> Çözümü Gizle / Göster
+              </button>
+              <button onclick="sendQuestionToSim(1)" class="px-3 py-1.5 rounded-lg bg-cyan-900/60 hover:bg-cyan-900 border border-cyan-700 text-cyan-300 text-xs font-mono font-bold transition">
+                <i class="fa-solid fa-play"></i> Simülatörde Göster
+              </button>
+            </div>
+          </div>
+
+          <!-- Question Content -->
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs sm:text-sm text-slate-200 leading-relaxed space-y-2">
+            <strong>Orijinal Soru Metni:</strong><br>
+            Şekildeki 2 kutuplu DA makinesinde statorun üst kısmında N, alt kısmında S kutbu bulunmaktadır.
+            Rotorun 1 nolu oluğundaki sargıdan sayfa düzleminden dışarı doğru ($\odot$) $I_1$ akımı, 
+            2 nolu oluğundaki sargıdan ise sayfa düzlemine içeri doğru ($\otimes$) $I_2$ akımı akmaktadır.<br>
+            <strong>a)</strong> 1 ve 2 nolu oluktaki sargılara etkiyen Lorentz kuvvetlerinin yönlerini vidalama kuralını kullanarak vektörel olarak bulunuz.<br>
+            <strong>b)</strong> Rotorun hangi yöne (CW / CCW) döneceğini net döndürme momenti denklemini yazarak açıklayınız.<br>
+            <strong>c)</strong> Besleme gerilimi ters çevrilirse dönüş yönü ne olur? Hem besleme hem manyetik kutuplar aynı anda ters çevrilirse ne olur?
+          </div>
+
+          <!-- Dynamic Solution Block -->
+          <div id="sol-1" class="p-5 rounded-xl bg-slate-950 border border-cyan-900/50 space-y-3 text-xs font-mono">
+            <div class="text-cyan-400 font-bold flex items-center gap-2">
+              <i class="fa-solid fa-check-circle"></i> Adım Adım Akademik Çözüm:
+            </div>
+            <div class="space-y-2 text-slate-300">
+              <div><strong>1. Verilenler & Vektörel Tanımlar:</strong></div>
+              <div>$\vec{B} = -B \hat{j}$ (Kuzey kutbundan Güney kutbuna aşağı doğru manyetik alan)</div>
+              <div>$\vec{l}_1 = +l \hat{k}$ (Oluk 1: Sayfa düzleminden dışarı akım vektörü, $\odot$)</div>
+              <div>$\vec{l}_2 = -l \hat{k}$ (Oluk 2: Sayfa düzlemine içeri akım vektörü, $\otimes$)</div>
+
+              <div class="pt-1"><strong>2. Oluk 1 Kuvvet Hesabı:</strong></div>
+              <div>$$\vec{F}_1 = i (\vec{l}_1 \times \vec{B}) = i (l \hat{k} \times (-B \hat{j})) = -i l B (\hat{k} \times \hat{j}) = -i l B (-\hat{i}) = +i l B \hat{i}\quad \implies \mathbf{Soldan\ Sa\check{g}a\ (\rightarrow)}$$</div>
+
+              <div class="pt-1"><strong>3. Oluk 2 Kuvvet Hesabı:</strong></div>
+              <div>$$\vec{F}_2 = i (\vec{l}_2 \times \vec{B}) = i (-l \hat{k} \times (-B \hat{j})) = +i l B (\hat{k} \times \hat{j}) = -i l B \hat{i}\quad \implies \mathbf{Sa\check{g}dan\ Sola\ (\leftarrow)}$$</div>
+
+              <div class="pt-1"><strong>4. Net Döndürme Momenti (Tork):</strong></div>
+              <div>Üstteki iletkene sağa, alttaki iletkene sola doğru etkiyen kuvvet çifti rotor merkezine göre saat ibreleri yönünde moment oluşturur:</div>
+              <div>$$\vec{T}_e = \vec{r}_1 \times \vec{F}_1 + \vec{r}_2 \times \vec{F}_2 = (r F_1 + r F_2) \hat{k}_{cw}\quad \implies \mathbf{Rotor\ SAAT\ \dot{I}BRELER\dot{I}\ Y\ddot{O}N\ddot{U}NDE\ (CW)\ D\ddot{o}ner!}$$</div>
+
+              <div class="pt-1 text-emerald-400">
+                <strong>Birim Kontrolü:</strong> $[F] = [A] \cdot [m] \cdot [T] = [A] \cdot [m] \cdot \left[\frac{N}{A \cdot m}\right] = [N]$ (Doğru).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 2: BLDC 120 Hall Sector -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4" id="qcard-2">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-8 h-8 rounded-lg bg-emerald-950 border border-emerald-800 flex items-center justify-center font-bold text-xs text-emerald-300">S2</span>
+              <div>
+                <h3 class="text-base font-bold text-white">BLDC 120° Hall Sinyalleri, Komütasyon Sektörü ve Evirici Durumu</h3>
+                <span class="text-[11px] font-mono text-emerald-400">Dr. Hakan Kahveci Notları: Sayfa 14-22 Birebir Soru</span>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="toggleSolution('sol-2', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 transition">
+                <i class="fa-solid fa-eye-slash"></i> Çözümü Gizle / Göster
+              </button>
+              <button onclick="sendQuestionToSim(2)" class="px-3 py-1.5 rounded-lg bg-emerald-900/60 hover:bg-emerald-900 border border-emerald-700 text-emerald-300 text-xs font-mono font-bold transition">
+                <i class="fa-solid fa-play"></i> Simülatörde Göster
+              </button>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs sm:text-sm text-slate-200 leading-relaxed space-y-2">
+            <strong>Orijinal Soru Metni:</strong><br>
+            3 fazlı, 120° elektriksel açıyla yerleştirilmiş Hall sensörlerine sahip bir BLDC motorda 
+            anlık Hall sensör lojik çıkışları $[H_1, H_2, H_3] = [1, 1, 0]$ olarak ölçülmüştür.<br>
+            <strong>a)</strong> Rotor o anda elektriksel olarak kaç derece aralığındadır?<br>
+            <strong>b)</strong> 6 transistörlü eviricide hangi anahtarlar iletimdedir? Hangi faz boştadır (floating)?<br>
+            <strong>c)</strong> Motorun dönüş yönünü saat ibrelerinin tersine (CCW) çevirmek için eviriciye uygulanması gereken anahtarlama çifti nedir?
+          </div>
+
+          <div id="sol-2" class="p-5 rounded-xl bg-slate-950 border border-emerald-900/50 space-y-3 text-xs font-mono">
+            <div class="text-emerald-400 font-bold flex items-center gap-2">
+              <i class="fa-solid fa-check-circle"></i> Adım Adım Akademik Çözüm:
+            </div>
+            <div class="space-y-2 text-slate-300">
+              <div><strong>a) Sektör Belirleme:</strong> 120° Hall tablosuna göre $[1, 1, 0]$ durumu <strong>3. Sektörü ($120^\circ - 180^\circ$)</strong> gösterir.</div>
+              <div><strong>b) İletimdeki Anahtarlar:</strong> Faz B üst transistörü ($B^+$) ile Faz C alt transistörü ($C^-$) iletimdedir. Akım Faz B'den girer, Faz C'den çıkar ($B^+ C^-$). <strong>Faz A tamamen BOŞTADIR</strong>.</div>
+              <div><strong>c) Ters Yön (CCW):</strong> Saat yönünün tersi tork üretmek için akım ters yönde akıtılır: <strong>$C^+ B^-$</strong> anahtarlanır.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 3: Universal Motor AC/DC Page 34-35 -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4" id="qcard-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-8 h-8 rounded-lg bg-amber-950 border border-amber-800 flex items-center justify-center font-bold text-xs text-amber-300">S3</span>
+              <div>
+                <h3 class="text-base font-bold text-white">Üniversal Motorda AC vs DC Çalışma, Empedans Üçgeni ve Verim Hesabı</h3>
+                <span class="text-[11px] font-mono text-amber-400">Dr. Hakan Kahveci Notları: Sayfa 34-35 Birebir Soru</span>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="toggleSolution('sol-3', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 transition">
+                <i class="fa-solid fa-eye-slash"></i> Çözümü Gizle / Göster
+              </button>
+              <button onclick="sendQuestionToSim(3)" class="px-3 py-1.5 rounded-lg bg-amber-900/60 hover:bg-amber-900 border border-amber-700 text-amber-300 text-xs font-mono font-bold transition">
+                <i class="fa-solid fa-play"></i> Simülatörde Göster
+              </button>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs sm:text-sm text-slate-200 leading-relaxed space-y-2">
+            <strong>Orijinal Soru Metni:</strong><br>
+            Bir üniversal motor $V = 120\text{ V}, 60\text{ Hz}$ alternatif gerilim kaynağına bağlandığında şebekeden $I = 1.5\text{ A}$ akım çekmekte ve $n_{ac} = 2000\text{ d/d}$ hızla dönmektedir.
+            Motorun toplam omik direnci $R = 20\ \Omega$, toplam endüktif reaktansı $X_L = 32\ \Omega$'dur.<br>
+            <strong>a)</strong> AC çalışmada endüklenen zıt EMK ($E_{ac}$) ve güç katsayısını ($\cos\varphi$) bulunuz.<br>
+            <strong>b)</strong> Motor aynı $120\text{ V}$ gerilimli bir DC kaynağa bağlandığında ve yine $1.5\text{ A}$ akım çektiğinde devir sayısı ($n_{dc}$) ne olur?<br>
+            <strong>c)</strong> AC ve DC durumdaki verimleri karşılaştırınız.
+          </div>
+
+          <div id="sol-3" class="p-5 rounded-xl bg-slate-950 border border-amber-900/50 space-y-3 text-xs font-mono">
+            <div class="text-amber-400 font-bold flex items-center gap-2">
+              <i class="fa-solid fa-check-circle"></i> Adım Adım Akademik Çözüm:
+            </div>
+            <div class="space-y-2 text-slate-300">
+              <div><strong>a) AC Zıt EMK & Güç Katsayısı:</strong></div>
+              <div>$$V_{ac}^2 = (E_{ac} + IR)^2 + (IX_L)^2 \implies 120^2 = (E_{ac} + 1.5 \times 20)^2 + (1.5 \times 32)^2$$</div>
+              <div>$$14400 = (E_{ac} + 30)^2 + 2304 \implies (E_{ac} + 30)^2 = 12096 \implies E_{ac} + 30 \approx 109.98\text{ V}$$</div>
+              <div>$$E_{ac} = 109.98 - 30 = \mathbf{79.98\text{ V}}\quad (\approx 80\text{ V})$$</div>
+              <div>$$\cos\varphi = \frac{E_{ac} + IR}{V} = \frac{109.98}{120} = \mathbf{0.9165}$$</div>
+
+              <div class="pt-1"><strong>b) DC Çalışmada Devir Sayısı:</strong></div>
+              <div>DC'de reaktans sıfırdır ($X_L = 0$): $E_{dc} = V_{dc} - IR = 120 - 30 = \mathbf{90.0\text{ V}}$.</div>
+              <div>$$\frac{n_{dc}}{n_{ac}} = \frac{E_{dc}}{E_{ac}} \implies n_{dc} = 2000 \cdot \frac{90.0}{79.98} \approx \mathbf{2250.5\text{ d/d}}$$</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 4: Servo 4096 PPR Encoder -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4" id="qcard-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-8 h-8 rounded-lg bg-indigo-950 border border-indigo-800 flex items-center justify-center font-bold text-xs text-indigo-300">S4</span>
+              <div>
+                <h3 class="text-base font-bold text-white">Servo Enkoder Çözünürlüğü, Pals Frekansı ve Resolver Açı Tayini</h3>
+                <span class="text-[11px] font-mono text-indigo-400">Dr. Hakan Kahveci Notları: Sayfa 46-50 Birebir Soru</span>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="toggleSolution('sol-4', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 transition">
+                <i class="fa-solid fa-eye-slash"></i> Çözümü Gizle / Göster
+              </button>
+              <button onclick="sendQuestionToSim(4)" class="px-3 py-1.5 rounded-lg bg-indigo-900/60 hover:bg-indigo-900 border border-indigo-700 text-indigo-300 text-xs font-mono font-bold transition">
+                <i class="fa-solid fa-play"></i> Simülatörde Göster
+              </button>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs sm:text-sm text-slate-200 leading-relaxed space-y-2">
+            <strong>Orijinal Soru Metni:</strong><br>
+            Bir servo motor miline 4096 PPR optik artımsal enkoder bağlanmıştır. Motor $n = 3000\text{ d/d}$ hızla dönmektedir.<br>
+            <strong>a)</strong> Mekanik açısal çözünürlük ($\Delta\theta$) kaç derecedir?<br>
+            <strong>b)</strong> Kuadratür 4X kenar sayımında tur başına toplam darbe sayısı kaçtır?<br>
+            <strong>c)</strong> Çıkış pals frekansı ($f$) kaç kHz'dir?<br>
+            <strong>d)</strong> Resolver stator sargılarında genlik oranı $V_{sin} / V_{cos} = 0.577$ ölçüldüğünde rotor açısı ($\theta$) nedir?
+          </div>
+
+          <div id="sol-4" class="p-5 rounded-xl bg-slate-950 border border-indigo-900/50 space-y-3 text-xs font-mono">
+            <div class="text-indigo-400 font-bold flex items-center gap-2">
+              <i class="fa-solid fa-check-circle"></i> Adım Adım Akademik Çözüm:
+            </div>
+            <div class="space-y-2 text-slate-300">
+              <div><strong>a) Çözünürlük:</strong> $\Delta\theta = \frac{360^\circ}{4096} \approx \mathbf{0.08789^\circ}$.</div>
+              <div><strong>b) 4X Darbe Sayısı:</strong> $4 \times 4096 = \mathbf{16384\text{ sayım/tur}}$.</div>
+              <div><strong>c) Pals Frekansı:</strong> $f = 4096 \times \frac{3000}{60} = 4096 \times 50 = \mathbf{204.8\text{ kHz}}$.</div>
+              <div><strong>d) Resolver Açısı:</strong> $\tan\theta = 0.577 \implies \theta = \arctan(0.577) = \mathbf{30.0^\circ}$.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 5: Stepper Speed and Frequency -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4" id="qcard-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-8 h-8 rounded-lg bg-orange-950 border border-orange-800 flex items-center justify-center font-bold text-xs text-orange-300">S5</span>
+              <div>
+                <h3 class="text-base font-bold text-white">4 Fazlı 50 Dişli Hibrit Adım Motorunda Devir-Frekans ve Yarım Adım Dönüşümü</h3>
+                <span class="text-[11px] font-mono text-orange-400">Dr. Hakan Kahveci Notları: Sayfa 58-60 Birebir Soru</span>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="toggleSolution('sol-5', this)" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono text-slate-200 transition">
+                <i class="fa-solid fa-eye-slash"></i> Çözümü Gizle / Göster
+              </button>
+              <button onclick="sendQuestionToSim(5)" class="px-3 py-1.5 rounded-lg bg-orange-900/60 hover:bg-orange-900 border border-orange-700 text-orange-300 text-xs font-mono font-bold transition">
+                <i class="fa-solid fa-play"></i> Simülatörde Göster
+              </button>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs sm:text-sm text-slate-200 leading-relaxed space-y-2">
+            <strong>Orijinal Soru Metni:</strong><br>
+            4 fazlı ($m = 4$), rotorunda 50 adet diş ($N_r = 50$) bulunan hibrit adım motoru kullanılmaktadır.<br>
+            <strong>a)</strong> Tam adım modundaki adım açısını ($\theta_s$) ve bir turun adım sayısını ($S$) hesaplayınız.<br>
+            <strong>b)</strong> $n = 1200\text{ d/d}$ hız için mikrodenetleyiciden uygulanması gereken adım frekansı ($f$) kaç kHz olmalıdır?<br>
+            <strong>c)</strong> Motor yarım adım (half-step) moduna geçirilirse yeni adım açısı ve $1200\text{ d/d}$ için gereken frekans nedir?
+          </div>
+
+          <div id="sol-5" class="p-5 rounded-xl bg-slate-950 border border-orange-900/50 space-y-3 text-xs font-mono">
+            <div class="text-orange-400 font-bold flex items-center gap-2">
+              <i class="fa-solid fa-check-circle"></i> Adım Adım Akademik Çözüm:
+            </div>
+            <div class="space-y-2 text-slate-300">
+              <div><strong>a) Tam Adım:</strong> $\theta_s = \frac{360^\circ}{4 \times 50} = \mathbf{1.8^\circ}$, $S = \mathbf{200\text{ adım/tur}}$.</div>
+              <div><strong>b) Pals Frekansı:</strong> $f = \frac{1200 \times 200}{60} = \mathbf{4000\text{ Hz}} = \mathbf{4.0\text{ kHz}}$.</div>
+              <div><strong>c) Yarım Adım:</strong> $\theta_s' = \frac{1.8^\circ}{2} = \mathbf{0.9^\circ}$, $S' = 400$, $f' = \frac{1200 \times 400}{60} = \mathbf{8000\text{ Hz}} = \mathbf{8.0\text{ kHz}}$.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- TAB 10: DERS NOTU & KAYNAK DOKÜMAN YÖNETİMİ -->
+    <!-- ======================================================= -->
+    <section id="tab-doc-manager" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-teal-400">
+          <i class="fa-solid fa-folder-open"></i>
+          <span>Kütüphane & Kaynak Doküman Yönetim Modülü</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Ders Kitabı, Notlar ve PDF Kaynak Yöneticisi
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Bu modül, platforma bağlı ders notlarını listeler ve kullanıcının yeni ders notu (PDF/Görsel) yükleyip tarayıcı hafızasında 
+          (IndexedDB) kalıcı olarak saklayabilmesini sağlar. Dokümandaki sayfa bağlantılarına tıklayarak doğrudan ilgili simülasyona geçebilirsiniz.
+        </p>
+      </div>
+
+      <!-- Document List & Uploader Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Document Upload Card -->
+        <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2 border-b border-slate-800 pb-2">
+            <i class="fa-solid fa-file-arrow-up text-teal-400"></i> Yeni Not / PDF Ekle
+          </h3>
+
+          <div class="space-y-3 text-xs font-mono">
+            <div>
+              <label class="text-slate-400">Doküman Başlığı:</label>
+              <input type="text" id="inputDocTitle" placeholder="Örn: 2026 Vize Çalışma Notları" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+            </div>
+
+            <div>
+              <label class="text-slate-400">Öğretim Elemanı / Yazar:</label>
+              <input type="text" id="inputDocAuthor" value="Dr. Hakan Kahveci" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+            </div>
+
+            <div>
+              <label class="text-slate-400">İlişkili Simülasyon:</label>
+              <select id="selectDocSim" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-white">
+                <option value="tab-direction-lab">Vidalama Kuralı & Yön Tayini</option>
+                <option value="tab-bldc">BLDC Komütasyon</option>
+                <option value="tab-universal">Üniversal Motor</option>
+                <option value="tab-servo">Servo Enkoder & Resolver</option>
+                <option value="tab-stepper">Adım Motorları</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-slate-400">Dosya Seç (PDF / Resim):</label>
+              <input type="file" id="inputFileUpload" accept=".pdf,image/*" class="w-full mt-1 text-slate-300 text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-cyan-900/60 file:text-cyan-300 file:font-bold hover:file:bg-cyan-900">
+            </div>
+
+            <button onclick="handleUserDocUpload()" class="w-full py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold transition flex items-center justify-center gap-1.5 shadow-lg shadow-teal-600/25">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Dokümanı Kütüphaneye Kaydet
+            </button>
+          </div>
+        </div>
+
+        <!-- Registered Documents List (Span 2) -->
+        <div class="lg:col-span-2 glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2 border-b border-slate-800 pb-2">
+            <i class="fa-solid fa-book text-cyan-400"></i> Kütüphanedeki Ders Dokümanları
+          </h3>
+
+          <div id="docListContainer" class="space-y-3">
+            <!-- Default Dr. Hakan Kahveci Note -->
+            <div class="p-4 rounded-xl bg-slate-900 border border-cyan-800/60 flex flex-wrap items-center justify-between gap-3">
+              <div class="space-y-1">
+                <div class="flex items-center space-x-2">
+                  <span class="px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800 text-cyan-300 text-[10px] font-bold font-mono">ANA DERS NOTU</span>
+                  <span class="font-bold text-white text-sm">ÖZEL ELEKTRİK MAKİNALARI DERS NOTLARI</span>
+                </div>
+                <div class="text-xs text-slate-400 font-mono">
+                  Yazar: <strong class="text-slate-200">Dr. Hakan Kahveci</strong> • Sayfa: <strong>81 Sayfa (64 Aktif Çalışma Sayfası)</strong>
+                </div>
+                <div class="text-[11px] text-slate-300 flex flex-wrap gap-2 pt-1 font-mono">
+                  <button onclick="switchTab('tab-direction-lab')" class="text-cyan-400 hover:underline">Sayfa 1: Vidalama Kuralı</button>
+                  <button onclick="switchTab('tab-bldc')" class="text-sky-400 hover:underline">Sayfa 14-22: BLDC 6-Adım</button>
+                  <button onclick="switchTab('tab-universal')" class="text-amber-400 hover:underline">Sayfa 34-35: Üniversal 120V</button>
+                  <button onclick="switchTab('tab-servo')" class="text-purple-400 hover:underline">Sayfa 46-50: 4096 PPR Enkoder</button>
+                  <button onclick="switchTab('tab-stepper')" class="text-orange-400 hover:underline">Sayfa 58-60: Adım Motoru 1.8°</button>
+                </div>
+              </div>
+              <div class="flex items-center space-x-2">
+                <a href="kaynak_dokumanlar/OZEL_ELEKTRIK_MAKINALARI_HAKAN_KAHVECI.pdf" target="_blank" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 text-xs font-mono font-bold transition flex items-center gap-1.5">
+                  <i class="fa-solid fa-file-pdf text-rose-400"></i> PDF'i Aç
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- TAB 11: DEFTER ÖZETİ & ALTIN FORMÜL KARTLARI -->
+    <!-- ======================================================= -->
+    <section id="tab-notes" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-emerald-400">
+          <i class="fa-solid fa-pen-fancy"></i>
+          <span>Fiziksel Ders Defteri Kılavuzu & Sınav Öncesi Hızlı Bakış Formülleri</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Deftere Yaz: Altın Mühendislik Formülleri & Püf Noktalar
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Sınavda çıkabilecek tüm kritik formüller, birimler ve türev bağıntıları aşağıda derli toplu olarak sunulmuştur.
+          Fiziksel defterinize not alırken bu şemayı referans alabilirsiniz.
+        </p>
+      </div>
+
+      <!-- Formula Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs">
+        
+        <!-- Card 1 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-cyan-400 font-mono">1. LORENTZ & LAPLACE</span>
+            <i class="fa-solid fa-magnet text-slate-500"></i>
+          </div>
+          <div class="space-y-1.5 font-mono text-slate-300">
+            <div>$\vec{F} = i (\vec{l} \times \vec{B})$ [N]</div>
+            <div>$F = B \cdot I \cdot l \cdot \sin\theta$</div>
+            <div>$\vec{T} = \vec{r} \times \vec{F}$ [N·m]</div>
+            <div>$T_e = \sum_{k=1}^N (\vec{r}_k \times \vec{F}_k)_z$</div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+              Vidalama kuralı: 4 parmak $\vec{l}$'den $\vec{B}$'ye kıvrılır, başparmak $\vec{F}$'yi gösterir.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-emerald-400 font-mono">2. DC MOTOR DİNAMİĞİ (ODE)</span>
+            <i class="fa-solid fa-bolt text-slate-500"></i>
+          </div>
+          <div class="space-y-1.5 font-mono text-slate-300">
+            <div>$L_a \frac{di_a}{dt} = V_a - R_a i_a - K_e \omega$</div>
+            <div>$J \frac{d\omega}{dt} = K_t i_a - B_m \omega - T_L$</div>
+            <div>$P_{mech} = T_e \cdot \omega_m$ [W]</div>
+            <div>$\tau_e = L_a/R_a$, $\tau_m = J/B_m$</div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+              Kalkışta $\omega=0 \implies I_{kalkis} = V_a / R_a$.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-amber-400 font-mono">3. ÜNİVERSAL MOTOR</span>
+            <i class="fa-solid fa-plug text-slate-500"></i>
+          </div>
+          <div class="space-y-1.5 font-mono text-slate-300">
+            <div>$V_{ac}^2 = (E_{ac} + IR)^2 + (IX_L)^2$</div>
+            <div>$E_{dc} = V_{dc} - I R$</div>
+            <div>$n_{dc} = n_{ac} \cdot \frac{E_{dc}}{E_{ac}}$</div>
+            <div>$\cos\varphi = \frac{E_{ac} + IR}{V_{ac}}$</div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+              Şebeke uçlarını çevirmek yönü DEĞİŞTİRMEZ. Armatür uçları çevrilmelidir.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-purple-400 font-mono">4. SERVO ENKODER & RESOLVER</span>
+            <i class="fa-solid fa-compact-disc text-slate-500"></i>
+          </div>
+          <div class="space-y-1.5 font-mono text-slate-300">
+            <div>$\Delta\theta = \frac{360^\circ}{PPR}$ [derece/pals]</div>
+            <div>$Count_{4X} = 4 \times PPR$</div>
+            <div>$f_{pulse} = \frac{n \cdot PPR}{60}$ [Hz]</div>
+            <div>$\theta_{resolver} = \arctan\left(\frac{V_{sin}}{V_{cos}}\right)$</div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+              A kanalı B'den önce $\implies$ CW; B önce $\implies$ CCW.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-orange-400 font-mono">5. ADIM MOTORU</span>
+            <i class="fa-solid fa-gears text-slate-500"></i>
+          </div>
+          <div class="space-y-1.5 font-mono text-slate-300">
+            <div>$\theta_s = \frac{360^\circ}{m \cdot N_r}$</div>
+            <div>$S = m \cdot N_r = \frac{360^\circ}{\theta_s}$</div>
+            <div>$n = \frac{f \cdot 60}{S}$ [d/d]</div>
+            <div>$f = \frac{n \cdot S}{60}$ [Hz]</div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+              Yarım adımda: $\theta_s' = \theta_s / 2$, $S' = 2S$, $f' = 2f$.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-sky-400 font-mono">6. BLDC ELEKTRONİK KOMÜTASYON</span>
+            <i class="fa-solid fa-microchip text-slate-500"></i>
+          </div>
+          <div class="space-y-1.5 font-mono text-slate-300">
+            <div>120° iletim: Her 60°'de 2 faz devrede, 1 faz boşta</div>
+            <div>$T_e = 2 \cdot k_t \cdot I$</div>
+            <div>$\theta_e = \frac{P}{2} \cdot \theta_m$</div>
+            <div>Ters dönüş: Komütasyon sırası $1 \rightarrow 6 \rightarrow 5 \dots$</div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+              Sensörsüz sürüşte boşta kalan fazın zıt EMK sıfır geçişi izlenir.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="mt-auto border-t border-slate-800 bg-slate-900/90 backdrop-blur-md py-4 text-center text-xs text-slate-500 font-mono">
+    <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2">
+      <div>KTÜ Elektrik-Elektronik Mühendisliği • Özel Elektrik Makinaları Dersi</div>
+      <div class="text-slate-400">Geliştirici: <strong>Muhammet Raşit Taflan</strong> • 3D CAD & Dinamik ODE Simülatörü v2.0.0</div>
+      <div>Akademik Kaynak: Dr. Hakan Kahveci Notları</div>
+    </div>
+  </footer>

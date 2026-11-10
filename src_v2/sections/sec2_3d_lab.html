@@ -1,0 +1,241 @@
+    <!-- ========================================== -->
+    <!-- TAB 1: 3D CAD MOTOR & VEKTÖR LABORATUVARI -->
+    <!-- ========================================== -->
+    <section id="tab-3d-lab" class="tab-content space-y-6">
+      <!-- 3D Canvas & Engineering Inspector Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- Center-Left: High-End 3D Viewport (Span 3) -->
+        <div class="lg:col-span-3 glass-card rounded-2xl overflow-hidden border-slate-800 flex flex-col relative shadow-2xl">
+          <!-- Viewport Header Toolbar -->
+          <div class="px-4 py-3 bg-slate-900/95 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 z-10">
+            <div class="flex items-center space-x-2">
+              <span class="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"></span>
+              <span class="text-xs font-mono font-bold text-white uppercase tracking-wider">3D Endüstriyel Motor & Vektörel İnceleme Sahnesi</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-mono">PBR CAD Modu</span>
+            </div>
+
+            <!-- 10 Engineering Camera View Presets -->
+            <div class="flex items-center space-x-1 text-xs">
+              <span class="text-slate-400 text-[11px] mr-1 hidden sm:inline">Kamera / Kesit:</span>
+              <select id="selectCameraMode" onchange="setCameraPreset(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1 font-mono focus:ring-1 focus:ring-cyan-500">
+                <option value="iso">1. İzometrik CAD</option>
+                <option value="front">2. Ön Kutup Kesiti</option>
+                <option value="rear">3. Arka Kapak & Rulman</option>
+                <option value="top">4. Üstten Görünüm</option>
+                <option value="side">5. Mil Ekseninden Yan</option>
+                <option value="long_section">6. Boyuna Kesit</option>
+                <option value="cross_section">7. Enine Kesit (Hava Aralığı)</option>
+                <option value="exploded">8. Parçalanmış Görünüm (Exploded)</option>
+                <option value="transparent">9. Şeffaf Stator (X-Ray)</option>
+                <option value="rotor_isolated">10. Yalnızca Rotor & Sargılar</option>
+              </select>
+              <button onclick="resetCameraView()" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 transition" title="Kamerayı Sıfırla"><i class="fa-solid fa-arrows-rotate"></i></button>
+              <button onclick="toggle3DFullscreen()" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Tam Ekran 3D Görünüm"><i class="fa-solid fa-expand"></i></button>
+            </div>
+          </div>
+
+          <!-- 3D Canvas Container -->
+          <div class="relative w-full h-[580px] bg-slate-950 flex items-center justify-center overflow-hidden" id="canvas3dContainer">
+            <canvas id="motor3dCanvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+
+            <!-- Floating Vector HUD in Top-Left -->
+            <div class="absolute top-4 left-4 p-3.5 rounded-xl bg-slate-900/90 backdrop-blur-md border border-slate-800 text-xs font-mono space-y-1.5 shadow-2xl pointer-events-none select-none max-w-[240px]">
+              <div class="font-bold text-slate-200 text-[11px] uppercase tracking-wider mb-1 flex items-center gap-1.5 border-b border-slate-800 pb-1">
+                <i class="fa-solid fa-layer-group text-cyan-400"></i> Elektromanyetik Vektörler
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-cyan-400 inline-block shadow-sm shadow-cyan-400"></span>
+                <span class="text-slate-300">Stator Akısı ($\vec{B}$): <strong id="hudFlux" class="text-cyan-400">0.85 T</strong></span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block shadow-sm shadow-yellow-400"></span>
+                <span class="text-slate-300">Endüvi Akımı ($\vec{I}$): <strong id="hudCurrent" class="text-yellow-400">4.82 A</strong></span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block shadow-sm shadow-emerald-400"></span>
+                <span class="text-slate-300">Lorentz Kuvveti ($\vec{F}$): <strong id="hudForce" class="text-emerald-400">4.10 N</strong></span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-pink-500 inline-block shadow-sm shadow-pink-500"></span>
+                <span class="text-slate-300">Toplam Moment ($T_e$): <strong id="hudTorque" class="text-pink-400">0.38 N·m</strong></span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-indigo-400 inline-block shadow-sm shadow-indigo-400"></span>
+                <span class="text-slate-300">Açısal Hız ($\vec{\omega}$): <strong id="hudOmega" class="text-indigo-400">125.7 rad/s</strong></span>
+              </div>
+            </div>
+
+            <!-- Interactive Component Inspector Card (Raycasting Popup) -->
+            <div id="componentInspectorCard" class="absolute top-4 right-4 p-4 rounded-xl bg-slate-900/95 backdrop-blur-md border border-cyan-800/80 text-xs font-mono shadow-2xl max-w-[280px] space-y-2 hidden z-20">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                <div class="font-bold text-cyan-300 flex items-center gap-1.5">
+                  <i class="fa-solid fa-microscope text-cyan-400"></i> <span id="inspPartName">Kolektör Dilimi</span>
+                </div>
+                <button onclick="closeComponentInspector()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+              <div class="text-[11px] text-slate-300 space-y-1">
+                <div><span class="text-slate-400">Malzeme:</span> <strong id="inspPartMaterial" class="text-white">E-Cu Elektrolitik Bakır</strong></div>
+                <div><span class="text-slate-400">Görevi:</span> <span id="inspPartFunction" class="text-slate-200">Kutup eksenini geçen iletkenin akımını ters çevirir.</span></div>
+                <div><span class="text-slate-400">Ders Notu:</span> <span id="inspPartPage" class="text-amber-400 font-bold">Sayfa 1-3, 30</span></div>
+                <div class="pt-1 border-t border-slate-800 text-cyan-300 font-bold" id="inspPartFormula">$T_e = 2 \cdot r \cdot l \cdot I \cdot B$</div>
+              </div>
+              <div class="pt-1 flex justify-between items-center text-[10px]">
+                <button onclick="isolateInspectedPart()" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">Parçayı İzole Et</button>
+                <button onclick="restoreAllParts()" class="px-2 py-1 rounded bg-cyan-900/60 hover:bg-cyan-900 text-cyan-300 border border-cyan-700 transition">Hepsini Göster</button>
+              </div>
+            </div>
+
+            <!-- Viewport Bottom Status Bar -->
+            <div class="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-mono text-slate-400 bg-slate-900/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-800 pointer-events-none">
+              <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-hand-pointer text-cyan-400"></i>
+                <span>Parçaya Tıkla: Teknik İnceleme • Sol Tık: Döndür • Sağ Tık: Kaydır • Tekerlek: Zoom</span>
+              </div>
+              <div class="flex items-center space-x-4">
+                <span>Rotor Mekanik Açı: <strong id="hudRotorAngle" class="text-white">0.0°</strong></span>
+                <span>Elektriksel Açı: <strong id="hudElecAngle" class="text-cyan-300">0.0°</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: 3D Motor Engineering Controls & ODE State (Span 1) -->
+        <div class="space-y-4">
+          <!-- Main Drive Card -->
+          <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+              <i class="fa-solid fa-sliders text-cyan-400"></i> Dinamik Sürüş & Gerilim
+            </h3>
+
+            <!-- Run / Pause / Step Controls -->
+            <div class="grid grid-cols-3 gap-2">
+              <button id="btnMotorPlay" onclick="toggleMotorPlay()" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-1.5 transition">
+                <i class="fa-solid fa-play"></i> <span id="btnMotorPlayText">Durdur</span>
+              </button>
+              <button onclick="stepCommutationSingle()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 font-semibold text-xs flex items-center justify-center gap-1 transition" title="1 Oluk Komütasyonu İlerle (+45°)">
+                <i class="fa-solid fa-forward-step"></i> Adım
+              </button>
+              <button onclick="resetDynamicMotor()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold text-xs flex items-center justify-center gap-1 transition" title="Tüm Dinamik Durumu Sıfırla">
+                <i class="fa-solid fa-rotate-left"></i> Sıfırla
+              </button>
+            </div>
+
+            <!-- Terminal Voltage Slider (Va) with Quick Polarity Switches -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-semibold">Uç Gerilimi ($V_a$):</span>
+                <span id="labelVa" class="font-mono font-bold text-yellow-400">120 V</span>
+              </div>
+              <input type="range" id="sliderVa" min="-240" max="240" step="5" value="120" oninput="setArmatureVoltage(this.value)" class="w-full">
+              <div class="grid grid-cols-3 gap-1.5 text-[10px] font-mono pt-1">
+                <button onclick="setArmatureVoltage(-120)" class="py-1 rounded bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 transition">-120 V (Ters)</button>
+                <button onclick="setArmatureVoltage(0)" class="py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">0 V (Boşta)</button>
+                <button onclick="setArmatureVoltage(120)" class="py-1 rounded bg-cyan-900/60 hover:bg-cyan-900 text-cyan-300 border border-cyan-700 transition">+120 V (Düz)</button>
+              </div>
+            </div>
+
+            <!-- Load Torque Slider (TL) -->
+            <div class="space-y-1.5 pt-2 border-t border-slate-800">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-300 font-semibold">Yük Momenti ($T_L$):</span>
+                <span id="labelTL" class="font-mono font-bold text-rose-400">0.20 N·m</span>
+              </div>
+              <input type="range" id="sliderTL" min="0.0" max="1.5" step="0.05" value="0.20" oninput="setLoadTorque(this.value)" class="w-full">
+              <div class="flex justify-between items-center text-[11px] pt-0.5">
+                <button id="btnToggleLoad" onclick="toggleInstantLoad()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-300 font-bold transition">
+                  <i class="fa-solid fa-weight-scale"></i> Ani Yük Uygula (+0.5 Nm)
+                </button>
+              </div>
+            </div>
+
+            <!-- Stator Magnetic Flux (B) -->
+            <div class="space-y-1 pt-1">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-400">Kutup Akısı ($B_{max}$):</span>
+                <span id="labelFlux" class="font-mono font-bold text-cyan-400">0.85 T</span>
+              </div>
+              <input type="range" id="sliderFlux" min="0.1" max="1.8" step="0.05" value="0.85" oninput="setFieldFlux(this.value)" class="w-full">
+            </div>
+
+            <!-- Exploded View Slider -->
+            <div class="space-y-1 pt-2 border-t border-slate-800">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-400 flex items-center gap-1">
+                  <i class="fa-solid fa-arrows-split-up-and-left text-rose-400"></i> Parçalanmış Görünüm:
+                </span>
+                <span id="labelExplode" class="font-mono font-bold text-rose-400">0%</span>
+              </div>
+              <input type="range" id="sliderExplode" min="0" max="100" step="1" value="0" oninput="updateExplodedView(this.value)" class="w-full">
+            </div>
+          </div>
+
+          <!-- Display & Vector Layers Filter Card -->
+          <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-3">
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+              <i class="fa-solid fa-eye text-indigo-400"></i> Fiziksel Vektör Katmanları
+            </h3>
+            <div class="space-y-2 text-xs">
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkShowField" checked onchange="toggleVectorLayer('field', this.checked)" class="rounded bg-slate-800 border-slate-700 text-cyan-500 focus:ring-0">
+                <span class="text-slate-300">Stator Manyetik Alanı ($\vec{B}$)</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkShowCurrent" checked onchange="toggleVectorLayer('current', this.checked)" class="rounded bg-slate-800 border-slate-700 text-yellow-500 focus:ring-0">
+                <span class="text-slate-300">İletken Akım Okları ($\vec{I}$)</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkShowSelfField" checked onchange="toggleVectorLayer('selfField', this.checked)" class="rounded bg-slate-800 border-slate-700 text-amber-500 focus:ring-0">
+                <span class="text-slate-300">İletken Öz Manyetik Alanı (Biot-Savart)</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkShowForce" checked onchange="toggleVectorLayer('force', this.checked)" class="rounded bg-slate-800 border-slate-700 text-emerald-500 focus:ring-0">
+                <span class="text-slate-300">Lorentz Kuvvet Vektörleri ($\vec{F}$)</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkShowTorque" checked onchange="toggleVectorLayer('torque', this.checked)" class="rounded bg-slate-800 border-slate-700 text-pink-500 focus:ring-0">
+                <span class="text-slate-300">Elektromanyetik Moment ($\vec{T}$)</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkShowOmega" checked onchange="toggleVectorLayer('omega', this.checked)" class="rounded bg-slate-800 border-slate-700 text-indigo-500 focus:ring-0">
+                <span class="text-slate-300">Açısal Hız Vektörü ($\vec{\omega}$)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-Time Analytical Gauges & State Indicators -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 font-mono">
+        <div class="glass-card rounded-xl p-3 border-slate-800">
+          <div class="text-slate-400 text-[10px] uppercase">Endüvi Akımı ($i_a$)</div>
+          <div id="gaugeIa" class="text-lg sm:text-xl font-black text-yellow-400 mt-0.5">4.82 A</div>
+          <div class="text-[9px] text-slate-500">$V_a - E_a / R_a$</div>
+        </div>
+        <div class="glass-card rounded-xl p-3 border-slate-800">
+          <div class="text-slate-400 text-[10px] uppercase">Mekanik Hız ($n$)</div>
+          <div id="gaugeRpm" class="text-lg sm:text-xl font-black text-cyan-400 mt-0.5">1200 d/d</div>
+          <div id="gaugeOmega" class="text-[9px] text-slate-500">125.7 rad/s</div>
+        </div>
+        <div class="glass-card rounded-xl p-3 border-slate-800">
+          <div class="text-slate-400 text-[10px] uppercase">Zıt EMK ($E_a$)</div>
+          <div id="gaugeEa" class="text-lg sm:text-xl font-black text-emerald-400 mt-0.5">85.4 V</div>
+          <div class="text-[9px] text-slate-500">$K_e \cdot \omega$</div>
+        </div>
+        <div class="glass-card rounded-xl p-3 border-slate-800">
+          <div class="text-slate-400 text-[10px] uppercase">Elektromanyetik Tork</div>
+          <div id="gaugeTe" class="text-lg sm:text-xl font-black text-pink-400 mt-0.5">0.38 N·m</div>
+          <div class="text-[9px] text-slate-500">$K_t \cdot i_a$</div>
+        </div>
+        <div class="glass-card rounded-xl p-3 border-slate-800">
+          <div class="text-slate-400 text-[10px] uppercase">Mekanik Güç ($P_m$)</div>
+          <div id="gaugePm" class="text-lg sm:text-xl font-black text-indigo-400 mt-0.5">47.8 W</div>
+          <div class="text-[9px] text-slate-500">$T_e \cdot \omega$</div>
+        </div>
+        <div class="glass-card rounded-xl p-3 border-slate-800">
+          <div class="text-slate-400 text-[10px] uppercase">Verim ($\eta$)</div>
+          <div id="gaugeEff" class="text-lg sm:text-xl font-black text-teal-400 mt-0.5">82.6 %</div>
+          <div class="text-[9px] text-slate-500">$P_m / P_{in}$</div>
+        </div>
+      </div>
+    </section>

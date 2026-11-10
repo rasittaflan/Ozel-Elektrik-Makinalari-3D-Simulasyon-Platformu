@@ -1,0 +1,221 @@
+    <!-- ======================================================= -->
+    <!-- TAB 4: DEVRE LABORATUVARI & GÜÇ ELEKTRONİĞİ SÜRÜCÜLER -->
+    <!-- ======================================================= -->
+    <section id="tab-circuits" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-indigo-400">
+          <i class="fa-solid fa-network-wired"></i>
+          <span>Güç Elektroniği Sürücü Devreleri & İnteraktif Anahtarlama Modelleri</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Motor Sürücü Devreleri: H-Köprüsü, PWM ve Üç Fazlı Evirici Laboratuvarı
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Bu modülde motor sürücü devreleri yalnızca statik resimler değil; kullanıcının anahtarları bizzat açıp kapatabildiği, 
+          PWM doluluk oranını değiştirebildiği ve motorun hareketinin bu anahtarlarla senkron olarak değiştiği etkileşimli bir simülatördür.
+        </p>
+      </div>
+
+      <!-- Circuit Layout: H-Bridge Lab & Inverter Architecture -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- DC Motor H-Bridge Driver Schematic with Clickable Switches -->
+        <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <i class="fa-solid fa-microchip text-indigo-400"></i> Dört Bölge H-Köprüsü (H-Bridge Driver)
+            </h3>
+            <span id="hbridgeStateLabel" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-950 border border-emerald-700 text-emerald-300">
+              İLERİ SÜRÜŞ (S1 & S4 ON)
+            </span>
+          </div>
+
+          <!-- Interactive H-Bridge Canvas -->
+          <div class="relative w-full h-[300px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="hbridgeCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <!-- H-Bridge Control Modes -->
+          <div class="space-y-3 text-xs font-mono">
+            <div class="grid grid-cols-4 gap-2">
+              <button onclick="setHBridgeMode('forward')" id="btnHbFwd" class="py-2 rounded-lg bg-emerald-900/60 border border-emerald-500 text-emerald-300 font-bold transition">
+                İleri (S1, S4)
+              </button>
+              <button onclick="setHBridgeMode('reverse')" id="btnHbRev" class="py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">
+                Geri (S2, S3)
+              </button>
+              <button onclick="setHBridgeMode('brake')" id="btnHbBrake" class="py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">
+                Fren (S2, S4)
+              </button>
+              <button onclick="setHBridgeMode('coast')" id="btnHbCoast" class="py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">
+                Boşta (OFF)
+              </button>
+            </div>
+
+            <!-- PWM Duty Cycle Slider -->
+            <div class="space-y-1 pt-1">
+              <div class="flex justify-between text-slate-400">
+                <span>PWM Görev Döngüsü (Duty Cycle):</span>
+                <span id="labelPwmVal" class="text-white font-bold">75 %</span>
+              </div>
+              <input type="range" id="sliderPwm" min="0" max="100" step="5" value="75" oninput="setPwmDuty(this.value)" class="w-full">
+              <div class="text-[10px] text-slate-500 flex justify-between">
+                <span>Efektif Gerilim: $V_{eff} = D \cdot V_{dc}$</span>
+                <span id="labelVeff" class="text-yellow-400 font-bold">90.0 V (@120V)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Universal Motor Circuit with DPDT Field Reversing Switch -->
+        <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <i class="fa-solid fa-arrows-split-up-and-left text-amber-400"></i> Üniversal Motor Bağlantı & Yön Çevirici Şema
+            </h3>
+            <span class="text-xs font-mono text-amber-400">Defter Sayfa 30 Analizi</span>
+          </div>
+
+          <!-- Universal Motor Circuit Canvas -->
+          <div class="relative w-full h-[300px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="universalCircuitCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <!-- Interactive Circuit Switches -->
+          <div class="space-y-2 text-xs font-mono">
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="toggleUnivSupplyType()" id="btnUnivSupplyToggle" class="py-2 rounded-lg bg-cyan-900/60 border border-cyan-500 text-cyan-300 font-bold transition">
+                Besleme: 120V AC (60 Hz)
+              </button>
+              <button onclick="toggleUnivArmatureSwitch()" id="btnUnivArmatureToggle" class="py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 font-bold hover:text-white transition">
+                Armatür DPDT Anahtarı: DÜZ
+              </button>
+            </div>
+            <div id="univCircuitDesc" class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300">
+              • Şebeke AC iken akım ve akı aynı anda yön değiştirir ($T \propto I_a^2$), tork yönü sabittir. Dönüş yönünü terslemek için DPDT anahtarıyla yalnızca armatür uçları yer değiştirilmelidir!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- TAB 5: BLDC & 6-ADIM ELEKTRONİK KOMÜTASYON LAB -->
+    <!-- ======================================================= -->
+    <section id="tab-bldc" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-sky-400">
+          <i class="fa-solid fa-microchip"></i>
+          <span>Bölüm 1 & 2 • Sayfa 10-29 • Fırçasız DA Motorları ve Evirici Sürüşü</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          BLDC 6-Adım Elektronik Komütasyon & 120° Hall Sensörleri Laboratuvarı
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Mekanik fırça-kollektörün yerini 120° elektriksel yerleşimli 3 Hall sensörü ($H_1, H_2, H_3$) ve 6 MOSFET'li evirici köprüsü alır.
+          Her 60° elektriksel açıda ilgili iki faz iletime sokulur, bir faz boştadır (120° iletim).
+        </p>
+      </div>
+
+      <!-- Inverter Bridge & Hall Table Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left: 3-Phase Inverter Bridge Schematic (Span 2) -->
+        <div class="lg:col-span-2 glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+              <i class="fa-solid fa-network-wired text-sky-400"></i> 3-Fazlı Evirici Köprüsü & Aktif İletim Yolları
+            </h3>
+            <span id="bldcCurrentStepLabel" class="text-xs font-mono font-bold text-cyan-400 px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800">
+              Adım 1 ($A^+ B^-$)
+            </span>
+          </div>
+
+          <div class="relative w-full h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="bldcBridgeCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <!-- Step Navigation Controls -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs font-mono">
+            <div class="flex items-center space-x-2">
+              <button onclick="prevBldcStep()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold transition">
+                <i class="fa-solid fa-backward-step"></i> Önceki Adım
+              </button>
+              <button id="btnBldcAutoPlay" onclick="toggleBldcAutoPlay()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-600/30 transition">
+                <i class="fa-solid fa-play"></i> Otomatik Komütasyon
+              </button>
+              <button onclick="nextBldcStep()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold transition">
+                Sonraki Adım <i class="fa-solid fa-forward-step"></i>
+              </button>
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <span class="text-slate-400">Yön:</span>
+              <button id="bldcDirCW" onclick="setBldcDirection(1)" class="px-2.5 py-1 rounded bg-cyan-900 border border-cyan-600 text-cyan-300 font-bold transition">CW (1→6)</button>
+              <button id="bldcDirCCW" onclick="setBldcDirection(-1)" class="px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-slate-400 font-bold transition">CCW (6→1)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: 120° Hall Sensor Truth Table & Logic -->
+        <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2 border-b border-slate-800 pb-2">
+            <i class="fa-solid fa-table-cells text-indigo-400"></i> Hall Sensörleri Tablosu (120°)
+          </h3>
+
+          <div class="overflow-x-auto text-xs font-mono">
+            <table class="w-full text-center border-collapse">
+              <thead>
+                <tr class="bg-slate-900 text-slate-400 border-b border-slate-800 text-[11px]">
+                  <th class="py-2 px-1">Adım</th>
+                  <th class="py-2 px-1">Açı</th>
+                  <th class="py-2 px-1 text-cyan-400">H1</th>
+                  <th class="py-2 px-1 text-cyan-400">H2</th>
+                  <th class="py-2 px-1 text-cyan-400">H3</th>
+                  <th class="py-2 px-1 text-emerald-400">Aktif Faz</th>
+                </tr>
+              </thead>
+              <tbody id="bldcTruthTableBody" class="divide-y divide-slate-800/60 text-slate-300 text-[11px]">
+                <tr id="row-step-1" class="bg-cyan-950/50 text-cyan-300 font-bold">
+                  <td class="py-1.5">1</td><td>0°-60°</td><td>1</td><td>0</td><td>1</td><td class="text-emerald-400 font-bold">A+ B-</td>
+                </tr>
+                <tr id="row-step-2">
+                  <td class="py-1.5">2</td><td>60°-120°</td><td>1</td><td>0</td><td>0</td><td class="text-emerald-400">A+ C-</td>
+                </tr>
+                <tr id="row-step-3">
+                  <td class="py-1.5">3</td><td>120°-180°</td><td>1</td><td>1</td><td>0</td><td class="text-emerald-400">B+ C-</td>
+                </tr>
+                <tr id="row-step-4">
+                  <td class="py-1.5">4</td><td>180°-240°</td><td>0</td><td>1</td><td>0</td><td class="text-emerald-400">B+ A-</td>
+                </tr>
+                <tr id="row-step-5">
+                  <td class="py-1.5">5</td><td>240°-300°</td><td>0</td><td>1</td><td>1</td><td class="text-emerald-400">C+ A-</td>
+                </tr>
+                <tr id="row-step-6">
+                  <td class="py-1.5">6</td><td>300°-360°</td><td>0</td><td>0</td><td>1</td><td class="text-emerald-400">C+ B-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-[11px] font-mono text-slate-300 space-y-1">
+            <div class="font-bold text-cyan-400">Komütasyon Kuralları:</div>
+            <div>• Her anda 2 anahtar iletimde, 1 faz boştadır (floating).</div>
+            <div>• Boştaki fazda oluşan ters EMK sıfır geçişi (zero-crossing) sensörsüz sürüşte rotor konumunu verir.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Oscilloscope: Trapezoidal Back-EMF & Current Waveforms -->
+      <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+            <i class="fa-solid fa-wave-square text-emerald-400"></i> Dijital Osiloskop: 3-Faz Yamuk Zıt EMK ($e_A, e_B, e_C$) ve Faz Akımları
+          </h3>
+          <span class="text-xs font-mono text-slate-400">Defter Sayfa 8 & 20 Osiloskop Ölçümleri</span>
+        </div>
+        <div class="w-full h-[220px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 relative">
+          <canvas id="bldcOscilloscopeCanvas" class="w-full h-full"></canvas>
+        </div>
+      </div>
+    </section>

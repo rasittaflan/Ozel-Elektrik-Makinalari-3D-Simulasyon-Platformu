@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Özel Elektrik Makinaları | Profesyonel 3D Mühendislik Simülasyonu & Aktif Öğrenme Laboratuvarı v2.0.0</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              900: '#0c4a6e',
+            },
+            slate: {
+              850: '#0d1527',
+              900: '#080e1a',
+              950: '#030712'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- KaTeX for Academic Mathematical & Physical Formulation -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Three.js & OrbitControls for CAD-level 3D Simulation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Chart.js for High-Frequency Live Oscilloscopes -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #050b14;
+      --bg-card: rgba(13, 21, 39, 0.90);
+      --border-card: rgba(30, 41, 59, 0.85);
+      --accent-cyan: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-indigo: #6366f1;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+    }
+
+    code, .font-mono {
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-card);
+      transition: all 0.2s ease;
+    }
+    .glass-card:hover {
+      border-color: rgba(56, 189, 248, 0.45);
+      box-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.18);
+    }
+
+    .tab-btn {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+      position: relative;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.28) 0%, rgba(99, 102, 241, 0.22) 100%);
+      border-bottom: 2px solid #38bdf8;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 8%;
+      right: 8%;
+      height: 2px;
+      background: #38bdf8;
+      box-shadow: 0 0 12px #38bdf8;
+    }
+
+    /* Custom scrollbars */
+    ::-webkit-scrollbar { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track { background: #080e1a; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
+
+    /* Custom Range Sliders */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: #1e293b;
+      height: 6px;
+      border-radius: 3px;
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #38bdf8;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
+      transition: transform 0.1s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .katex-display {
+      margin: 0.65em 0 !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.2em 0;
+    }
+
+    /* Tooltip styling */
+    .part-tooltip {
+      position: absolute;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid #38bdf8;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      color: #f8fafc;
+      pointer-events: none;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      display: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
+
+  <!-- Part Tooltip Element -->
+  <div id="partTooltip" class="part-tooltip font-mono"></div>
+
+  <!-- Top Global Header -->
+  <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 shadow-xl">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/25 text-white font-black text-xl">
+          <i class="fa-solid fa-bolt-lightning"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-cyan-400">KTÜ EEE • ÖZEL ELEKTRİK MAKİNALARI</span>
+            <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full border border-slate-700">Dr. Hakan Kahveci Notları</span>
+            <span class="text-[10px] bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded-full border border-cyan-800 font-bold">v2.0.0 CAD & ODE</span>
+          </div>
+          <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white flex items-center gap-2">
+            3D Mühendislik Simülasyonu & Aktif Öğrenme Laboratuvarı
+          </h1>
+        </div>
+      </div>
+
+      <!-- Live Telemetry Badges -->
+      <div class="hidden xl:flex items-center space-x-3 text-xs font-mono">
+        <div class="glass-card px-3 py-1.5 rounded-lg flex items-center space-x-2 border-slate-800">
+          <span id="badgeMotorLed" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-400">Durum:</span>
+          <span id="globalMotorStatus" class="font-bold text-emerald-400">ÇALIŞIYOR</span>
+        </div>
+        <div class="glass-card px-3 py-1.5 rounded-lg flex items-center space-x-2 border-slate-800">
+          <i class="fa-solid fa-arrows-spin text-cyan-400"></i>
+          <span class="text-slate-400">Hız ($n$):</span>
+          <span id="globalRpmVal" class="font-bold text-cyan-300">1200 d/d</span>
+          <span id="globalDirVal" class="text-[10px] px-1.5 py-0.5 rounded bg-cyan-900/60 text-cyan-300 border border-cyan-700">CW</span>
+        </div>
+        <div class="glass-card px-3 py-1.5 rounded-lg flex items-center space-x-2 border-slate-800">
+          <i class="fa-solid fa-bolt text-yellow-400"></i>
+          <span class="text-slate-400">Endüvi ($i_a$):</span>
+          <span id="globalIaVal" class="font-bold text-yellow-300">4.82 A</span>
+        </div>
+        <div class="glass-card px-3 py-1.5 rounded-lg flex items-center space-x-2 border-slate-800">
+          <i class="fa-solid fa-weight-hanging text-emerald-400"></i>
+          <span class="text-slate-400">Moment ($T_e$):</span>
+          <span id="globalTeVal" class="font-bold text-emerald-300">0.38 N·m</span>
+        </div>
+        <div class="glass-card px-3 py-1.5 rounded-lg flex items-center space-x-2 border-slate-800">
+          <i class="fa-solid fa-user-graduate text-indigo-400"></i>
+          <span class="text-slate-400">Geliştirici:</span>
+          <span class="font-semibold text-slate-200">Muhammet Raşit Taflan</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs Bar -->
+    <div class="border-t border-slate-800/80 bg-slate-900/80 overflow-x-auto">
+      <div class="max-w-7xl mx-auto px-4 flex space-x-1 sm:space-x-2">
+        <button onclick="switchTab('tab-3d-lab')" class="tab-btn active px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-3d-lab">
+          <i class="fa-solid fa-cube text-cyan-400"></i> 3D CAD Motor & Vektörler
+        </button>
+        <button onclick="switchTab('tab-direction-lab')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-direction-lab">
+          <i class="fa-solid fa-compass text-emerald-400"></i> Vidalama Kuralı (Defter Sayfa 1)
+        </button>
+        <button onclick="switchTab('tab-dynamics-lab')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-dynamics-lab">
+          <i class="fa-solid fa-chart-line text-yellow-400"></i> Motor Dinamiği (ODE & Osiloskop)
+        </button>
+        <button onclick="switchTab('tab-circuits')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-circuits">
+          <i class="fa-solid fa-network-wired text-indigo-400"></i> Devre Laboratuvarı & Sürücüler
+        </button>
+        <button onclick="switchTab('tab-bldc')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-bldc">
+          <i class="fa-solid fa-microchip text-sky-400"></i> BLDC & 6-Adım Komütasyon
+        </button>
+        <button onclick="switchTab('tab-universal')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-universal">
+          <i class="fa-solid fa-plug text-amber-400"></i> Üniversal Motor (Sayfa 34-35)
+        </button>
+        <button onclick="switchTab('tab-servo')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-servo">
+          <i class="fa-solid fa-gauge-high text-purple-400"></i> Servo, Enkoder & Resolver
+        </button>
+        <button onclick="switchTab('tab-stepper')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-stepper">
+          <i class="fa-solid fa-gears text-orange-400"></i> Adım Motorları (Step)
+        </button>
+        <button onclick="switchTab('tab-exam-bank')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-exam-bank">
+          <i class="fa-solid fa-file-signature text-rose-400"></i> Sınav Soruları & Aktif Çözücü
+        </button>
+        <button onclick="switchTab('tab-doc-manager')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-doc-manager">
+          <i class="fa-solid fa-folder-open text-teal-400"></i> Ders Notu & Kaynak Yönetimi
+        </button>
+        <button onclick="switchTab('tab-notes')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-notes">
+          <i class="fa-solid fa-pen-fancy text-emerald-400"></i> Defter Özeti & Formüller
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workstation Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">

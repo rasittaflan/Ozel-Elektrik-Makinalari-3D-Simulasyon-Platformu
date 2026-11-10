@@ -1,0 +1,156 @@
+    <!-- ======================================================= -->
+    <!-- TAB 2: DERS NOTU DİJİTAL İKİZİ & VİDALAMA KURALI LAB -->
+    <!-- ======================================================= -->
+    <section id="tab-direction-lab" class="tab-content hidden space-y-6">
+      <!-- Header Banner -->
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-cyan-400">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Dr. Hakan Kahveci Özel Elektrik Makinaları • Defter Sayfa 1 Orijinal Soru Analizi</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Ders Notundaki Motorun Dijital İkizi: Manyetik Alan, Akım & Vidalama Kuralı İspatı
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Bu modülde, Dr. Hakan Kahveci'nin ders notunun ilk sayfasında yer alan 
+          <strong>"Motor hangi yöne döner?"</strong> sorusu, orijinal el yazısı çizimi ile etkileşimli dijital modeli yan yana getirilerek incelenmektedir.
+          Vidalama kuralı ve vektörel çarpım denklemleri bağımsız olarak doğrulanmaktadır.
+        </p>
+      </div>
+
+      <!-- Side-by-Side Comparison Grid: Original Note vs Digital Twin -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Left Column: Original Lecture Note Page 1 Crop -->
+        <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-3 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+              <h3 class="text-sm font-bold text-amber-300 uppercase tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-image text-amber-400"></i> Orijinal El Yazısı Ders Notu (Sayfa 1)
+              </h3>
+              <span class="text-[11px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Doğrulanmış Kaynak</span>
+            </div>
+
+            <div class="rounded-xl overflow-hidden border border-slate-700 bg-white/5 p-2 flex items-center justify-center">
+              <img src="kaynak_dokumanlar/Hakan_Kahveci_Sayfa1_Vidalama_Kurali.jpg" alt="Dr. Hakan Kahveci Ders Notu Sayfa 1" class="w-full max-h-[340px] object-contain rounded-lg filter contrast-125">
+            </div>
+
+            <!-- Note Text Transcribed & Verified -->
+            <div class="mt-3 p-3.5 rounded-xl bg-slate-900/90 border border-amber-900/40 text-xs font-mono space-y-1.5 text-slate-300">
+              <div class="text-amber-400 font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-quote-left"></i> Defterdeki Metin:
+              </div>
+              <div class="italic text-slate-200">
+                "Motor hangi yöne döner? $\vec{F} = i (\vec{l} \times \vec{B})$ kuralına göre 1 nolu oluktaki sargıya etkiyen kuvveti bulalım. 
+                $\vec{l}$: akım ile aynı yönde tanımlı vektör. Vidalama kuralına göre soldan sağa doğrudur. 
+                Bu nedenle makinenin rotoru saat ibreleri yönünde döner."
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 text-[11px] text-slate-400 font-mono border-t border-slate-800/80">
+            • Not: Karşıdaki 2 nolu olukta akım içeri ($\otimes$) aktığından kuvvet sağdan sola doğrudur. Her iki kuvvet çifti de saat ibreleri yönünde (CW) tork üretir.
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Digital Twin Simulation Canvas -->
+        <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="text-sm font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-compass-drafting text-cyan-400"></i> Etkileşimli Dijital İkiz (2D Kesit)
+            </h3>
+            <span id="twinDirBadge" class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-700 text-emerald-300">
+              <i class="fa-solid fa-rotate-right"></i> DÖNÜŞ: CW (Saat Yönü)
+            </span>
+          </div>
+
+          <!-- 2D Canvas Container -->
+          <div class="relative w-full h-[340px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="digitalTwinCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <!-- Interactive Polarity & Connection Switches -->
+          <div class="grid grid-cols-3 gap-2 text-xs font-mono">
+            <button onclick="twinFlipPoles()" class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 font-semibold flex items-center justify-center gap-1 transition">
+              <i class="fa-solid fa-arrows-up-down"></i> Kutuplar ($N \leftrightarrow S$)
+            </button>
+            <button onclick="twinFlipCurrent()" class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-yellow-300 font-semibold flex items-center justify-center gap-1 transition">
+              <i class="fa-solid fa-right-left"></i> Akım ($+ \leftrightarrow -$)
+            </button>
+            <button onclick="twinReset()" class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold flex items-center justify-center gap-1 transition">
+              <i class="fa-solid fa-rotate-left"></i> Defter Hali (Reset)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right-Hand Rule Modes & Individual Slot Breakdown -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Left: Dual Right-Hand Rule Tutorial (Mode A vs Mode B) -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+            <i class="fa-solid fa-hand text-cyan-400"></i> İki Ayrı Sağ El Kuralı Öğrenme Modu
+          </h3>
+
+          <div class="space-y-3 text-xs sm:text-sm">
+            <!-- Mode A -->
+            <div class="p-4 rounded-xl bg-slate-900/80 border border-cyan-900/50 space-y-1.5">
+              <div class="font-bold text-cyan-300 flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-cyan-950 border border-cyan-700 flex items-center justify-center text-[10px]">A</span>
+                Mod A — Akımın Oluşturduğu Öz Manyetik Alan (Biot-Savart / Ampere):
+              </div>
+              <p class="text-slate-300 text-xs leading-relaxed">
+                Başparmak iletkendeki akım yönünü ($\vec{I}$, $\odot$ veya $\otimes$) gösterdiğinde; 
+                kıvrılan dört parmak iletkenin etrafında oluşan dairesel manyetik alan çizgilerinin ($\vec{B}_{oz}$) dolanım yönünü gösterir.
+                Bu dairesel alan, statorun ana alanını bir tarafta güçlendirirken diğer tarafta zayıflatır. 
+                İletken, <strong>manyetik alanın yoğun olduğu taraftan zayıf olduğu tarafa doğru itilir</strong>. 
+                Lorentz kuvvetinin fiziksel kaynağı tam olarak bu alan dengesizliğidir!
+              </p>
+            </div>
+
+            <!-- Mode B -->
+            <div class="p-4 rounded-xl bg-slate-900/80 border border-indigo-900/50 space-y-1.5">
+              <div class="font-bold text-indigo-300 flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-indigo-950 border border-indigo-700 flex items-center justify-center text-[10px]">B</span>
+                Mod B — Açısal Hız Vektörü ($\vec{\omega}$) ve Dönüş Yönü:
+              </div>
+              <p class="text-slate-300 text-xs leading-relaxed">
+                Sağ elin dört parmağı rotorun dönme yönünde (saat yönünde) kıvrıldığında, dik açılan başparmak 
+                <strong>mil ekseninde sayfa içine ($\otimes$, $-z$)</strong> yönelen açısal hız vektörünü ($\vec{\omega}$) gösterir.
+                <strong class="text-amber-400">Kritik Mühendislik Ayrımı:</strong> Akımın $\odot$ / $\otimes$ sembolü ile açısal hızın $\odot$ / $\otimes$ sembolü 
+                tamamen farklı fiziksel büyüklüklerdir!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Mathematical Vectorial Derivation & Slot Matrix -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+            <i class="fa-solid fa-calculator text-emerald-400"></i> Vektörel Çarpım & Moment Hesabı
+          </h3>
+
+          <div class="space-y-3 font-mono text-xs text-slate-300">
+            <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+              <div class="text-emerald-400 font-bold">1 Nolu Oluk Hesabı:</div>
+              <div>$\vec{l}_1 = +l \hat{k}$ (Sayfa dışına akım, $\odot$)</div>
+              <div>$\vec{B} = -B \hat{j}$ (Kuzeyden Güneye aşağı alan)</div>
+              <div>$$\vec{F}_1 = i (\vec{l}_1 \times \vec{B}) = i (l \hat{k} \times (-B \hat{j})) = +i l B \hat{i}\quad (\mathbf{Soldan\ Sa\check{g}a\ \rightarrow})$$</div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+              <div class="text-emerald-400 font-bold">2 Nolu Oluk Hesabı:</div>
+              <div>$\vec{l}_2 = -l \hat{k}$ (Sayfa içine akım, $\otimes$)</div>
+              <div>$\vec{B} = -B \hat{j}$ (Kuzeyden Güneye aşağı alan)</div>
+              <div>$$\vec{F}_2 = i (\vec{l}_2 \times \vec{B}) = i (-l \hat{k} \times (-B \hat{j})) = -i l B \hat{i}\quad (\mathbf{Sa\check{g}dan\ Sola\ \leftarrow})$$</div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-cyan-950/40 border border-cyan-800/80 space-y-1 text-slate-200">
+              <div class="text-cyan-300 font-bold">Rotor Merkezine Göre Net Moment:</div>
+              <div>$$\vec{T}_e = \vec{r}_1 \times \vec{F}_1 + \vec{r}_2 \times \vec{F}_2 = r F_1 \hat{k}_{cw} + r F_2 \hat{k}_{cw} \implies \mathbf{CW\ (Saat\ Y\ddot{o}n\ddot{u})}$$</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
