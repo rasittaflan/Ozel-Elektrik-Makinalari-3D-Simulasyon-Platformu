@@ -1,0 +1,3297 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>KTÜ Özel Elektrik Makinaları | 3D Hibrit Simülasyon & Aktif Öğrenme Laboratuvarı</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+            },
+            slate: {
+              850: '#0d1527',
+              900: '#080e1a',
+              950: '#030712'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- KaTeX for High Precision Engineering Mathematics -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Three.js & OrbitControls for 3D Motor Visualization -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Chart.js for Live Multichannel Oscilloscopes -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #050b14;
+      --bg-card: rgba(13, 21, 39, 0.88);
+      --border-card: rgba(30, 41, 59, 0.85);
+      --accent-cyan: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-indigo: #6366f1;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+    }
+
+    code, .font-mono {
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-card);
+      transition: all 0.25s ease;
+    }
+    .glass-card:hover {
+      border-color: rgba(56, 189, 248, 0.45);
+      box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.15);
+    }
+
+    .tab-btn {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+      position: relative;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.25) 0%, rgba(99, 102, 241, 0.2) 100%);
+      border-bottom: 2px solid #38bdf8;
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: #38bdf8;
+      box-shadow: 0 0 10px #38bdf8;
+    }
+
+    /* Custom scrollbars */
+    ::-webkit-scrollbar { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track { background: #080e1a; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
+
+    /* Custom Range Slider */
+    input[type=range] {
+      -webkit-appearance: none;
+      background: #1e293b;
+      height: 6px;
+      border-radius: 3px;
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #38bdf8;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
+      transition: transform 0.1s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .badge-lorentz {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .katex-display {
+      margin: 0.75em 0 !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.25em 0;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
+
+  <!-- Top Global Header -->
+  <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 shadow-xl">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 text-white font-black text-xl">
+          <i class="fa-solid fa-bolt-lightning"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-cyan-400">KTÜ EEE • ELK3010 / ELK4010</span>
+            <span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full border border-slate-700">Dr. Hakan Kahveci Notları</span>
+          </div>
+          <h1 class="text-lg md:text-xl font-extrabold tracking-tight text-white flex items-center gap-2">
+            ÖZEL ELEKTRİK MAKİNALARI <span class="text-xs font-semibold px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800 text-cyan-300">3D Hibrit Laboratuvarı</span>
+          </h1>
+        </div>
+      </div>
+
+      <!-- Live Telemetry Badges -->
+      <div class="hidden lg:flex items-center space-x-3 text-xs font-mono">
+        <div class="glass-card px-3 py-1.5 rounded-lg flex items-center space-x-2 border-slate-800">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-400">Motor Durumu:</span>
+          <span id="globalMotorStatus" class="font-bold text-emerald-400">ÇALIŞIYOR</span>
+        </div>
+        <div class="glass-card px-3 py-1.5 rounded-lg flex items-center space-x-2 border-slate-800">
+          <i class="fa-solid fa-arrows-spin text-cyan-400"></i>
+          <span class="text-slate-400">Hız:</span>
+          <span id="globalRpmVal" class="font-bold text-cyan-300">1200 d/d</span>
+          <span id="globalDirVal" class="text-[10px] px-1.5 py-0.5 rounded bg-cyan-900/60 text-cyan-300 border border-cyan-700">CW (Saat Yönü)</span>
+        </div>
+        <div class="glass-card px-3 py-1.5 rounded-lg flex items-center space-x-2 border-slate-800">
+          <i class="fa-solid fa-magnet text-amber-400"></i>
+          <span class="text-slate-400">Akı (B):</span>
+          <span id="globalFluxVal" class="font-bold text-amber-300">0.85 T</span>
+        </div>
+        <div class="glass-card px-3 py-1.5 rounded-lg flex items-center space-x-2 border-slate-800">
+          <i class="fa-solid fa-user-graduate text-indigo-400"></i>
+          <span class="text-slate-400">Öğrenci:</span>
+          <span class="font-semibold text-slate-200">Muhammet Raşit Taflan</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs Bar -->
+    <div class="border-t border-slate-800/80 bg-slate-900/70 overflow-x-auto">
+      <div class="max-w-7xl mx-auto px-4 flex space-x-1 sm:space-x-2">
+        <button onclick="switchTab('tab-overview')" class="tab-btn active px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-overview">
+          <i class="fa-solid fa-book-open"></i> Genel Bakış & Defter Analizi
+        </button>
+        <button onclick="switchTab('tab-3d-lab')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-3d-lab">
+          <i class="fa-solid fa-cube"></i> 3D Motor & Vektör Laboratuvarı
+        </button>
+        <button onclick="switchTab('tab-direction-lab')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-direction-lab">
+          <i class="fa-solid fa-compass"></i> Dönüş Yönü & Manyetik Alan (Vidalama Kuralı)
+        </button>
+        <button onclick="switchTab('tab-bldc')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-bldc">
+          <i class="fa-solid fa-microchip"></i> BLDC & 6-Adım Komütasyon
+        </button>
+        <button onclick="switchTab('tab-universal')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-universal">
+          <i class="fa-solid fa-plug"></i> Üniversal Motor AC/DC
+        </button>
+        <button onclick="switchTab('tab-servo')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-servo">
+          <i class="fa-solid fa-gauge-high"></i> Servo, Enkoder & Resolver
+        </button>
+        <button onclick="switchTab('tab-stepper')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-stepper">
+          <i class="fa-solid fa-gears"></i> Adım Motorları (Step Motors)
+        </button>
+        <button onclick="switchTab('tab-exam-bank')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-exam-bank">
+          <i class="fa-solid fa-file-signature text-amber-400"></i> Sınav Soruları & Çözüm Bankası
+        </button>
+        <button onclick="switchTab('tab-notes')" class="tab-btn px-3 py-2.5 text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 flex items-center gap-1.5" data-tab="tab-notes">
+          <i class="fa-solid fa-pen-fancy text-emerald-400"></i> Defter Özeti & Formüller
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: GENEL BAKIŞ & DEFTER ANALİZİ -->
+    <!-- ========================================== -->
+    <section id="tab-overview" class="tab-content space-y-6">
+      <!-- Hero Banner -->
+      <div class="glass-card rounded-2xl p-6 sm:p-8 bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 border-slate-700/60 relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+          <i class="fa-solid fa-network-wired text-[240px] text-cyan-400"></i>
+        </div>
+        <div class="max-w-3xl relative z-10 space-y-3">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-800 text-cyan-300 text-xs font-mono">
+            <i class="fa-solid fa-certificate"></i>
+            <span>Dr. Hakan Kahveci Özel Elektrik Makinaları Ders Notu Mühendislik Analizi</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Teoriden Simülasyona: Özel Elektrik Makinaları Çalışma İstasyonu
+          </h2>
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Bu platform, Dr. Hakan Kahveci'nin 81 sayfalık el yazısı ve teknik ders notları derinlemesine incelenerek oluşturulmuştur.
+            Klasik makinelerden modern servo sürücülere uzanan serüvende; manyetik kutupların yerleşimi, akım yönleri, 
+            <strong>Lorentz kuvveti ($ec{F} = i(ec{l}	imesec{B})$)</strong>, sağ el kuralı (vidalama kuralı), fırçasız komütasyon,
+            artımsal enkoder kuadratür fazları, resolver taşıyıcı uyarımı ve adım motoru mikro adımlama dinamikleri 
+            <strong>3 boyutlu fotogerçekçi modeller ve etkileşimli matematiksel çözücüler</strong> ile bütünleştirilmiştir.
+          </p>
+          <div class="flex flex-wrap gap-3 pt-2">
+            <button onclick="switchTab('tab-3d-lab')" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs shadow-lg shadow-cyan-600/30 flex items-center gap-2 transition">
+              <i class="fa-solid fa-cube"></i> 3D Motor Laboratuvarını Başlat
+            </button>
+            <button onclick="switchTab('tab-direction-lab')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 font-semibold text-xs flex items-center gap-2 transition">
+              <i class="fa-solid fa-hand-point-right"></i> Vidalama Kuralı & Yön Tayini (Defter Sayfa 1)
+            </button>
+            <button onclick="switchTab('tab-exam-bank')" class="px-4 py-2 rounded-xl bg-amber-900/40 hover:bg-amber-900/60 border border-amber-700/60 text-amber-300 font-semibold text-xs flex items-center gap-2 transition">
+              <i class="fa-solid fa-file-signature"></i> Çıkmış Sınav Sorularını Çöz
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course Architecture / 5 Modules Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Module 1 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3 relative group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-cyan-400 bg-cyan-950/70 border border-cyan-800 px-2.5 py-0.5 rounded-full">Bölüm 1 • Sayfa 1-29</span>
+            <i class="fa-solid fa-arrows-spin text-xl text-slate-500 group-hover:text-cyan-400 transition"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">Doğru Akım, Lorentz Kuvveti & BLDC Temelleri</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Stator kutupları ($N - S$), rotor oluk ve sargıları, fırça-kollektör yapısı. 
+            <strong>$ec{F} = i(ec{l}	imesec{B})$</strong> bağıntısı ve vidalama kuralı ile dönüş yönünün tayini.
+            Mekanik komütasyondan elektronik komütasyona geçiş, Hall sensörleri (120° yerleşim) ve trapezoidal ters EMK.
+          </p>
+          <div class="pt-2 flex justify-between items-center text-xs">
+            <span class="text-slate-400 font-mono">1. Soru (Defter Sayfa 1)</span>
+            <button onclick="switchTab('tab-direction-lab')" class="text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1">
+              İncele <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Module 2 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3 relative group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/70 border border-emerald-800 px-2.5 py-0.5 rounded-full">Bölüm 2 • Sayfa 30-44</span>
+            <i class="fa-solid fa-bolt text-xl text-slate-500 group-hover:text-emerald-400 transition"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">Üniversal Motorlar (AC/DC Seri Motorlar)</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Seri uyarmalı armatür ve kutup sargıları. AC şebekede akım ve manyetik akının eşzamanlı yön değiştirmesi 
+            ($T \propto I_a^2$) nedeniyle tek yönlü tork üretimi. DC ve AC empedans farkı ($Z = \sqrt{R^2 + X_L^2}$), reaktans gerilim düşümü,
+            hız ve verim farkı hesaplamaları (120V / 2000 d/d sayısal problemi).
+          </p>
+          <div class="pt-2 flex justify-between items-center text-xs">
+            <span class="text-slate-400 font-mono">3. Soru (Defter Sayfa 34-35)</span>
+            <button onclick="switchTab('tab-universal')" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1">
+              İncele <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Module 3 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3 relative group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-indigo-400 bg-indigo-950/70 border border-indigo-800 px-2.5 py-0.5 rounded-full">Bölüm 3 • Sayfa 45-53</span>
+            <i class="fa-solid fa-microchip text-xl text-slate-500 group-hover:text-indigo-400 transition"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">Sürekli Mıknatıslı Senkron Servo & Enkoder/Resolver</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Servo sistem mimarisi. Artımsal (Incremental) Enkoder: A, B kanalları (90° kuadratür faz farkı ile yön algılama), Z indeksi, Line Driver, TTL (5V) & HTL (24V).
+            Resolver: Döner transformatör ilkesi, $V_{sin} = V_m \sin	heta \sin\omega t$, $V_{cos} = V_m \cos	heta \sin\omega t$, mutlak açı çözümü.
+            Master-Slave senkron çalışma ve elektronik dişli.
+          </p>
+          <div class="pt-2 flex justify-between items-center text-xs">
+            <span class="text-slate-400 font-mono">4. Soru (Defter Sayfa 46-50)</span>
+            <button onclick="switchTab('tab-servo')" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
+              İncele <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Module 4 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3 relative group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-amber-400 bg-amber-950/70 border border-amber-800 px-2.5 py-0.5 rounded-full">Bölüm 4 • Sayfa 54-64</span>
+            <i class="fa-solid fa-gears text-xl text-slate-500 group-hover:text-amber-400 transition"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">Adım Motorları (Step Motors) & Mikro Adımlama</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Değişken Relüktanslı (VR), Sabit Mıknatıslı (PM) ve Hibrit (Hybrid) motorlar. 
+            Adım açısı formülasyonu: $	heta_s = rac{360^\circ}{m \cdot N_r}$, devir-frekans bağıntısı: $n = rac{60 \cdot f}{S}$.
+            Sürüş modları: Dalga (Wave), Tam Adım, Yarım Adım, Mikro Adımlama. Tutma torku, çekme torku ve rezonans sınırları.
+          </p>
+          <div class="pt-2 flex justify-between items-center text-xs">
+            <span class="text-slate-400 font-mono">5. Soru (Defter Sayfa 58-60)</span>
+            <button onclick="switchTab('tab-stepper')" class="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1">
+              İncele <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Module 5 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3 relative group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-rose-400 bg-rose-950/70 border border-rose-800 px-2.5 py-0.5 rounded-full">Bölüm 5 • 3D & Vektör</span>
+            <i class="fa-solid fa-cube text-xl text-slate-500 group-hover:text-rose-400 transition"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">3D İnteraktif Motor & Vektör Görselleştirici</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Rotor sac paketleri, oluklardaki bakır sargılar, komütatör lamelleri, fırça tutucular ve Hall PCB'si ile tam teşekküllü 3D model.
+            Manyetik alan çizgileri ($ec{B}$), akım vektörleri ($ec{I}$) ve Lorentz teğet kuvvet vektörleri ($ec{F}$) gerçek zamanlı render edilir.
+            Parçalanmış görünüm (Exploded View) ve şeffaf gövde modu mevcuttur.
+          </p>
+          <div class="pt-2 flex justify-between items-center text-xs">
+            <span class="text-slate-400 font-mono">Three.js WebGL Mimarisi</span>
+            <button onclick="switchTab('tab-3d-lab')" class="text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1">
+              Başlat <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Module 6 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3 relative group">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-purple-400 bg-purple-950/70 border border-purple-800 px-2.5 py-0.5 rounded-full">Sınav Bankası • 5 Problem</span>
+            <i class="fa-solid fa-graduation-cap text-xl text-slate-500 group-hover:text-purple-400 transition"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">Sınav Soruları & İnteraktif Çözücü</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Hakan Kahveci'nin defterindeki 5 temel sınav sorusu: Vidalama kuralıyla dönüş yönü ispatı, BLDC 120° komütasyon sektör tespiti,
+            Üniversal motor AC-DC karşılaştırması ($120	ext{V}, 60	ext{Hz}$), 4096 PPR enkoder ve resolver analizleri, 4 faz 50 dişli adım motoru hız hesabı.
+            Dinamik parametre girişli ve KaTeX çözümlü.
+          </p>
+          <div class="pt-2 flex justify-between items-center text-xs">
+            <span class="text-slate-400 font-mono">Dinamik Çözücü</span>
+            <button onclick="switchTab('tab-exam-bank')" class="text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1">
+              Soruları Çöz <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Golden Physical Notebook Principles Card -->
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-feather-pointed text-cyan-400"></i> Hakan Kahveci Dersi İçin 4 Altın Mühendislik İlkesi
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
+            <div class="font-bold text-cyan-300 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-cyan-950 border border-cyan-800 flex items-center justify-center text-[10px]">1</span>
+              Lorentz Kuvveti ve Vidalama Kuralı Şaşmazlığı
+            </div>
+            <p class="text-slate-400 leading-relaxed">
+              Dönüş yönü tayininde: $ec{F} = i(ec{l}	imesec{B})$ vektörel çarpımını kullan. Sağ elin 4 parmağını akım yönünden ($ec{l}$)
+              manyetik alan yönüne ($ec{B}$, N'den S'ye) kıvırdığında, dik açılan başparmak iletkene etkiyen kuvveti ($ec{F}$) verir.
+              Merkeze göre moment $ec{T} = ec{r}	imesec{F}$ alınarak dönüş yönü (CW veya CCW) belirlenir.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
+            <div class="font-bold text-emerald-300 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-950 border border-emerald-800 flex items-center justify-center text-[10px]">2</span>
+              Komütasyon: Fırçalıdan Elektronik BLDC'ye Dönüşüm
+            </div>
+            <p class="text-slate-400 leading-relaxed">
+              Klasik DA motorda komütatör lamelleri kutup eksenini geçince akımı mekanik olarak ters çevirir. BLDC motorda ise bu görevi
+              120° yerleştirilmiş 3 Hall sensörü ($H_1, H_2, H_3$) ve 6 transistörlü evirici üstlenir. Her 60°'de iki faz iletime sokulur,
+              bir faz boştadır (120° iletim).
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
+            <div class="font-bold text-amber-300 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-amber-950 border border-amber-800 flex items-center justify-center text-[10px]">3</span>
+              Üniversal Motorda AC Torkunun Pozitif Kalma Sırrı
+            </div>
+            <p class="text-slate-400 leading-relaxed">
+              Şebeke AC gerilimi ters döndüğünde hem armatür akımı $I_a$ hem de seri bağlı kutup akısı $\Phi$ aynı anda yön değiştirir.
+              Tork $T = k \cdot \Phi \cdot I_a \propto I_a^2$ olduğundan negatif değerin karesi pozitif kalır ve motor tek bir yönde dönmeye devam eder!
+              Dönüş yönünü değiştirmek için sadece armatür veya sadece uyarma sargısının uçları yer değiştirilmelidir!
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
+            <div class="font-bold text-indigo-300 flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-full bg-indigo-950 border border-indigo-800 flex items-center justify-center text-[10px]">4</span>
+              Adım Motoru & Konum Çözünürlüğü
+            </div>
+            <p class="text-slate-400 leading-relaxed">
+              Adım açısı $	heta_s = rac{360^\circ}{m \cdot N_r}$. Tur başına adım $S = m \cdot N_r$. Devir sayısı ise $n = rac{f \cdot 60}{S}$ [d/d].
+              Geri beslemesiz (açık çevrim) hassas pozisyonlama sağlar. Yarım adımda adım açısı yarıya iner, çözünürlük 2 katına çıkar.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: 3D MOTOR & VEKTÖR LABORATUVARI -->
+    <!-- ========================================== -->
+    <section id="tab-3d-lab" class="tab-content hidden space-y-6">
+      <!-- 3D Viewport & Control Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- Left: 3D Canvas Viewport (Span 3) -->
+        <div class="lg:col-span-3 glass-card rounded-2xl overflow-hidden border-slate-800 flex flex-col relative shadow-2xl">
+          <!-- Viewport Header Toolbar -->
+          <div class="px-4 py-3 bg-slate-900/90 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 z-10">
+            <div class="flex items-center space-x-2">
+              <span class="w-3 h-3 rounded-full bg-cyan-500 animate-ping"></span>
+              <span class="text-xs font-mono font-bold text-white uppercase tracking-wider">3D Fotogerçekçi Motor & Vektör Sahnesi</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">Three.js WebGL</span>
+            </div>
+
+            <!-- Camera View Presets -->
+            <div class="flex items-center space-x-1 text-xs">
+              <span class="text-slate-400 text-[11px] mr-1 hidden sm:inline">Kamera:</span>
+              <button onclick="setCameraView('iso')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="İzometrik Görünüm">İzometrik</button>
+              <button onclick="setCameraView('front')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Ön Kesit Görünümü">Ön (Kutup Kesiti)</button>
+              <button onclick="setCameraView('top')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Üstten Görünüm">Üst</button>
+              <button onclick="setCameraView('side')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition" title="Mil Boyunca Yan">Yan (Mil)</button>
+              <button onclick="resetCamera()" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-slate-700 transition" title="Kamerayı Sıfırla"><i class="fa-solid fa-arrows-rotate"></i></button>
+            </div>
+          </div>
+
+          <!-- 3D Canvas Container -->
+          <div class="relative w-full h-[520px] bg-slate-950 flex items-center justify-center overflow-hidden" id="canvas3dContainer">
+            <canvas id="motor3dCanvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+
+            <!-- 3D Floating Vector Legend Overlay -->
+            <div class="absolute top-4 left-4 p-3 rounded-xl bg-slate-900/85 backdrop-blur-md border border-slate-800 text-xs font-mono space-y-1.5 shadow-xl pointer-events-none select-none">
+              <div class="font-bold text-slate-200 text-[11px] uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-layer-group text-cyan-400"></i> Aktif 3D Vektörler
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-cyan-400 inline-block shadow-sm shadow-cyan-400"></span>
+                <span class="text-slate-300">Manyetik Akı ($ec{B}$): <strong id="hudFlux" class="text-cyan-400">0.85 T</strong></span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block shadow-sm shadow-yellow-400"></span>
+                <span class="text-slate-300">İletken Akımı ($ec{I}$): <strong id="hudCurrent" class="text-yellow-400">5.0 A</strong></span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block shadow-sm shadow-emerald-400"></span>
+                <span class="text-slate-300">Lorentz Kuvveti ($ec{F}$): <strong id="hudForce" class="text-emerald-400">4.25 N</strong></span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-indigo-400 inline-block shadow-sm shadow-indigo-400"></span>
+                <span class="text-slate-300">Açısal Hız ($ec{\omega}$): <strong id="hudOmega" class="text-indigo-400">125.6 rad/s</strong></span>
+              </div>
+            </div>
+
+            <!-- 3D Right-Hand Screw Rule Gizmo Badge in Top-Right -->
+            <div class="absolute top-4 right-4 p-3 rounded-xl bg-slate-900/90 backdrop-blur-md border border-cyan-800/80 text-xs font-mono shadow-xl max-w-[210px] pointer-events-none select-none">
+              <div class="font-bold text-cyan-300 text-[11px] flex items-center gap-1 mb-1">
+                <i class="fa-solid fa-hand"></i> Vidalama Kuralı Gizmo
+              </div>
+              <div class="text-[10px] text-slate-300 leading-tight space-y-1">
+                <div>$ec{F} = i(ec{l}	imesec{B})$</div>
+                <div class="text-yellow-400">İşaret parmağı $ightarrow$ $ec{l}$ (Akım)</div>
+                <div class="text-cyan-400">Orta parmak $ightarrow$ $ec{B}$ (Manyetik Alan)</div>
+                <div class="text-emerald-400 font-bold">Başparmak $ightarrow$ $ec{F}$ (Kuvvet)</div>
+              </div>
+            </div>
+
+            <!-- Viewport Bottom Status Bar -->
+            <div class="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-mono text-slate-400 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-800 pointer-events-none">
+              <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                <span>Sol Tık: Döndür • Sağ Tık: Kaydır • Tekerlek: Yakınlaş/Uzaklaş</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <span>Rotor Açısı: <strong id="hudRotorAngle" class="text-white">0.0°</strong></span>
+                <span>Elektriksel Açı: <strong id="hudElecAngle" class="text-cyan-300">0.0°</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: 3D Motor Controls Panel (Span 1) -->
+        <div class="space-y-4">
+          <!-- Main Drive Card -->
+          <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-4">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+              <i class="fa-solid fa-sliders text-cyan-400"></i> Sürüş & Parametreler
+            </h3>
+
+            <!-- Run / Pause / Step Controls -->
+            <div class="grid grid-cols-3 gap-2">
+              <button id="btnMotorPlay" onclick="toggleMotorPlay()" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-1.5 transition">
+                <i class="fa-solid fa-play"></i> <span id="btnMotorPlayText">Durdur</span>
+              </button>
+              <button onclick="stepMotorCommutation()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 font-semibold text-xs flex items-center justify-center gap-1 transition" title="1 Adım Komütasyon İlerle">
+                <i class="fa-solid fa-forward-step"></i> Adım
+              </button>
+              <button onclick="resetMotorPosition()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold text-xs flex items-center justify-center gap-1 transition" title="Açıyı Sıfırla">
+                <i class="fa-solid fa-rotate-left"></i> Sıfırla
+              </button>
+            </div>
+
+            <!-- Direction Toggle Buttons -->
+            <div class="space-y-1">
+              <label class="text-xs font-semibold text-slate-300">Dönüş Yönü (Polarite):</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button id="btnDirCW" onclick="setMotorDirection(1)" class="px-2.5 py-1.5 rounded-lg bg-cyan-900/60 border border-cyan-500 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1 transition">
+                  <i class="fa-solid fa-rotate-right"></i> CW (Saat)
+                </button>
+                <button id="btnDirCCW" onclick="setMotorDirection(-1)" class="px-2.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 font-bold text-xs flex items-center justify-center gap-1 transition">
+                  <i class="fa-solid fa-rotate-left"></i> CCW (Ters)
+                </button>
+              </div>
+            </div>
+
+            <!-- Speed Slider -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-400">Rotor Hızı ($n$):</span>
+                <span id="labelSpeed" class="font-mono font-bold text-cyan-400">1200 d/d</span>
+              </div>
+              <input type="range" id="sliderSpeed" min="0" max="3000" step="50" value="1200" oninput="updateMotorSpeed(this.value)" class="w-full">
+              <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                <span>0 d/d</span>
+                <span>1500 d/d</span>
+                <span>3000 d/d</span>
+              </div>
+            </div>
+
+            <!-- Armature Current Slider -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-400">İletken Akımı ($I$):</span>
+                <span id="labelCurrent" class="font-mono font-bold text-yellow-400">5.0 A</span>
+              </div>
+              <input type="range" id="sliderCurrent" min="0.5" max="20" step="0.5" value="5.0" oninput="updateMotorCurrent(this.value)" class="w-full">
+            </div>
+
+            <!-- Magnetic Flux Density Slider -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-400">Manyetik Alan Akısı ($B$):</span>
+                <span id="labelFlux" class="font-mono font-bold text-cyan-400">0.85 T</span>
+              </div>
+              <input type="range" id="sliderFlux" min="0.1" max="2.0" step="0.05" value="0.85" oninput="updateMotorFlux(this.value)" class="w-full">
+            </div>
+
+            <!-- Exploded View Slider -->
+            <div class="space-y-1 pt-2 border-t border-slate-800">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-400 flex items-center gap-1">
+                  <i class="fa-solid fa-arrows-split-up-and-left text-rose-400"></i> Parçalanmış Görünüm:
+                </span>
+                <span id="labelExplode" class="font-mono font-bold text-rose-400">0%</span>
+              </div>
+              <input type="range" id="sliderExplode" min="0" max="100" step="1" value="0" oninput="updateExplodedView(this.value)" class="w-full">
+            </div>
+          </div>
+
+          <!-- Display & Vector Toggles Card -->
+          <div class="glass-card rounded-2xl p-5 border-slate-800 space-y-3">
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+              <i class="fa-solid fa-eye text-indigo-400"></i> Görünüm & Vektör Filtresi
+            </h3>
+            <div class="space-y-2 text-xs">
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkShowField" checked onchange="toggleVectorLayer('field', this.checked)" class="rounded bg-slate-800 border-slate-700 text-cyan-500 focus:ring-0">
+                <span class="text-slate-300">Manyetik Alan Vektörleri ($ec{B}$)</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkShowCurrent" checked onchange="toggleVectorLayer('current', this.checked)" class="rounded bg-slate-800 border-slate-700 text-yellow-500 focus:ring-0">
+                <span class="text-slate-300">İletken Akım Okları ($ec{I}$)</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkShowForce" checked onchange="toggleVectorLayer('force', this.checked)" class="rounded bg-slate-800 border-slate-700 text-emerald-500 focus:ring-0">
+                <span class="text-slate-300">Lorentz Kuvvet Vektörleri ($ec{F}$)</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkShowFluxLines" checked onchange="toggleVectorLayer('fluxLines', this.checked)" class="rounded bg-slate-800 border-slate-700 text-cyan-500 focus:ring-0">
+                <span class="text-slate-300">Akı Çizgileri Animasyonu</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkTransparent" onchange="toggleTransparentCasing(this.checked)" class="rounded bg-slate-800 border-slate-700 text-indigo-500 focus:ring-0">
+                <span class="text-slate-300">Şeffaf Gövde (X-Ray Modu)</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" id="chkCutaway" onchange="toggleCutaway(this.checked)" class="rounded bg-slate-800 border-slate-700 text-indigo-500 focus:ring-0">
+                <span class="text-slate-300">Çeyrek Kesit (Hava Aralığı İçi)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Calculated Engineering Parameters -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="glass-card rounded-xl p-4 border-slate-800">
+          <div class="text-slate-400 text-xs font-mono">Teğetsel Lorentz Kuvveti ($F$)</div>
+          <div id="calcForceVal" class="text-xl sm:text-2xl font-black font-mono text-emerald-400 mt-1">4.25 N</div>
+          <div class="text-[11px] text-slate-500 mt-1 font-mono">$F = B \cdot I \cdot l$ ($l=10	ext{ cm}$)</div>
+        </div>
+        <div class="glass-card rounded-xl p-4 border-slate-800">
+          <div class="text-slate-400 text-xs font-mono">Elektromanyetik Tork ($T_e$)</div>
+          <div id="calcTorqueVal" class="text-xl sm:text-2xl font-black font-mono text-cyan-400 mt-1">0.34 N·m</div>
+          <div class="text-[11px] text-slate-500 mt-1 font-mono">$T_e = 2 \cdot r \cdot F$ ($r=4	ext{ cm}$)</div>
+        </div>
+        <div class="glass-card rounded-xl p-4 border-slate-800">
+          <div class="text-slate-400 text-xs font-mono">Mekanik Çıkış Gücü ($P_{m}$)</div>
+          <div id="calcPowerVal" class="text-xl sm:text-2xl font-black font-mono text-indigo-400 mt-1">42.7 W</div>
+          <div class="text-[11px] text-slate-500 mt-1 font-mono">$P_m = T_e \cdot \omega$</div>
+        </div>
+        <div class="glass-card rounded-xl p-4 border-slate-800">
+          <div class="text-slate-400 text-xs font-mono">Endüklenen Ters EMK ($E$)</div>
+          <div id="calcEmfVal" class="text-xl sm:text-2xl font-black font-mono text-amber-400 mt-1">8.54 V</div>
+          <div class="text-[11px] text-slate-500 mt-1 font-mono">$E = k_e \cdot \omega$ ($k_e pprox 0.068$)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: DÖNÜŞ YÖNÜ TAYİNİ & VİDALAMA KURALI -->
+    <!-- ========================================== -->
+    <section id="tab-direction-lab" class="tab-content hidden space-y-6">
+      <!-- Header Banner -->
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-cyan-400">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>Dr. Hakan Kahveci Ders Defteri Sayfa 1 • Temel Elektromanyetik Prensip</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Motor Hangi Yöne Döner? Manyetik Alan, Akım & Vidalama Kuralı Laboratuvarı
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Aşağıdaki laboratuvarda, ders notunuzun ilk sayfasındaki motor kesit çizimi ve $ec{F} = i(ec{l}	imesec{B})$ formülasyonu 
+          etkileşimli bir simülatöre dönüştürülmüştür. Kutupları veya akım yönünü değiştirerek kuvvet ve dönüş yönünün nasıl tepki verdiğini anlık olarak gözlemleyin.
+        </p>
+      </div>
+
+      <!-- Interactive 2D Cross Section & Derivation Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Left: 2D Interactive Cross-Section Canvas -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-compass-drafting text-cyan-400"></i> Motor Kesiti & Vektör Dağılımı (2D)
+            </h3>
+            <span id="badgeRotationDir" class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-950 border border-emerald-700 text-emerald-300">
+              <i class="fa-solid fa-rotate-right"></i> DÖNÜŞ: SAAT İBRELERİ YÖNÜNDE (CW)
+            </span>
+          </div>
+
+          <!-- 2D Canvas Container -->
+          <div class="relative w-full h-[380px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800/80 flex items-center justify-center">
+            <canvas id="direction2dCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <!-- Quick Action Buttons for Direction Experiments -->
+          <div class="grid grid-cols-3 gap-2 text-xs">
+            <button onclick="flipMagneticPoles()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyan-300 font-semibold flex items-center justify-center gap-1 transition">
+              <i class="fa-solid fa-arrows-up-down"></i> Kutupları Değiş ($N \leftrightarrow S$)
+            </button>
+            <button onclick="flipCurrentDirection()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-yellow-300 font-semibold flex items-center justify-center gap-1 transition">
+              <i class="fa-solid fa-right-left"></i> Akımı Tersle ($+ \leftrightarrow -$)
+            </button>
+            <button onclick="resetDirectionLab()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold flex items-center justify-center gap-1 transition">
+              <i class="fa-solid fa-rotate-left"></i> Orijinal Hal (Defter)
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Right-Hand Screw Rule & Step-by-Step KaTeX Derivation -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4 flex flex-col justify-between">
+          <div class="space-y-4">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-3">
+              <i class="fa-solid fa-calculator text-emerald-400"></i> Matematiksel Formülasyon & Vidalama Kuralı İspatı
+            </h3>
+
+            <!-- Handwritten Notebook Equation Box -->
+            <div class="p-4 rounded-xl bg-slate-900/90 border border-cyan-900/60 font-mono text-xs sm:text-sm space-y-2">
+              <div class="text-cyan-400 font-bold flex items-center gap-2">
+                <i class="fa-solid fa-quote-left"></i> Defterdeki Temel Denklem:
+              </div>
+              <div class="text-center py-1 text-white text-base">
+                $$ec{F} = i (ec{l} 	imes ec{B})$$
+              </div>
+              <div class="text-slate-400 text-xs">
+                $ec{l}$: Akım ile aynı yönde tanımlı uzunluk vektörü [m]<br>
+                $ec{B}$: Manyetik akı yoğunluğu vektörü (N kutbundan S kutbuna doğru) [Tesla]<br>
+                $ec{F}$: İletkene etkiyen mekanik Laplace/Lorentz kuvveti [Newton]
+              </div>
+            </div>
+
+            <!-- Dynamic Slot 1 & Slot 2 Analysis -->
+            <div class="space-y-3 text-xs sm:text-sm">
+              <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
+                <div class="font-bold text-yellow-300 flex items-center gap-1.5">
+                  <span class="w-5 h-5 rounded-full bg-yellow-950 border border-yellow-800 flex items-center justify-center text-[10px]">1</span>
+                  1 Nolu Oluktaki Sargıya Etkiyen Kuvvet ($ec{F}_1$):
+                </div>
+                <p id="analysisSlot1" class="text-slate-300 leading-relaxed text-xs">
+                  1 nolu olukta akım <strong>sayfa düzleminden DIŞARI ($\odot$)</strong> doğrudur ($ec{l}_1 = +z$). 
+                  Manyetik alan $ec{B}$ Kuzeyden Güneye <strong>AŞAĞI ($\downarrow$)</strong> yönlüdür ($ec{B} = -y$).<br>
+                  Vidalama kuralına göre: Sağ elin 4 parmağı $\odot$ yönünden $\downarrow$ yönüne büküldüğünde, başparmak 
+                  <strong class="text-emerald-400">SOLDAN SAĞA ($ightarrow$, $+x$)</strong> gösterir!
+                </p>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
+                <div class="font-bold text-yellow-300 flex items-center gap-1.5">
+                  <span class="w-5 h-5 rounded-full bg-yellow-950 border border-yellow-800 flex items-center justify-center text-[10px]">2</span>
+                  2 Nolu Oluktaki Sargıya Etkiyen Kuvvet ($ec{F}_2$):
+                </div>
+                <p id="analysisSlot2" class="text-slate-300 leading-relaxed text-xs">
+                  2 nolu olukta akım <strong>sayfa düzlemine İÇERİ ($\otimes$)</strong> doğrudur ($ec{l}_2 = -z$). 
+                  Manyetik alan $ec{B}$ yine <strong>AŞAĞI ($\downarrow$)</strong> yönlüdür.<br>
+                  Vidalama kuralına göre: $ec{l}_2 	imes ec{B}$ çarpımı başparmağı 
+                  <strong class="text-emerald-400">SAĞDAN SOLA ($\leftarrow$, $-x$)</strong> yöneltir!
+                </p>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-cyan-950/40 border border-cyan-800/80 space-y-1.5">
+                <div class="font-bold text-cyan-300 flex items-center gap-1.5">
+                  <i class="fa-solid fa-arrows-spin text-cyan-400"></i> Net Döndürme Momenti (Tork $ec{T}$):
+                </div>
+                <p id="analysisTorque" class="text-slate-200 leading-relaxed text-xs">
+                  Üstteki iletkene sağa ($ightarrow$), alttaki iletkene sola ($\leftarrow$) etkiyen kuvvet çifti rotor merkezine göre saat ibreleri yönünde bir döndürme torku yaratır:
+                  $$ec{T} = ec{r}_1 	imes ec{F}_1 + ec{r}_2 	imes ec{F}_2 \implies \mathbf{CW\ (Saat\ Yönü)}$$
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Notice -->
+          <div class="pt-3 border-t border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+            <span>Fırçalar 180° sonra akımı ters çevirerek dönüşün sürekliliğini garanti eder.</span>
+            <button onclick="syncDirectionWith3D()" class="px-2.5 py-1 rounded bg-cyan-900/60 hover:bg-cyan-900 text-cyan-300 border border-cyan-700 font-bold transition">
+              3D Sahneye Aktar <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: BLDC & 6-ADIM KOMÜTASYON LAB -->
+    <!-- ========================================== -->
+    <section id="tab-bldc" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-cyan-400">
+          <i class="fa-solid fa-microchip"></i>
+          <span>Bölüm 1 & 2 • Sayfa 10-29 • Fırçasız DA Motorları ve Evirici Sürüşü</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          BLDC 6-Adım Elektronik Komütasyon & Hall Sensörleri Laboratuvarı
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Klasik motorlardaki fırça-kollektör düzeneği yerine 120° yerleştirilmiş 3 adet Hall sensörü ($H_1, H_2, H_3$) rotor pozisyonunu algılar.
+          6 anahtarlı 3-fazlı evirici köprüsü (inverter) her 60° elektriksel açıda ilgili iki fazı sırayla enerjilendirir.
+        </p>
+      </div>
+
+      <!-- Inverter Bridge & Hall Table Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left: 3-Phase Inverter Bridge Schematic (Span 2) -->
+        <div class="lg:col-span-2 glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-network-wired text-cyan-400"></i> 3-Fazlı Evirici Köprüsü (Inverter Bridge) & İletim Yolları
+            </h3>
+            <div class="flex items-center space-x-2 text-xs font-mono">
+              <span class="text-slate-400">Mevcut Adım:</span>
+              <span id="bldcCurrentStepLabel" class="font-bold text-cyan-400 px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800">Adım 1 ($A^+ B^-$)</span>
+            </div>
+          </div>
+
+          <!-- Schematic Canvas / Visualizer -->
+          <div class="relative w-full h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="bldcBridgeCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <!-- Step Navigation Controls -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+            <div class="flex items-center space-x-2">
+              <button onclick="prevBldcStep()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-bold transition">
+                <i class="fa-solid fa-backward-step"></i> Önceki Adım
+              </button>
+              <button id="btnBldcAutoPlay" onclick="toggleBldcAutoPlay()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition">
+                <i class="fa-solid fa-play"></i> Otomatik Komütasyon
+              </button>
+              <button onclick="nextBldcStep()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-bold transition">
+                Sonraki Adım <i class="fa-solid fa-forward-step"></i>
+              </button>
+            </div>
+
+            <div class="flex items-center space-x-2 text-xs">
+              <span class="text-slate-400">Yön:</span>
+              <button id="bldcDirCW" onclick="setBldcDirection(1)" class="px-2.5 py-1 rounded bg-cyan-900 border border-cyan-600 text-cyan-300 font-bold transition">CW (1-2-3-4-5-6)</button>
+              <button id="bldcDirCCW" onclick="setBldcDirection(-1)" class="px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-slate-400 font-bold transition">CCW (6-5-4-3-2-1)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: 120° Hall Sensor Truth Table & Logic -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-3">
+            <i class="fa-solid fa-table-cells text-indigo-400"></i> Hall Sensörleri Doğruluk Tablosu (120°)
+          </h3>
+
+          <div class="overflow-x-auto text-xs font-mono">
+            <table class="w-full text-center border-collapse">
+              <thead>
+                <tr class="bg-slate-900 text-slate-400 border-b border-slate-800 text-[11px]">
+                  <th class="py-2 px-1">Adım</th>
+                  <th class="py-2 px-1">Açı</th>
+                  <th class="py-2 px-1 text-cyan-400">H1</th>
+                  <th class="py-2 px-1 text-cyan-400">H2</th>
+                  <th class="py-2 px-1 text-cyan-400">H3</th>
+                  <th class="py-2 px-1 text-emerald-400">Aktif Faz</th>
+                </tr>
+              </thead>
+              <tbody id="bldcTruthTableBody" class="divide-y divide-slate-800/60 text-slate-300 text-[11px]">
+                <tr id="row-step-1" class="bg-cyan-950/50 text-cyan-300 font-bold">
+                  <td class="py-1.5">1</td>
+                  <td>0° - 60°</td>
+                  <td>1</td><td>0</td><td>1</td>
+                  <td class="text-emerald-400 font-bold">A+ B-</td>
+                </tr>
+                <tr id="row-step-2">
+                  <td class="py-1.5">2</td>
+                  <td>60° - 120°</td>
+                  <td>1</td><td>0</td><td>0</td>
+                  <td class="text-emerald-400">A+ C-</td>
+                </tr>
+                <tr id="row-step-3">
+                  <td class="py-1.5">3</td>
+                  <td>120° - 180°</td>
+                  <td>1</td><td>1</td><td>0</td>
+                  <td class="text-emerald-400">B+ C-</td>
+                </tr>
+                <tr id="row-step-4">
+                  <td class="py-1.5">4</td>
+                  <td>180° - 240°</td>
+                  <td>0</td><td>1</td><td>0</td>
+                  <td class="text-emerald-400">B+ A-</td>
+                </tr>
+                <tr id="row-step-5">
+                  <td class="py-1.5">5</td>
+                  <td>240° - 300°</td>
+                  <td>0</td><td>1</td><td>1</td>
+                  <td class="text-emerald-400">C+ A-</td>
+                </tr>
+                <tr id="row-step-6">
+                  <td class="py-1.5">6</td>
+                  <td>300° - 360°</td>
+                  <td>0</td><td>0</td><td>1</td>
+                  <td class="text-emerald-400">C+ B-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-[11px] text-slate-400 space-y-1">
+            <div class="font-bold text-slate-300">Komütasyon Kuralı:</div>
+            <div>• Her adımda 2 faz iletimde, 1 faz boştadır (120° iletim).</div>
+            <div>• Tork ifadesi: $T_e = rac{e_a i_a + e_b i_b + e_c i_c}{\omega_m} = 2 k_t I$.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Oscilloscope: Trapezoidal Back-EMF & Current Waveforms -->
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-wave-square text-emerald-400"></i> Dijital Osiloskop: 3-Faz Trapezoidal Ters EMK & Faz Akımları
+          </h3>
+          <span class="text-xs font-mono text-slate-400">Defter Sayfa 8 & 20 Osiloskop Ölçümleri</span>
+        </div>
+        <div class="w-full h-[220px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 relative">
+          <canvas id="bldcOscilloscopeCanvas" class="w-full h-full"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 5: ÜNİVERSAL MOTOR AC/DC LABORATUVARI -->
+    <!-- ========================================== -->
+    <section id="tab-universal" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-cyan-400">
+          <i class="fa-solid fa-plug"></i>
+          <span>Bölüm 2 • Sayfa 30-44 • Üniversal (AC/DC Seri) Motorlar</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Üniversal Motor AC & DC Çalışma Davranışı, Empedans Üçgeni ve Dönüş Yönü
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Üniversal motor, hem doğru akım (DC) hem de alternatif akım (AC) ile çalışabilen seri uyarmalı bir motordur.
+          AC şebekede akım yön değiştirdiğinde hem armatürdeki akım hem de kutup sargısındaki akı ($\Phi$) aynı anda yön değiştirdiği için 
+          tork $T = k \Phi I_a \propto I_a^2$ daima pozitif yönde üretilir.
+        </p>
+      </div>
+
+      <!-- Phasor Diagram & Equivalent Circuit Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Left: Phasor Triangle & T-N Characteristics Canvas -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-chart-line text-emerald-400"></i> AC Gerilim Üçgeni (Fazör Diyagramı) & Devir Eğrisi
+            </h3>
+            <span class="text-xs font-mono text-cyan-400">$V_{ac}^2 = (E_a + IR)^2 + (IX_L)^2$</span>
+          </div>
+
+          <!-- Canvas for Phasor Diagram -->
+          <div class="relative w-full h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="universalPhasorCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <!-- Polarite Değişimi Deney Düğmeleri -->
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
+            <div class="text-xs font-bold text-slate-200">Dönüş Yönünü Değiştirme Deneyi (Sayfa 30 Prensibi):</div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <button onclick="testUniversalPolarity('line')" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition">
+                <i class="fa-solid fa-arrows-left-right"></i> Şebeke Uçlarını Çevir ($L \leftrightarrow N$)
+              </button>
+              <button onclick="testUniversalPolarity('armature')" class="px-3 py-2 rounded-lg bg-cyan-900/60 hover:bg-cyan-900 border border-cyan-700 text-cyan-300 font-bold transition">
+                <i class="fa-solid fa-rotate"></i> Sadece Armatür Uçlarını Çevir
+              </button>
+            </div>
+            <div id="universalDirectionResult" class="text-xs font-mono text-emerald-400 font-semibold pt-1">
+              • Şebeke uçlarını ters çevirmek yönü DEĞİŞTİRMEZ (Her iki akı da ters döner). Yönü değiştirmek için sadece armatür uçları ters bağlanmalıdır!
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Problem Solver (Notebook Page 34-35 Exact Numbers) -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-calculator text-amber-400"></i> Sayfa 34-35 Çözümlü Problem Hesaplayıcısı
+            </h3>
+            <span class="text-xs font-mono text-amber-400">120V / 2000 d/d Örneği</span>
+          </div>
+
+          <!-- Parameter Sliders -->
+          <div class="space-y-3 text-xs">
+            <div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Besleme Gerilimi ($V$):</span>
+                <span id="labelUnivV" class="font-mono font-bold text-white">120 V</span>
+              </div>
+              <input type="range" id="sliderUnivV" min="60" max="240" step="5" value="120" oninput="calculateUniversalMotor()" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Çekilen Akım ($I$):</span>
+                <span id="labelUnivI" class="font-mono font-bold text-yellow-400">1.5 A</span>
+              </div>
+              <input type="range" id="sliderUnivI" min="0.5" max="5.0" step="0.1" value="1.5" oninput="calculateUniversalMotor()" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Toplam Direnç ($R = R_a + R_f$):</span>
+                <span id="labelUnivR" class="font-mono font-bold text-slate-300">20.0 Ω</span>
+              </div>
+              <input type="range" id="sliderUnivR" min="5" max="50" step="1" value="20" oninput="calculateUniversalMotor()" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Toplam Reaktans ($X_L = \omega L$):</span>
+                <span id="labelUnivX" class="font-mono font-bold text-cyan-400">32.0 Ω</span>
+              </div>
+              <input type="range" id="sliderUnivX" min="5" max="80" step="1" value="32" oninput="calculateUniversalMotor()" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">AC Çalışma Devri ($n_{ac}$):</span>
+                <span id="labelUnivNac" class="font-mono font-bold text-emerald-400">2000 d/d</span>
+              </div>
+              <input type="range" id="sliderUnivNac" min="1000" max="5000" step="100" value="2000" oninput="calculateUniversalMotor()" class="w-full">
+            </div>
+          </div>
+
+          <!-- Dynamic Results Box -->
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2 text-xs font-mono">
+            <div class="text-cyan-400 font-bold border-b border-slate-800 pb-1">Hesaplama Sonuçları:</div>
+            <div class="grid grid-cols-2 gap-2 text-slate-300">
+              <div>AC Ters EMK ($E_{ac}$): <strong id="resUnivEac" class="text-white">79.8 V</strong></div>
+              <div>DC Ters EMK ($E_{dc}$): <strong id="resUnivEdc" class="text-white">90.0 V</strong></div>
+              <div>Güç Katsayısı ($\cosarphi$): <strong id="resUnivCosPhi" class="text-amber-400">0.915</strong></div>
+              <div>DC Devir Sayısı ($n_{dc}$): <strong id="resUnivNdc" class="text-emerald-400">2255 d/d</strong></div>
+              <div>Giriş Gücü ($P_{gir}$): <strong id="resUnivPin" class="text-indigo-400">164.7 W</strong></div>
+              <div>Verim ($\eta$): <strong id="resUnivEff" class="text-cyan-400">72.7 %</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 6: SERVO SİSTEMLER, ENKODER & RESOLVER -->
+    <!-- ========================================== -->
+    <section id="tab-servo" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-cyan-400">
+          <i class="fa-solid fa-gauge-high"></i>
+          <span>Bölüm 3 • Sayfa 45-53 • Servo Sistemlerde Konum Algılayıcılar</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Servo Motorlar, Artımsal & Mutlak Enkoderler ve Resolver Laboratuvarı
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Servo motorların arkasına takılan enkoder veya resolver algılayıcıları milin anlık konum ve hız bilgisini geri besleme olarak sürücüye aktarır.
+          Artımsal (Incremental) enkoderde A ve B sinyalleri arasındaki 90° kuadratür faz farkı ile yön algılanır.
+          Resolver ise döner transformatör yapısıyla en zorlu endüstriyel ortamlarda mutlak açı çözümü üretir.
+        </p>
+      </div>
+
+      <!-- Encoder & Resolver Dual Showcase Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Left: Incremental Encoder Quadrature Simulator -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-compact-disc text-cyan-400"></i> Artımsal (Incremental) Enkoder & Kuadratür Sinyalleri
+            </h3>
+            <span id="encoderDirBadge" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800 text-cyan-300">
+              CW (A, B'den 90° Önce)
+            </span>
+          </div>
+
+          <!-- Rotating Disc & Pulse Waveforms Canvas -->
+          <div class="relative w-full h-[280px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="encoderCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <!-- Encoder Controls & Resolution Calculator -->
+          <div class="space-y-3 text-xs">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="text-slate-400">Enkoder Çözünürlüğü (PPR):</label>
+                <select id="selectEncoderPpr" onchange="updateEncoderSim()" class="w-full mt-1 bg-slate-900 border border-slate-700 rounded-lg p-2 text-white font-mono">
+                  <option value="1000">1000 PPR (0.3600°)</option>
+                  <option value="2048">2048 PPR (0.1758°)</option>
+                  <option value="2500">2500 PPR (0.1440°)</option>
+                  <option value="4096">4096 PPR (0.0879°)</option>
+                  <option value="4200" selected>4200 PPR (0.0857° - Defter)</option>
+                  <option value="8192">8192 PPR (0.0439°)</option>
+                  <option value="10000">10000 PPR (0.0360°)</option>
+                </select>
+              </div>
+              <div>
+                <label class="text-slate-400">Dönüş Yönü Simülasyonu:</label>
+                <div class="grid grid-cols-2 gap-1 mt-1">
+                  <button id="btnEncCW" onclick="setEncoderDir(1)" class="px-2 py-2 rounded-lg bg-cyan-900 border border-cyan-500 text-cyan-300 font-bold transition">CW (İleri)</button>
+                  <button id="btnEncCCW" onclick="setEncoderDir(-1)" class="px-2 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 font-bold transition">CCW (Geri)</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quadrature Edge Multiplier Info -->
+            <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-[11px] font-mono text-slate-300 flex justify-between items-center">
+              <div>Kuadratür 4X Çözünürlük: <strong id="enc4xCount" class="text-cyan-400">16,800 darbe/tur</strong></div>
+              <div>1 Pals Frekansı: <strong id="encPulseFreq" class="text-emerald-400">84.0 kHz</strong> (@1200 d/d)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Resolver (Analog Transformer) Modulator Simulator -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-atom text-indigo-400"></i> Resolver (Döner Transformatör) Modülasyonu
+            </h3>
+            <span class="text-xs font-mono text-indigo-400">Sayfa 50 İncelemesi</span>
+          </div>
+
+          <!-- Canvas for Resolver Modulated Waveforms & Lissajous -->
+          <div class="relative w-full h-[280px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="resolverCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <!-- Mathematical Formulations of Resolver -->
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 text-xs font-mono text-slate-300">
+            <div class="text-indigo-400 font-bold">Resolver Çıkış Denklemleri:</div>
+            <div class="space-y-1 text-[11px]">
+              <div>• Rotor Uyarma: $V_{ref} = V_m \sin(\omega_c t)$ (Taşıyıcı 5-10 kHz)</div>
+              <div>• Sinüs Sargısı: $V_{sin} = V_m \sin(	heta) \cdot \sin(\omega_c t)$</div>
+              <div>• Kosinüs Sargısı: $V_{cos} = V_m \cos(	heta) \cdot \sin(\omega_c t)$</div>
+              <div class="text-emerald-400 font-bold">• Mutlak Açı Çözümü: $	heta = rctan\left(rac{V_{sin}}{V_{cos}}ight)$</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 7: ADIM MOTORLARI (STEP MOTORS) LAB -->
+    <!-- ========================================== -->
+    <section id="tab-stepper" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-cyan-400">
+          <i class="fa-solid fa-gears"></i>
+          <span>Bölüm 4 • Sayfa 54-64 • Adım Motorları & Sürüş Yöntemleri</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Adım Motorları (Step Motors), Mikro Adımlama ve Frekans-Hız Laboratuvarı
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Adım motorları, mikrodenetleyiciden gelen her bir dijital pals ile sabit bir açısal adım ($	heta_s$) atan fırçasız, senkron makinelerdir.
+          Açık çevrim kontrol edilmelerine rağmen adımı kaçırmadıkları sürece kesin pozisyonlama sağlarlar.
+        </p>
+      </div>
+
+      <!-- Stepper Simulator & Controls Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Left: 2D Stepper Excitation & Rotor Teeth Canvas -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-circle-dot text-amber-400"></i> Rotor Dişleri & Faz Sargıları Canlı Uyarma Şeması
+            </h3>
+            <span id="stepModeBadge" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-amber-950 border border-amber-800 text-amber-300">
+              Tam Adım (Full-Step)
+            </span>
+          </div>
+
+          <!-- Stepper Canvas -->
+          <div class="relative w-full h-[320px] bg-slate-950 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center">
+            <canvas id="stepperCanvas" class="w-full h-full"></canvas>
+          </div>
+
+          <!-- Step Drive Modes Selector -->
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-slate-300">Sürme Yöntemi (Modu):</label>
+            <div class="grid grid-cols-4 gap-2 text-xs">
+              <button onclick="setStepperDriveMode('wave')" id="btnStepWave" class="px-2 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">
+                Dalga (1 Faz)
+              </button>
+              <button onclick="setStepperDriveMode('full')" id="btnStepFull" class="px-2 py-2 rounded-lg bg-amber-900/60 border border-amber-500 text-amber-300 font-bold transition">
+                Tam Adım (2 Faz)
+              </button>
+              <button onclick="setStepperDriveMode('half')" id="btnStepHalf" class="px-2 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">
+                Yarım (Half-Step)
+              </button>
+              <button onclick="setStepperDriveMode('micro')" id="btnStepMicro" class="px-2 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition">
+                Mikro Adım (1/8)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Mathematical Speed-Frequency & Tooth Calculator -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-calculator text-cyan-400"></i> Adım Açısı & Frekans-Hız Hesaplayıcısı
+            </h3>
+            <span class="text-xs font-mono text-cyan-400">Defter Sayfa 58-60</span>
+          </div>
+
+          <!-- Interactive Stepper Inputs -->
+          <div class="space-y-3 text-xs">
+            <div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Faz Sayısı ($m$):</span>
+                <span id="labelStepM" class="font-mono font-bold text-cyan-400">4 Faz</span>
+              </div>
+              <input type="range" id="sliderStepM" min="2" max="5" step="1" value="4" oninput="calculateStepper()" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Rotor Diş Sayısı ($N_r$):</span>
+                <span id="labelStepNr" class="font-mono font-bold text-amber-400">50 Diş</span>
+              </div>
+              <input type="range" id="sliderStepNr" min="10" max="100" step="5" value="50" oninput="calculateStepper()" class="w-full">
+            </div>
+
+            <div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Hedef Motor Hızı ($n$):</span>
+                <span id="labelStepRpm" class="font-mono font-bold text-emerald-400">1200 d/d</span>
+              </div>
+              <input type="range" id="sliderStepRpm" min="60" max="3000" step="60" value="1200" oninput="calculateStepper()" class="w-full">
+            </div>
+          </div>
+
+          <!-- Dynamic Output Card -->
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2 text-xs font-mono">
+            <div class="text-amber-400 font-bold border-b border-slate-800 pb-1">Hesaplanan Değerler:</div>
+            <div class="grid grid-cols-2 gap-2 text-slate-300">
+              <div>Adım Açısı ($	heta_s$): <strong id="resStepAngle" class="text-white">1.80°</strong></div>
+              <div>Tur Başına Adım ($S$): <strong id="resStepCount" class="text-white">200 adım/tur</strong></div>
+              <div>Gereken Frekans ($f_{step}$): <strong id="resStepFreq" class="text-emerald-400">4000 Hz (4 kHz)</strong></div>
+              <div>Adım Periyodu ($T_{step}$): <strong id="resStepPeriod" class="text-cyan-400">250 µs</strong></div>
+            </div>
+            <div class="pt-2 text-[11px] text-slate-400 leading-relaxed border-t border-slate-800">
+              Formüller: $	heta_s = rac{360^\circ}{m \cdot N_r}$, $S = rac{360^\circ}{	heta_s}$, $f = rac{n \cdot S}{60}$.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 8: SINAV SORULARI & ÇÖZÜM BANKASI -->
+    <!-- ========================================== -->
+    <section id="tab-exam-bank" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-amber-400">
+          <i class="fa-solid fa-file-signature"></i>
+          <span>Dr. Hakan Kahveci Özel Elektrik Makinaları • Çıkmış & Model Sınav Soruları</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Sınav Soruları, Sayısal Problemler & Adım Adım Akademik Çözüm Bankası
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Ders defterindeki tüm çizimli ve sayısal sorular aşağıda toplanmıştır.
+          Parametreleri değiştirerek yeni senaryolar türetebilir, detaylı çözümü inceleyebilir ve 
+          <strong>"Simülatörde Göster"</strong> düğmesiyle verileri anında 3D laboratuvara aktarabilirsiniz.
+        </p>
+      </div>
+
+      <!-- 5 Comprehensive Questions Accordion / List -->
+      <div class="space-y-6">
+        
+        <!-- Question 1: Notebook Page 1 (Uploaded Image Twin) -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-7 h-7 rounded-lg bg-cyan-950 border border-cyan-800 flex items-center justify-center font-bold text-xs text-cyan-300">Q1</span>
+              <h3 class="text-base font-bold text-white">Motor Hangi Yöne Döner? Manyetik Kutup ve Akım Vektörü ile Yön İspatı</h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded-full border border-slate-800">Defter Sayfa 1 • 20 Puan</span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs sm:text-sm text-slate-200 leading-relaxed space-y-2">
+            <strong>Soru Metni:</strong><br>
+            Şekildeki 2 kutuplu DA makinesinde statorun üst kısmında N, alt kısmında S kutbu bulunmaktadır.
+            Rotorun 1 nolu oluğundaki sargıdan sayfa düzleminden dışarı doğru ($\odot$) $I_1$ akımı, 
+            2 nolu oluğundaki sargıdan ise sayfa düzlemine içeri doğru ($\otimes$) $I_2$ akımı akmaktadır.<br>
+            <strong>a)</strong> 1 ve 2 nolu oluktaki iletkenlere etkiyen Laplace/Lorentz kuvvetlerinin büyüklük ve yönlerini vidalama kuralını kullanarak vektörel olarak bulunuz.<br>
+            <strong>b)</strong> Rotorun hangi yöne (CW / CCW) döneceğini net döndürme momenti denklemini yazarak açıklayınız.<br>
+            <strong>c)</strong> Besleme geriliminin polaritesi ters çevrilirse ne olur? Hem besleme gerilimi hem de mıknatıs kutupları aynı anda ters çevrilirse ne olur?
+          </div>
+
+          <!-- Step-by-Step KaTeX Solution Box -->
+          <div class="p-5 rounded-xl bg-slate-950 border border-cyan-900/50 space-y-3 text-xs sm:text-sm font-mono">
+            <div class="text-cyan-400 font-bold flex items-center gap-2">
+              <i class="fa-solid fa-check-circle"></i> Akademik Çözüm Adımları:
+            </div>
+            <div class="text-slate-300 space-y-2">
+              <div><strong>a) 1 ve 2 Nolu Oluk Kuvvetleri:</strong></div>
+              <div>$ec{F} = i (ec{l} 	imes ec{B})$ Lorentz formülü uygulanır. Koordinat sisteminde $+x$ sağa, $+y$ yukarı, $+z$ sayfa dışına tanımlansın.</div>
+              <div>• Manyetik alan vektörü N'den S'ye doğrudur: $ec{B} = -B \hat{j}$ (Aşağı yönlü).</div>
+              <div>• 1 nolu olukta akım sayfa dışınadır: $ec{l}_1 = +l \hat{k}$.</div>
+              <div>$$ec{F}_1 = i (l \hat{k} 	imes (-B \hat{j})) = -i l B (\hat{k} 	imes \hat{j}) = -i l B (-\hat{i}) = +i l B \hat{i}\quad \implies \mathbf{Soldan\ Sa\check{g}a\ (ightarrow)}$$</div>
+              <div>• 2 nolu olukta akım sayfa içincedir: $ec{l}_2 = -l \hat{k}$.</div>
+              <div>$$ec{F}_2 = i (-l \hat{k} 	imes (-B \hat{j})) = +i l B (\hat{k} 	imes \hat{j}) = -i l B \hat{i}\quad \implies \mathbf{Sa\check{g}dan\ Sola\ (\leftarrow)}$$</div>
+
+              <div class="pt-2"><strong>b) Net Döndürme Momenti (Tork):</strong></div>
+              <div>$ec{r}_1$ vektörü merkezden oluk 1'e ($+y$ ve $-x$ yönünde), $ec{r}_2$ ise ($ -y$ ve $+x$ yönünde) uzanır.</div>
+              <div>Üstteki kuvvet sağa, alttaki kuvvet sola iter. Mil merkezine göre her iki tork da aynı yönde toplanır:</div>
+              <div>$$ec{T} = ec{r}_1 	imes ec{F}_1 + ec{r}_2 	imes ec{F}_2 = (r F_1 + r F_2) \hat{k}_{cw}\quad \implies \mathbf{Saat\ \dot{I}breleri\ Y\ddot{o}n\ddot{u}nde\ (CW)\ D\ddot{o}ner!}$$</div>
+
+              <div class="pt-2"><strong>c) Polarite Değişimleri:</strong></div>
+              <div>• Yalnız akım yönü değişirse: $ec{l}$ ters döner $\implies ec{F}$ ters döner $\implies$ Motor <strong>CCW (Ters)</strong> döner.</div>
+              <div>• Hem akım hem manyetik kutuplar aynı anda değişirse: İki eksi birbirini çarparak artı yapar: $(-1) 	imes (-1) = +1 \implies$ Motor <strong>YİNE CW (Saat Yönünde)</strong> döner!</div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-800 flex justify-end">
+              <button onclick="switchTab('tab-direction-lab')" class="px-3 py-1.5 rounded-lg bg-cyan-900/60 hover:bg-cyan-900 border border-cyan-700 text-cyan-300 font-bold text-xs flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-play"></i> Yön Simülatöründe Canlı Gör
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 2: BLDC 120 Hall Sensor Commutation Sector -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-7 h-7 rounded-lg bg-emerald-950 border border-emerald-800 flex items-center justify-center font-bold text-xs text-emerald-300">Q2</span>
+              <h3 class="text-base font-bold text-white">BLDC 120° Hall Sinyalleri, Komütasyon Sektörü ve Evirici Durumu</h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded-full border border-slate-800">Defter Sayfa 14-22 • 20 Puan</span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs sm:text-sm text-slate-200 leading-relaxed space-y-2">
+            <strong>Soru Metni:</strong><br>
+            3 fazlı, 120° elektriksel yerleşimli Hall sensörlerine sahip bir fırçasız doğru akım (BLDC) motorunun 
+            sensör çıkışları bir anda osiloskopta $[H_1, H_2, H_3] = [1, 1, 0]$ olarak ölçülmüştür.<br>
+            <strong>a)</strong> Rotor o anda elektriksel olarak hangi açı aralığında (sektörde) bulunmaktadır?<br>
+            <strong>b)</strong> Saat yönünde (CW) tork üretmeye devam etmek için 6 transistörlü eviricide hangi üst ve alt transistörler iletimde olmalıdır? Hangi faz boştadır?<br>
+            <strong>c)</strong> Motorun dönüş yönünü saat yönünün tersine (CCW) çevirmek için eviriciye uygulanması gereken anahtarlama durumu nedir?
+          </div>
+
+          <!-- Solution -->
+          <div class="p-5 rounded-xl bg-slate-950 border border-emerald-900/50 space-y-3 text-xs sm:text-sm font-mono">
+            <div class="text-emerald-400 font-bold flex items-center gap-2">
+              <i class="fa-solid fa-check-circle"></i> Akademik Çözüm Adımları:
+            </div>
+            <div class="text-slate-300 space-y-2">
+              <div><strong>a) Sektör Belirleme:</strong></div>
+              <div>120° Hall mantık tablosuna göre:</div>
+              <div>• Adım 1: $[1, 0, 1] ightarrow 0^\circ - 60^\circ$</div>
+              <div>• Adım 2: $[1, 0, 0] ightarrow 60^\circ - 120^\circ$</div>
+              <div>• <strong>Adım 3: $[1, 1, 0] ightarrow 120^\circ - 180^\circ$</strong></div>
+              <div>Demek ki rotor o anda <strong>3. Sektörde ($120^\circ - 180^\circ$)</strong> bulunmaktadır.</div>
+
+              <div class="pt-2"><strong>b) İletimdeki Anahtarlar ve Boşta Olan Faz:</strong></div>
+              <div>3. Adımda motor sargılarına pozitif tork sağlamak için:</div>
+              <div>• <strong>B+ Transistörü (Üst Kol)</strong> ve <strong>C- Transistörü (Alt Kol)</strong> iletimdedir.</div>
+              <div>• Akım Faz B'den girer, Faz C'den çıkar ($B^+ C^-$).</div>
+              <div>• <strong>Faz A tamamen BOŞTADIR (Floating)</strong>. A fazında yamuk şeklinde ters EMK ($e_a$) sıfır geçişi (zero-crossing) yapar.</div>
+
+              <div class="pt-2"><strong>c) CCW Yön Dönüşümü:</strong></div>
+              <div>Ters yönde döndürmek için akım polaritesi terslenir: $B^+ C^-$ yerine <strong>$C^+ B^-$</strong> (Adım 6) anahtarlanmalıdır!</div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-800 flex justify-end">
+              <button onclick="switchTab('tab-bldc')" class="px-3 py-1.5 rounded-lg bg-emerald-900/60 hover:bg-emerald-900 border border-emerald-700 text-emerald-300 font-bold text-xs flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-play"></i> BLDC Laboratuvarında Simüle Et
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 3: Universal Motor AC vs DC Detailed Calculation -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-7 h-7 rounded-lg bg-amber-950 border border-amber-800 flex items-center justify-center font-bold text-xs text-amber-300">Q3</span>
+              <h3 class="text-base font-bold text-white">Üniversal Motorda AC vs DC Çalışma, Empedans Üçgeni ve Verim Hesabı</h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded-full border border-slate-800">Defter Sayfa 34-35 Birebir • 25 Puan</span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs sm:text-sm text-slate-200 leading-relaxed space-y-2">
+            <strong>Soru Metni (Defterdeki Orijinal Soru):</strong><br>
+            Bir üniversal motor $V = 120	ext{ V}, 60	ext{ Hz}$ alternatif gerilim kaynağına bağlandığında şebekeden $I = 1.5	ext{ A}$ akım çekmekte ve $n_{ac} = 2000	ext{ d/d}$ hızla dönmektedir.
+            Motorun toplam omik direnci $R = R_a + R_f = 20\ \Omega$, toplam endüktif reaktansı ise $X_L = 32\ \Omega$'dur.<br>
+            <strong>a)</strong> AC çalışmada endüklenen zıt EMK'yi ($E_{ac}$) ve güç katsayısını ($\cosarphi$) bulunuz.<br>
+            <strong>b)</strong> Bu motor aynı $120	ext{ V}$ gerilimli bir DC kaynağa bağlandığında ve yine $1.5	ext{ A}$ akım çektiğinde devir sayısı ($n_{dc}$) ne olur?<br>
+            <strong>c)</strong> AC ve DC çalışma durumlarındaki mekanik çıkış güçlerini ve elektriksel verimleri karşılaştırınız.
+          </div>
+
+          <!-- Solution -->
+          <div class="p-5 rounded-xl bg-slate-950 border border-amber-900/50 space-y-3 text-xs sm:text-sm font-mono">
+            <div class="text-amber-400 font-bold flex items-center gap-2">
+              <i class="fa-solid fa-check-circle"></i> Akademik Çözüm Adımları:
+            </div>
+            <div class="text-slate-300 space-y-2">
+              <div><strong>a) AC Zıt EMK ve Güç Katsayısı Hesabı:</strong></div>
+              <div>AC gerilim üçgeni bağıntısı: $V_{ac}^2 = (E_{ac} + I R)^2 + (I X_L)^2$</div>
+              <div>$120^2 = (E_{ac} + 1.5 	imes 20)^2 + (1.5 	imes 32)^2$</div>
+              <div>$14400 = (E_{ac} + 30)^2 + (48)^2 = (E_{ac} + 30)^2 + 2304$</div>
+              <div>$(E_{ac} + 30)^2 = 14400 - 2304 = 12096 \implies E_{ac} + 30 = \sqrt{12096} pprox 109.98	ext{ V}$</div>
+              <div>$$E_{ac} = 109.98 - 30 = \mathbf{79.98	ext{ V}}\quad (pprox 80	ext{ V})$$</div>
+              <div>Güç Katsayısı: $\cosarphi = rac{E_{ac} + I R}{V} = rac{79.98 + 30}{120} = rac{109.98}{120} = \mathbf{0.9165}$</div>
+
+              <div class="pt-2"><strong>b) DC Çalışmada Devir Sayısı:</strong></div>
+              <div>DC'de reaktans sıfırdır ($X_L = 0$). Zıt EMK doğrudan omik gerilim düşümü çıkarılarak bulunur:</div>
+              <div>$$E_{dc} = V_{dc} - I R = 120 - (1.5 	imes 20) = 120 - 30 = \mathbf{90.0	ext{ V}}$$</div>
+              <div>Dönme hızı zıt EMK ile doğru orantılıdır ($E \propto \Phi \cdot n$). Akım aynı kaldığı için manyetik akı $\Phi$ sabittir:</div>
+              <div>$$rac{n_{dc}}{n_{ac}} = rac{E_{dc}}{E_{ac}} \implies n_{dc} = n_{ac} \cdot rac{E_{dc}}{E_{ac}} = 2000 \cdot rac{90.0}{79.98} pprox \mathbf{2250.5	ext{ d/d}}$$</div>
+              <div class="text-cyan-300">• Yorum: DC beslemede reaktif gerilim düşümü ($I X_L$) ortadan kalktığı için zıt EMK büyür ve motor devri 2000 d/d'den 2250 d/d'ye yükselir!</div>
+
+              <div class="pt-2"><strong>c) Güç ve Verim Kıyaslaması:</strong></div>
+              <div>• AC Giriş Gücü: $P_{gir,ac} = V \cdot I \cdot \cosarphi = 120 	imes 1.5 	imes 0.9165 = \mathbf{165.0	ext{ W}}$</div>
+              <div>• AC Mekanik Güç: $P_{çık,ac} = E_{ac} \cdot I = 79.98 	imes 1.5 = \mathbf{119.97	ext{ W}} \implies \eta_{ac} = rac{119.97}{165.0} pprox \mathbf{72.7\%}$</div>
+              <div>• DC Giriş Gücü: $P_{gir,dc} = V \cdot I = 120 	imes 1.5 = \mathbf{180.0	ext{ W}}$</div>
+              <div>• DC Mekanik Güç: $P_{çık,dc} = E_{dc} \cdot I = 90.0 	imes 1.5 = \mathbf{135.0	ext{ W}} \implies \eta_{dc} = rac{135.0}{180.0} = \mathbf{75.0\%}$</div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-800 flex justify-end">
+              <button onclick="switchTab('tab-universal')" class="px-3 py-1.5 rounded-lg bg-amber-900/60 hover:bg-amber-900 border border-amber-700 text-amber-300 font-bold text-xs flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-play"></i> Üniversal Motor Simülatöründe Dene
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 4: Servo 4096 PPR Encoder & Resolver Calculation -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-7 h-7 rounded-lg bg-indigo-950 border border-indigo-800 flex items-center justify-center font-bold text-xs text-indigo-300">Q4</span>
+              <h3 class="text-base font-bold text-white">Servo Enkoder Çözünürlüğü, Pals Frekansı ve Resolver Açı Tayini</h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded-full border border-slate-800">Defter Sayfa 46-50 • 20 Puan</span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs sm:text-sm text-slate-200 leading-relaxed space-y-2">
+            <strong>Soru Metni:</strong><br>
+            Bir CNC freze tezgahının servo motor miline 4096 PPR (Pulse Per Revolution) çözünürlüğe sahip optik artımsal bir enkoder bağlanmıştır.
+            Motor $n = 3000	ext{ d/d}$ hızla dönmektedir.<br>
+            <strong>a)</strong> Bu enkoderin her bir kare dalga periyodunun temsil ettiği açısal mekanik çözünürlük ($\Delta	heta$) kaç derecedir?<br>
+            <strong>b)</strong> Sürücü kuadratür 4X (X4 edge-detect) kod çözme kullandığında bir turda sayılan toplam darbe sayısı kaçtır?<br>
+            <strong>c)</strong> A ve B çıkış kanallarından üretilen sinyallerin temel frekansı ($f$) kaç kHz'dir?<br>
+            <strong>d)</strong> Aynı servo motorda enkoder yerine resolver kullanılsaydı ve stator sargılarında genlik oranı $rac{V_{sin}}{V_{cos}} = 0.577$ ölçülseydi rotor açısı ($	heta$) ne olurdu?
+          </div>
+
+          <!-- Solution -->
+          <div class="p-5 rounded-xl bg-slate-950 border border-indigo-900/50 space-y-3 text-xs sm:text-sm font-mono">
+            <div class="text-indigo-400 font-bold flex items-center gap-2">
+              <i class="fa-solid fa-check-circle"></i> Akademik Çözüm Adımları:
+            </div>
+            <div class="text-slate-300 space-y-2">
+              <div><strong>a) Açısal Çözünürlük:</strong></div>
+              <div>$$\Delta	heta = rac{360^\circ}{PPR} = rac{360^\circ}{4096} pprox \mathbf{0.08789^\circ}\quad (5.27	ext{ ark dakika})$$</div>
+
+              <div class="pt-2"><strong>b) 4X Kuadratür Darbe Sayısı:</strong></div>
+              <div>A ve B sinyallerinin hem yükselen hem düşen kenarları sayıldığında bir periyotta 4 kenar tespit edilir:</div>
+              <div>$$Count_{4X} = 4 	imes PPR = 4 	imes 4096 = \mathbf{16384	ext{ sayım/tur}}$$</div>
+              <div>Efektif çözünürlük: $\Delta	heta_{4X} = rac{360^\circ}{16384} pprox \mathbf{0.02197^\circ}$.</div>
+
+              <div class="pt-2"><strong>c) Çıkış Sinyali Frekansı ($f$):</strong></div>
+              <div>Motor devri $n = 3000	ext{ d/d} = rac{3000}{60} = 50	ext{ tur/saniye}$.</div>
+              <div>$$f = PPR 	imes rac{n}{60} = 4096 	imes 50 = 204,800	ext{ Hz} = \mathbf{204.8	ext{ kHz}}$$</div>
+
+              <div class="pt-2"><strong>d) Resolver Mutlak Açı Hesabı:</strong></div>
+              <div>Resolver çıkışları: $V_{sin} = V_m \sin	heta \sin\omega t$ ve $V_{cos} = V_m \cos	heta \sin\omega t$.</div>
+              <div>$$	an	heta = rac{V_{sin}}{V_{cos}} = 0.577 \implies 	heta = rctan(0.577) = \mathbf{30.0^\circ}$$</div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-800 flex justify-end">
+              <button onclick="switchTab('tab-servo')" class="px-3 py-1.5 rounded-lg bg-indigo-900/60 hover:bg-indigo-900 border border-indigo-700 text-indigo-300 font-bold text-xs flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-play"></i> Enkoder/Resolver Simülatöründe Gör
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 5: Hybrid Stepper Motor Teeth, Step Angle & Speed -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-7 h-7 rounded-lg bg-cyan-950 border border-cyan-800 flex items-center justify-center font-bold text-xs text-cyan-300">Q5</span>
+              <h3 class="text-base font-bold text-white">4 Fazlı 50 Dişli Hibrit Adım Motorunda Devir-Frekans ve Yarım Adım Dönüşümü</h3>
+            </div>
+            <span class="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded-full border border-slate-800">Defter Sayfa 58-60 Birebir • 15 Puan</span>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs sm:text-sm text-slate-200 leading-relaxed space-y-2">
+            <strong>Soru Metni (Defterdeki Orijinal Soru):</strong><br>
+            4 fazlı ($m = 4$), rotorunda 50 adet diş ($N_r = 50$) bulunan hibrit bir adım motoru endüstriyel bir pozisyonlama ünitesinde kullanılmaktadır.<br>
+            <strong>a)</strong> Bu motorun tam adım sürüş modundaki adım açısını ($	heta_s$) ve bir turu tamamlamak için gereken adım sayısını ($S$) hesaplayınız.<br>
+            <strong>b)</strong> Motor milinin $n = 1200	ext{ d/d}$ devirle dönmesi için mikrodenetleyici sürücüsünden uygulanması gereken darbe (pals) frekansı ($f$) kaç kHz olmalıdır?<br>
+            <strong>c)</strong> Motor daha hassas çalışması için yarım adım (half-step) moduna geçirilirse yeni adım açısı ve aynı $1200	ext{ d/d}$ hızı korumak için gereken pals frekansı ne olur?
+          </div>
+
+          <!-- Solution -->
+          <div class="p-5 rounded-xl bg-slate-950 border border-cyan-900/50 space-y-3 text-xs sm:text-sm font-mono">
+            <div class="text-cyan-400 font-bold flex items-center gap-2">
+              <i class="fa-solid fa-check-circle"></i> Akademik Çözüm Adımları:
+            </div>
+            <div class="text-slate-300 space-y-2">
+              <div><strong>a) Tam Adım Açısı ve Tur Başına Adım Sayısı:</strong></div>
+              <div>$$	heta_s = rac{360^\circ}{m \cdot N_r} = rac{360^\circ}{4 	imes 50} = rac{360^\circ}{200} = \mathbf{1.8^\circ}$$</div>
+              <div>$$S = rac{360^\circ}{	heta_s} = 200	ext{ ad\im/tur}$$</div>
+
+              <div class="pt-2"><strong>b) Pals Frekansı Hesabı ($n = 1200	ext{ d/d}$):</strong></div>
+              <div>Hız formülü: $n = rac{	heta_s \cdot f}{360^\circ} 	imes 60 = rac{f}{S} 	imes 60$</div>
+              <div>$$f = rac{n \cdot S}{60} = rac{1200 	imes 200}{60} = 20 	imes 200 = \mathbf{4000	ext{ Hz}} = \mathbf{4.0	ext{ kHz}}$$</div>
+
+              <div class="pt-2"><strong>c) Yarım Adım (Half-Step) Dönüşümü:</strong></div>
+              <div>Yarım adımda adımlar 1 faz ve 2 faz ardışık uyarıldığı için adım açısı yarıya iner:</div>
+              <div>$$	heta_s' = rac{	heta_s}{2} = rac{1.8^\circ}{2} = \mathbf{0.9^\circ}$$</div>
+              <div>Tur başına gereken adım sayısı 2 katına çıkar: $S' = 2 	imes 200 = \mathbf{400	ext{ ad\im/tur}}$.</div>
+              <div>Aynı $1200	ext{ d/d}$ mekanik hızı korumak için darbe frekansı da 2 katına çıkmalıdır:</div>
+              <div>$$f' = rac{1200 	imes 400}{60} = 20 	imes 400 = \mathbf{8000	ext{ Hz}} = \mathbf{8.0	ext{ kHz}}$$</div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-800 flex justify-end">
+              <button onclick="switchTab('tab-stepper')" class="px-3 py-1.5 rounded-lg bg-cyan-900/60 hover:bg-cyan-900 border border-cyan-700 text-cyan-300 font-bold text-xs flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-play"></i> Adım Motoru Simülatöründe Test Et
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 9: DEFTER ÖZETİ & FORMÜL KARTLARI -->
+    <!-- ========================================== -->
+    <section id="tab-notes" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 border-slate-800 space-y-2">
+        <div class="flex items-center space-x-2 text-xs font-mono text-emerald-400">
+          <i class="fa-solid fa-pen-fancy"></i>
+          <span>Fiziksel Ders Defteri Kılavuzu & Sınav Öncesi Hızlı Bakış Formülleri</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-white">
+          Deftere Yaz: Altın Mühendislik Formülleri & Püf Noktalar
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300">
+          Sınavda çıkabilecek tüm kritik formüller, birimler ve türev bağıntıları aşağıda derli toplu olarak sunulmuştur.
+          Fiziksel defterinize not alırken bu şemayı referans alabilirsiniz.
+        </p>
+      </div>
+
+      <!-- Formula Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs">
+        
+        <!-- Card 1 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-cyan-400 font-mono">1. LORENTZ & LAPLACE</span>
+            <i class="fa-solid fa-magnet text-slate-500"></i>
+          </div>
+          <div class="space-y-1.5 font-mono text-slate-300">
+            <div>$ec{F} = i (ec{l} 	imes ec{B})$ [N]</div>
+            <div>$F = B \cdot I \cdot l \cdot \sin	heta$</div>
+            <div>$ec{T} = ec{r} 	imes ec{F}$ [N·m]</div>
+            <div>$T = 2 \cdot r \cdot l \cdot I \cdot B$</div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+              Vidalama kuralı: 4 parmak $ec{l}$'den $ec{B}$'ye kıvrılır, başparmak $ec{F}$'yi gösterir.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-emerald-400 font-mono">2. BLDC KOMÜTASYON</span>
+            <i class="fa-solid fa-microchip text-slate-500"></i>
+          </div>
+          <div class="space-y-1.5 font-mono text-slate-300">
+            <div>$E = k_e \cdot \omega$ [V]</div>
+            <div>$T_e = 2 \cdot k_t \cdot I$ [N·m]</div>
+            <div>$P_{mech} = T_e \cdot \omega_m$ [W]</div>
+            <div>$	heta_e = rac{P}{2} \cdot 	heta_m$</div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+              120° iletimde her anda 2 transistör açık, 1 faz boşta (floating).
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-amber-400 font-mono">3. ÜNİVERSAL MOTOR</span>
+            <i class="fa-solid fa-plug text-slate-500"></i>
+          </div>
+          <div class="space-y-1.5 font-mono text-slate-300">
+            <div>$V_{ac}^2 = (E_{ac} + IR)^2 + (IX_L)^2$</div>
+            <div>$E_{dc} = V_{dc} - I R$</div>
+            <div>$n_{dc} = n_{ac} \cdot rac{E_{dc}}{E_{ac}}$</div>
+            <div>$\cosarphi = rac{E_{ac} + IR}{V_{ac}}$</div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+              Şebeke polaritesini değiştirmek dönüş yönünü değiştirmez. Armatür uçları değiştirilmelidir.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-indigo-400 font-mono">4. SERVO ENKODER</span>
+            <i class="fa-solid fa-compact-disc text-slate-500"></i>
+          </div>
+          <div class="space-y-1.5 font-mono text-slate-300">
+            <div>$\Delta	heta = rac{360^\circ}{PPR}$ [derece/pals]</div>
+            <div>$Count_{4X} = 4 	imes PPR$</div>
+            <div>$f_{pulse} = rac{n \cdot PPR}{60}$ [Hz]</div>
+            <div>A, B'den önce $\implies$ CW; B, A'dan önce $\implies$ CCW</div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+              Z kanalı: Her tam turda 1 pals üretir (sıfır noktası referansı).
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-rose-400 font-mono">5. RESOLVER ÇÖZÜCÜ</span>
+            <i class="fa-solid fa-atom text-slate-500"></i>
+          </div>
+          <div class="space-y-1.5 font-mono text-slate-300">
+            <div>$V_{sin} = V_m \sin	heta \sin\omega_c t$</div>
+            <div>$V_{cos} = V_m \cos	heta \sin\omega_c t$</div>
+            <div>$	heta = rctan\left(rac{V_{sin}}{V_{cos}}ight)$</div>
+            <div>Yüksek sıcaklık, toz ve titreşime en dayanıklı analog mutlak algılayıcı.</div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+              R-to-D (Resolver to Digital) dönüştürücü ile mikrodenetleyiciye okunur.
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="glass-card rounded-xl p-5 border-slate-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-bold text-purple-400 font-mono">6. ADIM MOTORU</span>
+            <i class="fa-solid fa-gears text-slate-500"></i>
+          </div>
+          <div class="space-y-1.5 font-mono text-slate-300">
+            <div>$	heta_s = rac{360^\circ}{m \cdot N_r}$</div>
+            <div>$S = rac{360^\circ}{	heta_s} = m \cdot N_r$</div>
+            <div>$n = rac{f \cdot 60}{S}$ [d/d]</div>
+            <div>$f = rac{n \cdot S}{60}$ [Hz]</div>
+            <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+              Yarım adımda: $	heta_s' = 	heta_s / 2$, $S' = 2S$, $f' = 2f$.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="mt-auto border-t border-slate-800 bg-slate-900/90 backdrop-blur-md py-4 text-center text-xs text-slate-500 font-mono">
+    <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2">
+      <div>KTÜ Elektrik-Elektronik Mühendisliği • Özel Elektrik Makinaları Dersi</div>
+      <div class="text-slate-400">Hazırlayan: <strong>Muhammet Raşit Taflan</strong> • 3D WebGL Hibrit Simülasyon Platformu</div>
+      <div>Dr. Hakan Kahveci Notlarına Dayalıdır</div>
+    </div>
+  </footer>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT SIMULATION LOGIC & ENGINES -->
+  <!-- ========================================== -->
+  <script>
+    // --- GLOBAL SIMULATION STATE ---
+    const state = {
+      activeTab: 'tab-overview',
+      // Motor parameters
+      motorRunning: true,
+      motorSpeedRpm: 1200,
+      motorDirection: 1, // 1: CW, -1: CCW
+      rotorAngle: 0,
+      armatureCurrent: 5.0, // Amperes
+      fluxDensity: 0.85, // Tesla
+      conductorLength: 0.10, // 10 cm
+      rotorRadius: 0.04, // 4 cm
+      explodedRatio: 0,
+      transparentCasing: false,
+      cutawayMode: false,
+      showVectors: {
+        field: true,
+        current: true,
+        force: true,
+        fluxLines: true
+      },
+      // Direction 2D Lab state
+      dirLab: {
+        northOnTop: true,
+        currentOutSlot1: true,
+        brushCrossed: false
+      },
+      // BLDC Lab state
+      bldc: {
+        step: 1,
+        autoPlay: false,
+        direction: 1,
+        timer: null
+      },
+      // Stepper Lab state
+      stepper: {
+        mode: 'full', // 'wave', 'full', 'half', 'micro'
+        stepIndex: 0,
+        m: 4,
+        nr: 50,
+        targetRpm: 1200
+      },
+      // Encoder Lab state
+      encoder: {
+        ppr: 4200,
+        direction: 1,
+        angle: 0
+      }
+    };
+
+    // --- TAB SWITCHING WITH AUTO KATEX RENDER ---
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+      const target = document.getElementById(tabId);
+      if (target) target.classList.remove('hidden');
+
+      const activeBtn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // Trigger redraws based on tab
+      if (tabId === 'tab-3d-lab') {
+        onWindowResize3D();
+      } else if (tabId === 'tab-direction-lab') {
+        drawDirection2DCanvas();
+      } else if (tabId === 'tab-bldc') {
+        drawBldcBridgeCanvas();
+        drawBldcOscilloscope();
+      } else if (tabId === 'tab-universal') {
+        calculateUniversalMotor();
+        drawUniversalPhasor();
+      } else if (tabId === 'tab-servo') {
+        drawEncoderCanvas();
+        drawResolverCanvas();
+      } else if (tabId === 'tab-stepper') {
+        calculateStepper();
+        drawStepperCanvas();
+      }
+
+      // Render math formulas
+      renderKaTeX();
+    }
+
+    function renderKaTeX() {
+      if (window.renderMathInElement) {
+        try {
+          renderMathInElement(document.body, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false }
+            ],
+            throwOnError: false
+          });
+        } catch (e) {
+          console.warn('KaTeX render warning:', e);
+        }
+      }
+    }
+
+    // =========================================================================
+    // THREE.JS 3D MOTOR ENGINE
+    // =========================================================================
+    let scene3d, camera3d, renderer3d, controls3d;
+    let motorGroup, statorGroup, poleShoesGroup, rotorGroup, armatureWindingsGroup, commutatorGroup, brushGroup, hallPcbGroup, vectorGroup, fluxLinesGroup;
+    let arrowForce1, arrowForce2, arrowField1, arrowField2, arrowCurrent1, arrowCurrent2;
+    let rightHandGizmoGroup;
+
+    function init3DScene() {
+      const container = document.getElementById('canvas3dContainer');
+      const canvas = document.getElementById('motor3dCanvas');
+      if (!container || !canvas) return;
+
+      // 1. Scene & Camera
+      scene3d = new THREE.Scene();
+      scene3d.background = new THREE.Color(0x050b14);
+
+      camera3d = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+      camera3d.position.set(0.28, 0.22, 0.35);
+
+      // 2. Renderer
+      renderer3d = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      renderer3d.setSize(container.clientWidth, container.clientHeight);
+      renderer3d.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer3d.shadowMap.enabled = true;
+      renderer3d.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      // 3. OrbitControls
+      controls3d = new THREE.OrbitControls(camera3d, renderer3d.domElement);
+      controls3d.enableDamping = true;
+      controls3d.dampingFactor = 0.05;
+      controls3d.minDistance = 0.1;
+      controls3d.maxDistance = 1.5;
+      controls3d.target.set(0, 0, 0);
+
+      // 4. Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
+      scene3d.add(ambientLight);
+
+      const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.85);
+      dirLight1.position.set(0.5, 0.8, 0.5);
+      dirLight1.castShadow = true;
+      scene3d.add(dirLight1);
+
+      const dirLight2 = new THREE.DirectionalLight(0x38bdf8, 0.5);
+      dirLight2.position.set(-0.5, -0.4, -0.3);
+      scene3d.add(dirLight2);
+
+      const cyanPoint = new THREE.PointLight(0x06b6d4, 1.2, 1.0);
+      cyanPoint.position.set(0, 0.15, 0.1);
+      scene3d.add(cyanPoint);
+
+      // 5. Build Motor Assembly
+      build3DMotor();
+
+      // 6. Window resize handler
+      window.addEventListener('resize', onWindowResize3D);
+
+      // 7. Animation loop
+      animate3D();
+    }
+
+    function build3DMotor() {
+      motorGroup = new THREE.Group();
+      scene3d.add(motorGroup);
+
+      // Materials
+      const steelMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.8, roughness: 0.3 });
+      const darkSteelMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.7, roughness: 0.4 });
+      const copperMat = new THREE.MeshStandardMaterial({ color: 0xd97706, metalness: 0.85, roughness: 0.25 });
+      const northPoleMat = new THREE.MeshStandardMaterial({ color: 0xdc2626, metalness: 0.6, roughness: 0.35 }); // Red North
+      const southPoleMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, metalness: 0.6, roughness: 0.35 }); // Blue South
+      const brassMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.9, roughness: 0.2 });
+      const carbonMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.8 });
+
+      // --- A. STATOR OUTER CASING & FINS ---
+      statorGroup = new THREE.Group();
+      motorGroup.add(statorGroup);
+
+      // Cylindrical Frame
+      const casingGeom = new THREE.CylinderGeometry(0.082, 0.082, 0.12, 32, 1, true);
+      const casingMat = new THREE.MeshStandardMaterial({
+        color: 0x1e293b,
+        metalness: 0.85,
+        roughness: 0.25,
+        side: THREE.DoubleSide
+      });
+      const casingMesh = new THREE.Mesh(casingGeom, casingMat);
+      casingMesh.rotation.x = Math.PI / 2;
+      statorGroup.add(casingMesh);
+
+      // Cooling Fins around stator
+      const finGeom = new THREE.BoxGeometry(0.003, 0.012, 0.12);
+      for (let i = 0; i < 24; i++) {
+        const finAngle = (i / 24) * Math.PI * 2;
+        const fin = new THREE.Mesh(finGeom, casingMat);
+        fin.position.set(Math.cos(finAngle) * 0.086, Math.sin(finAngle) * 0.086, 0);
+        fin.rotation.z = finAngle;
+        statorGroup.add(fin);
+      }
+
+      // --- B. STATOR SALIENT POLES (N & S) & FIELD COILS ---
+      poleShoesGroup = new THREE.Group();
+      motorGroup.add(poleShoesGroup);
+
+      // North Pole Shoe (Top)
+      const poleNGeom = new THREE.BoxGeometry(0.045, 0.022, 0.10);
+      const poleN = new THREE.Mesh(poleNGeom, northPoleMat);
+      poleN.position.set(0, 0.062, 0);
+      poleShoesGroup.add(poleN);
+
+      // North Pole Coil (Copper Wrap)
+      const coilNGeom = new THREE.TorusGeometry(0.025, 0.008, 12, 24);
+      const coilN = new THREE.Mesh(coilNGeom, copperMat);
+      coilN.rotation.x = Math.PI / 2;
+      coilN.position.set(0, 0.065, 0);
+      poleShoesGroup.add(coilN);
+
+      // South Pole Shoe (Bottom)
+      const poleSGeom = new THREE.BoxGeometry(0.045, 0.022, 0.10);
+      const poleS = new THREE.Mesh(poleSGeom, southPoleMat);
+      poleS.position.set(0, -0.062, 0);
+      poleShoesGroup.add(poleS);
+
+      // South Pole Coil (Copper Wrap)
+      const coilS = new THREE.Mesh(coilNGeom, copperMat);
+      coilS.rotation.x = Math.PI / 2;
+      coilS.position.set(0, -0.065, 0);
+      poleShoesGroup.add(coilS);
+
+      // Pole labels "N" and "S" via small cylinders/cubes
+      const labelN = new THREE.Mesh(new THREE.BoxGeometry(0.01, 0.002, 0.01), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+      labelN.position.set(0, 0.05, 0.052);
+      poleShoesGroup.add(labelN);
+
+      // --- C. ROTOR GROUP (ROTOR LAMINATIONS, SLOTS, WINDINGS, SHAFT) ---
+      rotorGroup = new THREE.Group();
+      motorGroup.add(rotorGroup);
+
+      // Central Steel Shaft
+      const shaftGeom = new THREE.CylinderGeometry(0.010, 0.010, 0.22, 24);
+      const shaftMesh = new THREE.Mesh(shaftGeom, steelMat);
+      shaftMesh.rotation.x = Math.PI / 2;
+      rotorGroup.add(shaftMesh);
+
+      // Laminated Rotor Core (with 8 realistic slots)
+      const rotorCoreGeom = new THREE.CylinderGeometry(0.042, 0.042, 0.10, 32);
+      const rotorCoreMesh = new THREE.Mesh(rotorCoreGeom, darkSteelMat);
+      rotorCoreMesh.rotation.x = Math.PI / 2;
+      rotorGroup.add(rotorCoreMesh);
+
+      // 8 Slots and Copper Windings inside slots
+      armatureWindingsGroup = new THREE.Group();
+      rotorGroup.add(armatureWindingsGroup);
+
+      for (let i = 0; i < 8; i++) {
+        const slotAngle = (i / 8) * Math.PI * 2;
+        const x = Math.cos(slotAngle) * 0.038;
+        const y = Math.sin(slotAngle) * 0.038;
+
+        // Copper Conductor Rod in slot
+        const condGeom = new THREE.CylinderGeometry(0.0045, 0.0045, 0.102, 12);
+        const condMesh = new THREE.Mesh(condGeom, copperMat);
+        condMesh.rotation.x = Math.PI / 2;
+        condMesh.position.set(x, y, 0);
+        armatureWindingsGroup.add(condMesh);
+
+        // End-turn loop connecting opposing conductors
+        const endLoopGeom = new THREE.TorusGeometry(0.018, 0.004, 8, 16, Math.PI);
+        const endLoopFront = new THREE.Mesh(endLoopGeom, copperMat);
+        endLoopFront.position.set(0, 0, 0.052);
+        endLoopFront.rotation.z = slotAngle;
+        armatureWindingsGroup.add(endLoopFront);
+
+        const endLoopBack = new THREE.Mesh(endLoopGeom, copperMat);
+        endLoopBack.position.set(0, 0, -0.052);
+        endLoopBack.rotation.z = slotAngle + Math.PI;
+        armatureWindingsGroup.add(endLoopBack);
+      }
+
+      // --- D. COMMUTATOR CYLINDER WITH SEGMENTS ---
+      commutatorGroup = new THREE.Group();
+      rotorGroup.add(commutatorGroup);
+
+      const commGeom = new THREE.CylinderGeometry(0.022, 0.022, 0.028, 24);
+      const commMesh = new THREE.Mesh(commGeom, brassMat);
+      commMesh.rotation.x = Math.PI / 2;
+      commMesh.position.set(0, 0, 0.072);
+      commutatorGroup.add(commMesh);
+
+      // Commutator segment lines
+      const segLineGeom = new THREE.BoxGeometry(0.001, 0.023, 0.0285);
+      for (let i = 0; i < 12; i++) {
+        const segLine = new THREE.Mesh(segLineGeom, darkSteelMat);
+        segLine.position.set(0, 0, 0.072);
+        segLine.rotation.z = (i / 12) * Math.PI * 2;
+        commutatorGroup.add(segLine);
+      }
+
+      // --- E. CARBON BRUSHES & SPRING HOLDERS (Stationary) ---
+      brushGroup = new THREE.Group();
+      motorGroup.add(brushGroup);
+
+      // Left Brush
+      const brushGeom = new THREE.BoxGeometry(0.008, 0.012, 0.014);
+      const brushLeft = new THREE.Mesh(brushGeom, carbonMat);
+      brushLeft.position.set(-0.028, 0, 0.072);
+      brushGroup.add(brushLeft);
+
+      // Left Holder
+      const holderGeom = new THREE.BoxGeometry(0.012, 0.016, 0.016);
+      const holderLeft = new THREE.Mesh(holderGeom, brassMat);
+      holderLeft.position.set(-0.038, 0, 0.072);
+      brushGroup.add(holderLeft);
+
+      // Right Brush
+      const brushRight = new THREE.Mesh(brushGeom, carbonMat);
+      brushRight.position.set(0.028, 0, 0.072);
+      brushGroup.add(brushRight);
+
+      // Right Holder
+      const holderRight = new THREE.Mesh(holderGeom, brassMat);
+      holderRight.position.set(0.038, 0, 0.072);
+      brushGroup.add(holderRight);
+
+      // --- F. HALL SENSOR PCB (120 Degree Sensor Ring) ---
+      hallPcbGroup = new THREE.Group();
+      motorGroup.add(hallPcbGroup);
+
+      const pcbGeom = new THREE.RingGeometry(0.048, 0.068, 32);
+      const pcbMat = new THREE.MeshStandardMaterial({ color: 0x065f46, side: THREE.DoubleSide }); // Green PCB
+      const pcbMesh = new THREE.Mesh(pcbGeom, pcbMat);
+      pcbMesh.position.set(0, 0, -0.062);
+      hallPcbGroup.add(pcbMesh);
+
+      // 3 Hall Sensor ICs at 0°, 120°, 240°
+      const icGeom = new THREE.BoxGeometry(0.006, 0.008, 0.004);
+      const icMat = new THREE.MeshStandardMaterial({ color: 0x111827 });
+      const ledMatOn = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+      for (let i = 0; i < 3; i++) {
+        const angle = (i * 120) * (Math.PI / 180);
+        const ic = new THREE.Mesh(icGeom, icMat);
+        ic.position.set(Math.cos(angle) * 0.058, Math.sin(angle) * 0.058, -0.065);
+        ic.rotation.z = angle;
+        hallPcbGroup.add(ic);
+
+        const led = new THREE.Mesh(new THREE.SphereGeometry(0.002, 8, 8), ledMatOn);
+        led.position.set(Math.cos(angle) * 0.063, Math.sin(angle) * 0.063, -0.066);
+        hallPcbGroup.add(led);
+      }
+
+      // --- G. VECTOR OVERLAYS (Magnetic B, Current I, Force F) ---
+      vectorGroup = new THREE.Group();
+      motorGroup.add(vectorGroup);
+
+      // 1. Magnetic Field Arrows (Downward from North to South)
+      arrowField1 = new THREE.ArrowHelper(new THREE.Vector3(0, -1, 0), new THREE.Vector3(-0.015, 0.035, 0.02), 0.065, 0x06b6d4, 0.012, 0.008);
+      arrowField2 = new THREE.ArrowHelper(new THREE.Vector3(0, -1, 0), new THREE.Vector3(0.015, 0.035, 0.02), 0.065, 0x06b6d4, 0.012, 0.008);
+      vectorGroup.add(arrowField1);
+      vectorGroup.add(arrowField2);
+
+      // 2. Current Arrows on Rotor Conductors (Slot 1 Out +Z, Slot 2 In -Z)
+      arrowCurrent1 = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), new THREE.Vector3(-0.032, 0.025, -0.03), 0.06, 0xfacc15, 0.012, 0.008);
+      arrowCurrent2 = new THREE.ArrowHelper(new THREE.Vector3(0, 0, -1), new THREE.Vector3(0.032, -0.025, 0.03), 0.06, 0xfacc15, 0.012, 0.008);
+      rotorGroup.add(arrowCurrent1);
+      rotorGroup.add(arrowCurrent2);
+
+      // 3. Lorentz Force Arrows (Tangential pushing rotor clockwise)
+      arrowForce1 = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(-0.032, 0.025, 0), 0.045, 0x10b981, 0.014, 0.010);
+      arrowForce2 = new THREE.ArrowHelper(new THREE.Vector3(-1, 0, 0), new THREE.Vector3(0.032, -0.025, 0), 0.045, 0x10b981, 0.014, 0.010);
+      rotorGroup.add(arrowForce1);
+      rotorGroup.add(arrowForce2);
+
+      // --- H. MAGNETIC FLUX CURVE LINES ---
+      fluxLinesGroup = new THREE.Group();
+      vectorGroup.add(fluxLinesGroup);
+
+      const fluxLineMat = new THREE.LineDashedMaterial({
+        color: 0x38bdf8,
+        dashSize: 0.008,
+        gapSize: 0.004,
+        linewidth: 2
+      });
+
+      for (let i = -3; i <= 3; i++) {
+        const points = [];
+        const xOffset = i * 0.012;
+        points.push(new THREE.Vector3(xOffset, 0.055, 0));
+        points.push(new THREE.Vector3(xOffset * 0.85, 0.02, 0));
+        points.push(new THREE.Vector3(xOffset * 0.85, -0.02, 0));
+        points.push(new THREE.Vector3(xOffset, -0.055, 0));
+        const curveGeom = new THREE.BufferGeometry().setFromPoints(points);
+        const line = new THREE.Line(curveGeom, fluxLineMat);
+        line.computeLineDistances();
+        fluxLinesGroup.add(line);
+      }
+    }
+
+    // --- 3D ANIMATION LOOP ---
+    let lastTime3D = performance.now();
+
+    function animate3D() {
+      requestAnimationFrame(animate3D);
+
+      const now = performance.now();
+      const delta = (now - lastTime3D) / 1000;
+      lastTime3D = now;
+
+      if (state.motorRunning && rotorGroup) {
+        // Calculate angular delta based on RPM
+        const rpm = state.motorSpeedRpm * state.motorDirection;
+        const omega = (rpm * 2 * Math.PI) / 60; // rad/s
+        const deltaAngle = omega * delta;
+
+        state.rotorAngle += deltaAngle;
+        rotorGroup.rotation.z = state.rotorAngle;
+
+        // Update HUD readouts
+        const deg = ((state.rotorAngle * 180 / Math.PI) % 360 + 360) % 360;
+        const hudRotor = document.getElementById('hudRotorAngle');
+        const hudElec = document.getElementById('hudElecAngle');
+        if (hudRotor) hudRotor.innerText = deg.toFixed(1) + '°';
+        if (hudElec) hudElec.innerText = ((deg * 2) % 360).toFixed(1) + '°';
+      }
+
+      // Pulse flux lines animation
+      if (fluxLinesGroup && fluxLinesGroup.visible) {
+        fluxLinesGroup.children.forEach((l, idx) => {
+          l.material.dashSize = 0.008 + Math.sin(now * 0.005 + idx) * 0.002;
+        });
+      }
+
+      if (controls3d) controls3d.update();
+      if (renderer3d && scene3d && camera3d) {
+        renderer3d.render(scene3d, camera3d);
+      }
+    }
+
+    function onWindowResize3D() {
+      const container = document.getElementById('canvas3dContainer');
+      if (!container || !renderer3d || !camera3d) return;
+
+      const width = container.clientWidth;
+      const height = container.clientHeight || 520;
+
+      camera3d.aspect = width / height;
+      camera3d.updateProjectionMatrix();
+      renderer3d.setSize(width, height);
+    }
+
+    // --- 3D CAMERA PRESETS ---
+    function setCameraView(preset) {
+      if (!camera3d || !controls3d) return;
+      if (preset === 'iso') {
+        camera3d.position.set(0.28, 0.22, 0.35);
+      } else if (preset === 'front') {
+        camera3d.position.set(0, 0, 0.40);
+      } else if (preset === 'top') {
+        camera3d.position.set(0, 0.40, 0.001);
+      } else if (preset === 'side') {
+        camera3d.position.set(0.40, 0, 0);
+      }
+      controls3d.target.set(0, 0, 0);
+      controls3d.update();
+    }
+
+    function resetCamera() {
+      setCameraView('iso');
+    }
+
+    // --- 3D INTERACTIVE CONTROLS ---
+    function toggleMotorPlay() {
+      state.motorRunning = !state.motorRunning;
+      const btn = document.getElementById('btnMotorPlay');
+      const text = document.getElementById('btnMotorPlayText');
+      const globalStatus = document.getElementById('globalMotorStatus');
+
+      if (state.motorRunning) {
+        if (btn) btn.className = 'px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-1.5 transition';
+        if (text) text.innerText = 'Durdur';
+        if (globalStatus) {
+          globalStatus.innerText = 'ÇALIŞIYOR';
+          globalStatus.className = 'font-bold text-emerald-400';
+        }
+      } else {
+        if (btn) btn.className = 'px-3 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow-lg shadow-amber-600/30 flex items-center justify-center gap-1.5 transition';
+        if (text) text.innerText = 'Başlat';
+        if (globalStatus) {
+          globalStatus.innerText = 'DURDU';
+          globalStatus.className = 'font-bold text-amber-400';
+        }
+      }
+    }
+
+    function stepMotorCommutation() {
+      state.motorRunning = false;
+      const stepAngle = (60 * Math.PI / 180) * state.motorDirection;
+      state.rotorAngle += stepAngle;
+      if (rotorGroup) rotorGroup.rotation.z = state.rotorAngle;
+
+      const deg = ((state.rotorAngle * 180 / Math.PI) % 360 + 360) % 360;
+      const hudRotor = document.getElementById('hudRotorAngle');
+      if (hudRotor) hudRotor.innerText = deg.toFixed(1) + '°';
+
+      // Update play button to "Başlat"
+      const text = document.getElementById('btnMotorPlayText');
+      if (text) text.innerText = 'Başlat';
+    }
+
+    function resetMotorPosition() {
+      state.rotorAngle = 0;
+      if (rotorGroup) rotorGroup.rotation.z = 0;
+      const hudRotor = document.getElementById('hudRotorAngle');
+      if (hudRotor) hudRotor.innerText = '0.0°';
+    }
+
+    function setMotorDirection(dir) {
+      state.motorDirection = dir;
+      const btnCW = document.getElementById('btnDirCW');
+      const btnCCW = document.getElementById('btnDirCCW');
+      const globalDir = document.getElementById('globalDirVal');
+
+      if (dir === 1) {
+        btnCW.className = 'px-2.5 py-1.5 rounded-lg bg-cyan-900/60 border border-cyan-500 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1 transition';
+        btnCCW.className = 'px-2.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 font-bold text-xs flex items-center justify-center gap-1 transition';
+        if (globalDir) globalDir.innerText = 'CW (Saat Yönü)';
+        if (arrowForce1) arrowForce1.setDirection(new THREE.Vector3(1, 0, 0));
+        if (arrowForce2) arrowForce2.setDirection(new THREE.Vector3(-1, 0, 0));
+      } else {
+        btnCW.className = 'px-2.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 font-bold text-xs flex items-center justify-center gap-1 transition';
+        btnCCW.className = 'px-2.5 py-1.5 rounded-lg bg-cyan-900/60 border border-cyan-500 text-cyan-300 font-bold text-xs flex items-center justify-center gap-1 transition';
+        if (globalDir) globalDir.innerText = 'CCW (Ters Yön)';
+        if (arrowForce1) arrowForce1.setDirection(new THREE.Vector3(-1, 0, 0));
+        if (arrowForce2) arrowForce2.setDirection(new THREE.Vector3(1, 0, 0));
+      }
+    }
+
+    function updateMotorSpeed(val) {
+      state.motorSpeedRpm = parseFloat(val);
+      const label = document.getElementById('labelSpeed');
+      const globalRpm = document.getElementById('globalRpmVal');
+      if (label) label.innerText = val + ' d/d';
+      if (globalRpm) globalRpm.innerText = val + ' d/d';
+      recalcEngineeringValues();
+    }
+
+    function updateMotorCurrent(val) {
+      state.armatureCurrent = parseFloat(val);
+      const label = document.getElementById('labelCurrent');
+      const hud = document.getElementById('hudCurrent');
+      if (label) label.innerText = parseFloat(val).toFixed(1) + ' A';
+      if (hud) hud.innerText = parseFloat(val).toFixed(1) + ' A';
+      recalcEngineeringValues();
+    }
+
+    function updateMotorFlux(val) {
+      state.fluxDensity = parseFloat(val);
+      const label = document.getElementById('labelFlux');
+      const hud = document.getElementById('hudFlux');
+      const globalFlux = document.getElementById('globalFluxVal');
+      if (label) label.innerText = parseFloat(val).toFixed(2) + ' T';
+      if (hud) hud.innerText = parseFloat(val).toFixed(2) + ' T';
+      if (globalFlux) globalFlux.innerText = parseFloat(val).toFixed(2) + ' T';
+      recalcEngineeringValues();
+    }
+
+    function updateExplodedView(val) {
+      state.explodedRatio = parseFloat(val) / 100.0;
+      const label = document.getElementById('labelExplode');
+      if (label) label.innerText = val + '%';
+
+      const d = state.explodedRatio * 0.12;
+
+      // Displace parts along Z
+      if (statorGroup) statorGroup.position.z = -d * 0.5;
+      if (poleShoesGroup) poleShoesGroup.position.z = -d * 0.3;
+      if (rotorGroup) rotorGroup.position.z = 0;
+      if (commutatorGroup) commutatorGroup.position.z = d * 0.6;
+      if (brushGroup) brushGroup.position.z = d * 0.8;
+      if (hallPcbGroup) hallPcbGroup.position.z = -d * 0.9;
+    }
+
+    function toggleVectorLayer(layer, isVisible) {
+      state.showVectors[layer] = isVisible;
+      if (layer === 'field') {
+        if (arrowField1) arrowField1.visible = isVisible;
+        if (arrowField2) arrowField2.visible = isVisible;
+      } else if (layer === 'current') {
+        if (arrowCurrent1) arrowCurrent1.visible = isVisible;
+        if (arrowCurrent2) arrowCurrent2.visible = isVisible;
+      } else if (layer === 'force') {
+        if (arrowForce1) arrowForce1.visible = isVisible;
+        if (arrowForce2) arrowForce2.visible = isVisible;
+      } else if (layer === 'fluxLines') {
+        if (fluxLinesGroup) fluxLinesGroup.visible = isVisible;
+      }
+    }
+
+    function toggleTransparentCasing(isTrans) {
+      state.transparentCasing = isTrans;
+      if (statorGroup) {
+        statorGroup.children.forEach(child => {
+          if (child.material) {
+            child.material.transparent = isTrans;
+            child.material.opacity = isTrans ? 0.25 : 1.0;
+          }
+        });
+      }
+    }
+
+    function toggleCutaway(isCut) {
+      state.cutawayMode = isCut;
+      if (statorGroup) {
+        statorGroup.position.x = isCut ? 0.04 : 0;
+      }
+    }
+
+    function recalcEngineeringValues() {
+      const B = state.fluxDensity;
+      const I = state.armatureCurrent;
+      const l = state.conductorLength;
+      const r = state.rotorRadius;
+      const rpm = state.motorSpeedRpm;
+      const omega = (rpm * 2 * Math.PI) / 60;
+
+      // F = B * I * l
+      const F = B * I * l;
+      // T = 2 * r * F (two active conductor sides)
+      const T = 2 * r * F;
+      // P_m = T * omega
+      const P = T * omega;
+      // E = ke * omega
+      const ke = 0.068;
+      const E = ke * omega;
+
+      const elF = document.getElementById('calcForceVal');
+      const elT = document.getElementById('calcTorqueVal');
+      const elP = document.getElementById('calcPowerVal');
+      const elE = document.getElementById('calcEmfVal');
+      const hudForce = document.getElementById('hudForce');
+      const hudOmega = document.getElementById('hudOmega');
+
+      if (elF) elF.innerText = F.toFixed(2) + ' N';
+      if (elT) elT.innerText = T.toFixed(2) + ' N·m';
+      if (elP) elP.innerText = P.toFixed(1) + ' W';
+      if (elE) elE.innerText = E.toFixed(2) + ' V';
+      if (hudForce) hudForce.innerText = F.toFixed(2) + ' N';
+      if (hudOmega) hudOmega.innerText = omega.toFixed(1) + ' rad/s';
+    }
+
+    // =========================================================================
+    // 2D DIRECTION DETERMINATION LAB ENGINE (NOTEBOOK PAGE 1 TWIN)
+    // =========================================================================
+    function initDirection2DLab() {
+      drawDirection2DCanvas();
+    }
+
+    function drawDirection2DCanvas() {
+      const canvas = document.getElementById('direction2dCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth || 450;
+      const h = canvas.height = canvas.parentElement.clientHeight || 380;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const cx = w / 2;
+      const cy = h / 2;
+      const statorR = Math.min(w, h) * 0.40;
+      const rotorR = statorR * 0.58;
+
+      // 1. Draw Stator Outer Ring
+      ctx.beginPath();
+      ctx.arc(cx, cy, statorR, 0, Math.PI * 2);
+      ctx.lineWidth = 14;
+      ctx.strokeStyle = '#334155';
+      ctx.stroke();
+
+      // 2. Draw Poles (North & South)
+      const poleH = statorR * 0.32;
+      const poleW = statorR * 0.85;
+
+      const isNorthTop = state.dirLab.northOnTop;
+
+      // Top Pole
+      ctx.fillStyle = isNorthTop ? '#b91c1c' : '#1d4ed8'; // Red if N, Blue if S
+      ctx.beginPath();
+      ctx.arc(cx, cy, statorR - 7, -Math.PI * 0.78, -Math.PI * 0.22);
+      ctx.arc(cx, cy, statorR - 7 - poleH, -Math.PI * 0.22, -Math.PI * 0.78, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#f8fafc';
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 16px Plus Jakarta Sans, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(isNorthTop ? 'KUTUP (N)' : 'KUTUP (S)', cx, cy - statorR + 22);
+
+      // Bottom Pole
+      ctx.fillStyle = isNorthTop ? '#1d4ed8' : '#b91c1c';
+      ctx.beginPath();
+      ctx.arc(cx, cy, statorR - 7, Math.PI * 0.22, Math.PI * 0.78);
+      ctx.arc(cx, cy, statorR - 7 - poleH, Math.PI * 0.78, Math.PI * 0.22, true);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#f8fafc';
+      ctx.stroke();
+
+      ctx.fillText(isNorthTop ? 'KUTUP (S)' : 'KUTUP (N)', cx, cy + statorR - 22);
+
+      // 3. Draw Magnetic Flux Vector Lines (B)
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.45)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 4]);
+      const fluxDir = isNorthTop ? 1 : -1; // 1: down, -1: up
+
+      for (let x = -statorR * 0.35; x <= statorR * 0.35; x += 24) {
+        ctx.beginPath();
+        ctx.moveTo(cx + x, cy - (statorR - poleH - 8) * fluxDir);
+        ctx.lineTo(cx + x, cy + (statorR - poleH - 8) * fluxDir);
+        ctx.stroke();
+
+        // Arrow head for B
+        const arrowY = cy + 10 * fluxDir;
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.moveTo(cx + x, arrowY + 8 * fluxDir);
+        ctx.lineTo(cx + x - 4, arrowY);
+        ctx.lineTo(cx + x + 4, arrowY);
+        ctx.closePath();
+        ctx.fill();
+      }
+      ctx.setLineDash([]);
+
+      // Label B
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 13px JetBrains Mono';
+      ctx.fillText(isNorthTop ? 'Akı B (↓)' : 'Akı B (↑)', cx + statorR * 0.52, cy);
+
+      // 4. Draw Rotor Core
+      ctx.beginPath();
+      ctx.arc(cx, cy, rotorR, 0, Math.PI * 2);
+      ctx.fillStyle = '#1e293b';
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#64748b';
+      ctx.stroke();
+
+      // Shaft circle
+      ctx.beginPath();
+      ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+      ctx.fillStyle = '#94a3b8';
+      ctx.fill();
+
+      // 5. Draw Rotor Slots (Slot 1 at Top-Left, Slot 2 at Bottom-Right or Top/Bottom)
+      const slotDist = rotorR * 0.65;
+      const s1x = cx - slotDist * 0.45;
+      const s1y = cy - slotDist * 0.70;
+      const s2x = cx + slotDist * 0.45;
+      const s2y = cy + slotDist * 0.70;
+
+      // Slot 1
+      ctx.beginPath();
+      ctx.arc(s1x, s1y, 14, 0, Math.PI * 2);
+      ctx.fillStyle = '#0f172a';
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#f59e0b';
+      ctx.stroke();
+
+      // Slot 2
+      ctx.beginPath();
+      ctx.arc(s2x, s2y, 14, 0, Math.PI * 2);
+      ctx.fillStyle = '#0f172a';
+      ctx.fill();
+      ctx.strokeStyle = '#f59e0b';
+      ctx.stroke();
+
+      // Conductor Symbols: Dot (out of page) or Cross (into page)
+      const isOutSlot1 = state.dirLab.currentOutSlot1;
+
+      // Slot 1 Symbol
+      ctx.fillStyle = '#facc15';
+      ctx.font = 'bold 14px JetBrains Mono';
+      ctx.fillText(isOutSlot1 ? '⊙' : '⊗', s1x, s1y + 1);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 11px JetBrains Mono';
+      ctx.fillText('1', s1x - 18, s1y - 12);
+
+      // Slot 2 Symbol
+      ctx.fillStyle = '#facc15';
+      ctx.font = 'bold 14px JetBrains Mono';
+      ctx.fillText(isOutSlot1 ? '⊗' : '⊙', s2x, s2y + 1);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 11px JetBrains Mono';
+      ctx.fillText('2', s2x + 18, s2y + 12);
+
+      // 6. Draw Lorentz Force Arrows (F1 and F2)
+      // If B is down (1) and I1 is out (+z): F1 = z x (-y) = +x (Right)
+      // If B is up (-1) and I1 is out (+z): F1 = z x (+y) = -x (Left)
+      // If I1 is in (-z): F1 flips
+      const f1Dir = (isNorthTop ? 1 : -1) * (isOutSlot1 ? 1 : -1); // 1: right, -1: left
+      const f2Dir = -f1Dir; // Newton 3rd law / symmetric
+
+      // Arrow F1 at Slot 1
+      drawArrow2D(ctx, s1x, s1y, s1x + f1Dir * 55, s1y, '#10b981', 'F₁');
+      // Arrow F2 at Slot 2
+      drawArrow2D(ctx, s2x, s2y, s2x + f2Dir * 55, s2y, '#10b981', 'F₂');
+
+      // 7. Draw Rotation Direction Arc & Badge
+      const isCW = (f1Dir === 1);
+      ctx.beginPath();
+      ctx.arc(cx, cy, rotorR + 18, isCW ? -0.8 : 0.8, isCW ? 0.8 : -0.8, !isCW);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#38bdf8';
+      ctx.stroke();
+
+      // Arrow on rotation arc
+      const arcEndX = cx + Math.cos(isCW ? 0.8 : -0.8) * (rotorR + 18);
+      const arcEndY = cy + Math.sin(isCW ? 0.8 : -0.8) * (rotorR + 18);
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath();
+      ctx.arc(arcEndX, arcEndY, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Update Text Badges & Analysis
+      const badge = document.getElementById('badgeRotationDir');
+      if (badge) {
+        if (isCW) {
+          badge.className = 'text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-950 border border-emerald-700 text-emerald-300';
+          badge.innerHTML = '<i class="fa-solid fa-rotate-right"></i> DÖNÜŞ: SAAT İBRELERİ YÖNÜNDE (CW)';
+        } else {
+          badge.className = 'text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-rose-950 border border-rose-700 text-rose-300';
+          badge.innerHTML = '<i class="fa-solid fa-rotate-left"></i> DÖNÜŞ: SAATİN TERSİ YÖNÜNDE (CCW)';
+        }
+      }
+
+      // Update Analysis Text in HTML
+      updateDirectionAnalysis(isNorthTop, isOutSlot1, f1Dir, isCW);
+    }
+
+    function drawArrow2D(ctx, fromX, fromY, toX, toY, color, label) {
+      const headlen = 8;
+      const angle = Math.atan2(toY - fromY, toX - fromX);
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 3;
+
+      ctx.beginPath();
+      ctx.moveTo(fromX, fromY);
+      ctx.lineTo(toX, toY);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(toX, toY);
+      ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.font = 'bold 12px JetBrains Mono';
+      ctx.fillText(label, toX + (toX > fromX ? 8 : -16), toY - 4);
+    }
+
+    function updateDirectionAnalysis(isNTop, isOut1, f1Dir, isCW) {
+      const elSlot1 = document.getElementById('analysisSlot1');
+      const elSlot2 = document.getElementById('analysisSlot2');
+      const elTorque = document.getElementById('analysisTorque');
+
+      const bDirText = isNTop ? 'AŞAĞI (↓, -y)' : 'YUKARI (↑, +y)';
+      const i1Text = isOut1 ? 'sayfa düzleminden DIŞARI (⊙, +z)' : 'sayfa düzlemine İÇERİ (⊗, -z)';
+      const f1Text = (f1Dir === 1) ? 'SOLDAN SAĞA (→, +x)' : 'SAĞDAN SOLA (←, -x)';
+      const f2Text = (f1Dir === 1) ? 'SAĞDAN SOLA (←, -x)' : 'SOLDAN SAĞA (→, +x)';
+
+      if (elSlot1) {
+        elSlot1.innerHTML = `1 nolu olukta akım <strong>${i1Text}</strong> doğrudur. Manyetik alan $\vec{B}$ <strong>${bDirText}</strong> yönlüdür.<br>Vidalama kuralına göre: $\vec{F}_1 = i(\vec{l}_1 \times \vec{B})$ işlemi başparmağı <strong class="text-emerald-400">${f1Text}</strong> yöneltir!`;
+      }
+      if (elSlot2) {
+        elSlot2.innerHTML = `2 nolu olukta akım karşı yöndedir. Manyetik alan aynı olduğundan kuvvet <strong class="text-emerald-400">${f2Text}</strong> yöneltir!`;
+      }
+      if (elTorque) {
+        elTorque.innerHTML = `Kuvvet çiftinin mil merkezine göre oluşturduğu net döndürme momenti:<br>$\vec{T} = \vec{r}_1 \times \vec{F}_1 + \vec{r}_2 \times \vec{F}_2 \implies$ <strong class="text-cyan-300">${isCW ? 'SAAT İBRELERİ YÖNÜNDE (CW)' : 'SAATİN TERSİ YÖNÜNDE (CCW)'}</strong>`;
+      }
+      renderKaTeX();
+    }
+
+    function flipMagneticPoles() {
+      state.dirLab.northOnTop = !state.dirLab.northOnTop;
+      drawDirection2DCanvas();
+    }
+
+    function flipCurrentDirection() {
+      state.dirLab.currentOutSlot1 = !state.dirLab.currentOutSlot1;
+      drawDirection2DCanvas();
+    }
+
+    function resetDirectionLab() {
+      state.dirLab.northOnTop = true;
+      state.dirLab.currentOutSlot1 = true;
+      drawDirection2DCanvas();
+    }
+
+    function syncDirectionWith3D() {
+      const isCW = (state.dirLab.northOnTop === state.dirLab.currentOutSlot1);
+      setMotorDirection(isCW ? 1 : -1);
+      switchTab('tab-3d-lab');
+    }
+
+    // =========================================================================
+    // BLDC 6-STEP INVERTER & OSCILLOSCOPE ENGINE
+    // =========================================================================
+    const bldcStepData = [
+      { step: 1, angle: '0° - 60°', h1: 1, h2: 0, h3: 1, pos: 'A', neg: 'B', float: 'C', name: 'A+ B-' },
+      { step: 2, angle: '60° - 120°', h1: 1, h2: 0, h3: 0, pos: 'A', neg: 'C', float: 'B', name: 'A+ C-' },
+      { step: 3, angle: '120° - 180°', h1: 1, h2: 1, h3: 0, pos: 'B', neg: 'C', float: 'A', name: 'B+ C-' },
+      { step: 4, angle: '180° - 240°', h1: 0, h2: 1, h3: 0, pos: 'B', neg: 'A', float: 'C', name: 'B+ A-' },
+      { step: 5, angle: '240° - 300°', h1: 0, h2: 1, h3: 1, pos: 'C', neg: 'A', float: 'B', name: 'C+ A-' },
+      { step: 6, angle: '300° - 360°', h1: 0, h2: 0, h3: 1, pos: 'C', neg: 'B', float: 'A', name: 'C+ B-' }
+    ];
+
+    function initBldcLab() {
+      drawBldcBridgeCanvas();
+      drawBldcOscilloscope();
+    }
+
+    function drawBldcBridgeCanvas() {
+      const canvas = document.getElementById('bldcBridgeCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth || 650;
+      const h = canvas.height = canvas.parentElement.clientHeight || 320;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const curStep = bldcStepData[state.bldc.step - 1];
+
+      // Update table highlight
+      for (let i = 1; i <= 6; i++) {
+        const row = document.getElementById(`row-step-${i}`);
+        if (row) {
+          if (i === state.bldc.step) {
+            row.className = 'bg-cyan-950/70 text-cyan-300 font-bold border-l-4 border-cyan-400';
+          } else {
+            row.className = '';
+          }
+        }
+      }
+
+      const label = document.getElementById('bldcCurrentStepLabel');
+      if (label) label.innerText = `Adım ${curStep.step} (${curStep.name})`;
+
+      // Draw DC Rail Lines
+      const topRailY = 40;
+      const botRailY = 280;
+      const leftX = 50;
+      const rightX = w - 50;
+
+      ctx.strokeStyle = '#ef4444'; // +VDC Red
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(leftX, topRailY);
+      ctx.lineTo(rightX, topRailY);
+      ctx.stroke();
+
+      ctx.fillStyle = '#ef4444';
+      ctx.font = 'bold 12px JetBrains Mono';
+      ctx.fillText('+VDC (Bara)', leftX + 10, topRailY - 10);
+
+      ctx.strokeStyle = '#3b82f6'; // -VDC Blue
+      ctx.beginPath();
+      ctx.moveTo(leftX, botRailY);
+      ctx.lineTo(rightX, botRailY);
+      ctx.stroke();
+
+      ctx.fillStyle = '#3b82f6';
+      ctx.fillText('GND / -VDC', leftX + 10, botRailY + 20);
+
+      // 3 Inverter Legs: Phase A, Phase B, Phase C
+      const legSpacing = (rightX - leftX) / 4;
+      const phases = ['A', 'B', 'C'];
+
+      phases.forEach((ph, idx) => {
+        const legX = leftX + (idx + 1) * legSpacing;
+        const isUpperOn = (curStep.pos === ph);
+        const isLowerOn = (curStep.neg === ph);
+
+        // Vertical leg wire
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(legX, topRailY);
+        ctx.lineTo(legX, botRailY);
+        ctx.stroke();
+
+        // Upper Switch (Q1, Q3, Q5)
+        const qUpperY = 90;
+        drawMosfetSymbol(ctx, legX, qUpperY, isUpperOn, `${ph}+ (Q${idx*2+1})`);
+
+        // Lower Switch (Q2, Q4, Q6)
+        const qLowerY = 220;
+        drawMosfetSymbol(ctx, legX, qLowerY, isLowerOn, `${ph}- (Q${idx*2+2})`);
+
+        // Center tap to Motor Phase Terminal
+        const midY = (topRailY + botRailY) / 2;
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = 'bold 13px JetBrains Mono';
+        ctx.fillText(`Faz ${ph}`, legX + 15, midY - 6);
+
+        // Highlight active conduction current
+        if (isUpperOn) {
+          ctx.strokeStyle = '#10b981';
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(legX, topRailY);
+          ctx.lineTo(legX, midY);
+          ctx.stroke();
+
+          // Green Current Arrow into phase
+          drawSmallArrow(ctx, legX, midY - 20, 0, 1, '#10b981');
+        } else if (isLowerOn) {
+          ctx.strokeStyle = '#f59e0b';
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(legX, midY);
+          ctx.lineTo(legX, botRailY);
+          ctx.stroke();
+
+          // Orange Current Arrow out of phase
+          drawSmallArrow(ctx, legX, midY + 30, 0, 1, '#f59e0b');
+        }
+      });
+    }
+
+    function drawMosfetSymbol(ctx, x, y, isOn, label) {
+      ctx.save();
+      ctx.fillStyle = isOn ? 'rgba(16, 185, 129, 0.25)' : 'rgba(30, 41, 59, 0.8)';
+      ctx.strokeStyle = isOn ? '#10b981' : '#64748b';
+      ctx.lineWidth = isOn ? 3 : 1.5;
+
+      ctx.beginPath();
+      ctx.roundRect(x - 24, y - 18, 48, 36, 6);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = isOn ? '#34d399' : '#94a3b8';
+      ctx.font = 'bold 11px JetBrains Mono';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, x, y - 4);
+
+      ctx.font = '10px JetBrains Mono';
+      ctx.fillStyle = isOn ? '#10b981' : '#64748b';
+      ctx.fillText(isOn ? 'ON (İletimde)' : 'OFF (Kesimde)', x, y + 9);
+      ctx.restore();
+    }
+
+    function drawSmallArrow(ctx, x, y, dx, dy, color) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(x + dx * 8, y + dy * 8);
+      ctx.lineTo(x - dy * 5, y + dx * 5);
+      ctx.lineTo(x + dy * 5, y - dx * 5);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawBldcOscilloscope() {
+      const canvas = document.getElementById('bldcOscilloscopeCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth || 800;
+      const h = canvas.height = canvas.parentElement.clientHeight || 220;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid Lines
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = 0; y < h; y += 35) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      // Draw 3-Phase Trapezoidal Back-EMF Waves
+      const midY = h / 2;
+      const amp = 45;
+
+      const colors = ['#38bdf8', '#34d399', '#f59e0b']; // Ph A, Ph B, Ph C
+      const phaseOffsets = [0, (2 * Math.PI) / 3, (4 * Math.PI) / 3];
+
+      phases = ['e_A (Mavi)', 'e_B (Yeşil)', 'e_C (Sarı)'];
+
+      for (let p = 0; p < 3; p++) {
+        ctx.strokeStyle = colors[p];
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+
+        for (let x = 0; x < w; x++) {
+          const theta = (x / w) * (Math.PI * 4) + phaseOffsets[p];
+          // Trapezoidal shape approximation
+          const sinVal = Math.sin(theta);
+          let trapVal = 0;
+          if (sinVal > 0.5) trapVal = 1;
+          else if (sinVal < -0.5) trapVal = -1;
+          else trapVal = sinVal / 0.5;
+
+          const y = midY - trapVal * amp;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+
+      // Current Commutation marker cursor line
+      const curX = ((state.bldc.step - 0.5) / 6) * (w / 2);
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(curX, 0);
+      ctx.lineTo(curX, h);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#ef4444';
+      ctx.font = 'bold 11px JetBrains Mono';
+      ctx.fillText(`Adım ${state.bldc.step}`, curX + 5, 20);
+    }
+
+    function nextBldcStep() {
+      if (state.bldc.direction === 1) {
+        state.bldc.step = (state.bldc.step % 6) + 1;
+      } else {
+        state.bldc.step = state.bldc.step === 1 ? 6 : state.bldc.step - 1;
+      }
+      drawBldcBridgeCanvas();
+      drawBldcOscilloscope();
+    }
+
+    function prevBldcStep() {
+      if (state.bldc.direction === 1) {
+        state.bldc.step = state.bldc.step === 1 ? 6 : state.bldc.step - 1;
+      } else {
+        state.bldc.step = (state.bldc.step % 6) + 1;
+      }
+      drawBldcBridgeCanvas();
+      drawBldcOscilloscope();
+    }
+
+    function toggleBldcAutoPlay() {
+      state.bldc.autoPlay = !state.bldc.autoPlay;
+      const btn = document.getElementById('btnBldcAutoPlay');
+      if (state.bldc.autoPlay) {
+        if (btn) btn.className = 'px-3.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold transition';
+        if (btn) btn.innerHTML = '<i class="fa-solid fa-pause"></i> Durdur';
+        state.bldc.timer = setInterval(nextBldcStep, 700);
+      } else {
+        if (btn) btn.className = 'px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition';
+        if (btn) btn.innerHTML = '<i class="fa-solid fa-play"></i> Otomatik Komütasyon';
+        clearInterval(state.bldc.timer);
+      }
+    }
+
+    function setBldcDirection(dir) {
+      state.bldc.direction = dir;
+      const btnCW = document.getElementById('bldcDirCW');
+      const btnCCW = document.getElementById('bldcDirCCW');
+      if (dir === 1) {
+        btnCW.className = 'px-2.5 py-1 rounded bg-cyan-900 border border-cyan-600 text-cyan-300 font-bold transition';
+        btnCCW.className = 'px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-slate-400 font-bold transition';
+      } else {
+        btnCW.className = 'px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-slate-400 font-bold transition';
+        btnCCW.className = 'px-2.5 py-1 rounded bg-cyan-900 border border-cyan-600 text-cyan-300 font-bold transition';
+      }
+    }
+
+    // =========================================================================
+    // UNIVERSAL MOTOR AC/DC CALCULATOR & PHASOR ENGINE
+    // =========================================================================
+    function calculateUniversalMotor() {
+      const V = parseFloat(document.getElementById('sliderUnivV').value);
+      const I = parseFloat(document.getElementById('sliderUnivI').value);
+      const R = parseFloat(document.getElementById('sliderUnivR').value);
+      const X = parseFloat(document.getElementById('sliderUnivX').value);
+      const Nac = parseFloat(document.getElementById('sliderUnivNac').value);
+
+      document.getElementById('labelUnivV').innerText = V.toFixed(0) + ' V';
+      document.getElementById('labelUnivI').innerText = I.toFixed(1) + ' A';
+      document.getElementById('labelUnivR').innerText = R.toFixed(1) + ' Ω';
+      document.getElementById('labelUnivX').innerText = X.toFixed(1) + ' Ω';
+      document.getElementById('labelUnivNac').innerText = Nac.toFixed(0) + ' d/d';
+
+      // V^2 = (Eac + I*R)^2 + (I*X)^2
+      const IX = I * X;
+      const IR = I * R;
+      const underRoot = (V * V) - (IX * IX);
+
+      let Eac = 0;
+      let cosPhi = 0;
+      let Edc = 0;
+      let Ndc = 0;
+
+      if (underRoot > 0) {
+        Eac = Math.max(0, Math.sqrt(underRoot) - IR);
+        cosPhi = (Eac + IR) / V;
+        Edc = Math.max(0, V - IR);
+        Ndc = (Eac > 0) ? Nac * (Edc / Eac) : 0;
+      }
+
+      const Pin = V * I * cosPhi;
+      const Pout = Eac * I;
+      const eff = (Pin > 0) ? (Pout / Pin) * 100 : 0;
+
+      document.getElementById('resUnivEac').innerText = Eac.toFixed(1) + ' V';
+      document.getElementById('resUnivEdc').innerText = Edc.toFixed(1) + ' V';
+      document.getElementById('resUnivCosPhi').innerText = cosPhi.toFixed(3);
+      document.getElementById('resUnivNdc').innerText = Ndc.toFixed(0) + ' d/d';
+      document.getElementById('resUnivPin').innerText = Pin.toFixed(1) + ' W';
+      document.getElementById('resUnivEff').innerText = eff.toFixed(1) + ' %';
+
+      drawUniversalPhasor(V, IR, IX, Eac);
+    }
+
+    function drawUniversalPhasor(V = 120, IR = 30, IX = 48, Eac = 80) {
+      const canvas = document.getElementById('universalPhasorCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth || 450;
+      const h = canvas.height = canvas.parentElement.clientHeight || 320;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const originX = 60;
+      const originY = h - 60;
+      const scale = 1.9;
+
+      // Base vector: Eac + IR (horizontal)
+      const baseLen = (Eac + IR) * scale;
+      const heightLen = IX * scale;
+
+      // 1. Horizontal Component (Eac + IR)
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(originX, originY);
+      ctx.lineTo(originX + baseLen, originY);
+      ctx.stroke();
+
+      // Label Eac + IR
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 12px JetBrains Mono';
+      ctx.fillText(`E_a + I·R (${(Eac + IR).toFixed(1)} V)`, originX + baseLen / 2 - 30, originY + 20);
+
+      // 2. Vertical Component (I*X_L)
+      ctx.strokeStyle = '#f59e0b';
+      ctx.beginPath();
+      ctx.moveTo(originX + baseLen, originY);
+      ctx.lineTo(originX + baseLen, originY - heightLen);
+      ctx.stroke();
+
+      // Label IX
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText(`I·X_L (${IX.toFixed(1)} V)`, originX + baseLen + 10, originY - heightLen / 2);
+
+      // 3. Hypotenuse (Total Voltage V)
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.moveTo(originX, originY);
+      ctx.lineTo(originX + baseLen, originY - heightLen);
+      ctx.stroke();
+
+      // Label V
+      ctx.fillStyle = '#ef4444';
+      ctx.fillText(`V = ${V.toFixed(0)} V`, originX + baseLen / 2 - 20, originY - heightLen / 2 - 10);
+
+      // Angle Arc (phi)
+      ctx.beginPath();
+      ctx.arc(originX, originY, 35, -Math.atan2(heightLen, baseLen), 0);
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#10b981';
+      ctx.fillText('φ', originX + 40, originY - 10);
+    }
+
+    function testUniversalPolarity(type) {
+      const res = document.getElementById('universalDirectionResult');
+      if (type === 'line') {
+        res.innerHTML = '<span class="text-amber-400 font-bold">L ve N şebeke uçları yer değiştirildi:</span> Hem armatür akımı $I_a$ hem de seri kutup akısı $\Phi$ aynı anda ters döner. $(-I) \times (-\Phi) = +T \implies$ <strong class="text-emerald-400">DÖNÜŞ YÖNÜ DEĞİŞMEZ!</strong> (AC şebekede sürekli dönebilme prensibi).';
+      } else {
+        res.innerHTML = '<span class="text-cyan-400 font-bold">Sadece Armatür Uçları Yer Değiştirildi:</span> Kutup akısı aynı kalırken sadece armatür akımının yönü ters çevrildi. $(+I) \times (-\Phi) = -T \implies$ <strong class="text-rose-400">DÖNÜŞ YÖNÜ TERSİNE ÇEVRİLİR! (Saat Yönünün Tersi)</strong>';
+      }
+      renderKaTeX();
+    }
+
+    // =========================================================================
+    // SERVO ENCODER & RESOLVER ENGINE
+    // =========================================================================
+    function initServoLab() {
+      drawEncoderCanvas();
+      drawResolverCanvas();
+    }
+
+    function drawEncoderCanvas() {
+      const canvas = document.getElementById('encoderCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth || 450;
+      const h = canvas.height = canvas.parentElement.clientHeight || 280;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Quadrature Channels A, B, and Z waveforms
+      const rowH = h / 3;
+      const t = performance.now() * 0.003 * state.encoder.direction;
+
+      const channels = [
+        { name: 'Kanal A', color: '#38bdf8', offset: 0 },
+        { name: 'Kanal B (90° Faz)', color: '#34d399', offset: (state.encoder.direction === 1) ? Math.PI / 2 : -Math.PI / 2 },
+        { name: 'Kanal Z (Index Palsi)', color: '#f59e0b', offset: 0, isZ: true }
+      ];
+
+      channels.forEach((ch, idx) => {
+        const yBase = idx * rowH + rowH * 0.75;
+        ctx.fillStyle = ch.color;
+        ctx.font = 'bold 11px JetBrains Mono';
+        ctx.fillText(ch.name, 15, idx * rowH + 20);
+
+        ctx.strokeStyle = ch.color;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+
+        for (let x = 80; x < w; x++) {
+          let val = 0;
+          if (ch.isZ) {
+            // Index pulse occurs once per revolution
+            const phase = ((x * 0.02 + t * 0.2) % (Math.PI * 8));
+            val = (phase > 0 && phase < 0.4) ? 1 : 0;
+          } else {
+            val = Math.sin((x * 0.05) + t + ch.offset) > 0 ? 1 : 0;
+          }
+
+          const y = yBase - val * 35;
+          if (x === 80) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      });
+    }
+
+    function setEncoderDir(dir) {
+      state.encoder.direction = dir;
+      const badge = document.getElementById('encoderDirBadge');
+      const btnCW = document.getElementById('btnEncCW');
+      const btnCCW = document.getElementById('btnEncCCW');
+
+      if (dir === 1) {
+        badge.innerText = "CW (A, B'den 90° Önce)";
+        badge.className = 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800 text-cyan-300';
+        btnCW.className = 'px-2 py-2 rounded-lg bg-cyan-900 border border-cyan-500 text-cyan-300 font-bold transition';
+        btnCCW.className = 'px-2 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 font-bold transition';
+      } else {
+        badge.innerText = "CCW (B, A'dan 90° Önce)";
+        badge.className = 'text-xs font-mono font-bold px-2 py-0.5 rounded bg-rose-950 border border-rose-800 text-rose-300';
+        btnCW.className = 'px-2 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 font-bold transition';
+        btnCCW.className = 'px-2 py-2 rounded-lg bg-cyan-900 border border-cyan-500 text-cyan-300 font-bold transition';
+      }
+      drawEncoderCanvas();
+    }
+
+    function updateEncoderSim() {
+      const ppr = parseInt(document.getElementById('selectEncoderPpr').value);
+      state.encoder.ppr = ppr;
+      const count4x = ppr * 4;
+      const rpm = state.motorSpeedRpm;
+      const fKhz = (ppr * rpm) / (60 * 1000);
+
+      document.getElementById('enc4xCount').innerText = count4x.toLocaleString() + ' darbe/tur';
+      document.getElementById('encPulseFreq').innerText = fKhz.toFixed(1) + ' kHz';
+    }
+
+    function drawResolverCanvas() {
+      const canvas = document.getElementById('resolverCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth || 450;
+      const h = canvas.height = canvas.parentElement.clientHeight || 280;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Resolver Signals: Carrier sin(wc*t), Vsin = sin(theta)*sin(wc*t), Vcos = cos(theta)*sin(wc*t)
+      const t = performance.now() * 0.002;
+      const rotorAngle = t * 0.5; // slow mechanical rotation
+
+      const rowH = h / 2;
+
+      // 1. Vsin Waveform (Top Half)
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 11px JetBrains Mono';
+      ctx.fillText(`V_sin = sin(θ)·sin(ω_c t) [θ = ${((rotorAngle * 180 / Math.PI) % 360).toFixed(0)}°]`, 15, 20);
+
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let x = 0; x < w; x++) {
+        const carrier = Math.sin(x * 0.25);
+        const mod = Math.sin(rotorAngle + (x * 0.015));
+        const y = rowH * 0.5 - (carrier * mod) * 38;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // 2. Vcos Waveform (Bottom Half)
+      ctx.fillStyle = '#a855f7';
+      ctx.fillText('V_cos = cos(θ)·sin(ω_c t)', 15, rowH + 20);
+
+      ctx.strokeStyle = '#a855f7';
+      ctx.beginPath();
+      for (let x = 0; x < w; x++) {
+        const carrier = Math.sin(x * 0.25);
+        const mod = Math.cos(rotorAngle + (x * 0.015));
+        const y = rowH * 1.5 - (carrier * mod) * 38;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    // =========================================================================
+    // STEPPER MOTOR ENGINE
+    // =========================================================================
+    function initStepperLab() {
+      calculateStepper();
+      drawStepperCanvas();
+    }
+
+    function calculateStepper() {
+      const m = parseInt(document.getElementById('sliderStepM').value);
+      const nr = parseInt(document.getElementById('sliderStepNr').value);
+      const rpm = parseInt(document.getElementById('sliderStepRpm').value);
+
+      state.stepper.m = m;
+      state.stepper.nr = nr;
+      state.stepper.targetRpm = rpm;
+
+      document.getElementById('labelStepM').innerText = m + ' Faz';
+      document.getElementById('labelStepNr').innerText = nr + ' Diş';
+      document.getElementById('labelStepRpm').innerText = rpm + ' d/d';
+
+      let stepAngle = 360.0 / (m * nr);
+      let stepsPerRev = m * nr;
+
+      if (state.stepper.mode === 'half') {
+        stepAngle /= 2.0;
+        stepsPerRev *= 2;
+      } else if (state.stepper.mode === 'micro') {
+        stepAngle /= 8.0;
+        stepsPerRev *= 8;
+      }
+
+      // f = (rpm * stepsPerRev) / 60
+      const fStep = (rpm * stepsPerRev) / 60.0;
+      const periodUs = (fStep > 0) ? (1.0 / fStep) * 1e6 : 0;
+
+      document.getElementById('resStepAngle').innerText = stepAngle.toFixed(3) + '°';
+      document.getElementById('resStepCount').innerText = stepsPerRev.toLocaleString() + ' adım/tur';
+      document.getElementById('resStepFreq').innerText = (fStep >= 1000) ? (fStep / 1000).toFixed(2) + ' kHz' : fStep.toFixed(0) + ' Hz';
+      document.getElementById('resStepPeriod').innerText = periodUs.toFixed(1) + ' µs';
+
+      drawStepperCanvas();
+    }
+
+    function setStepperDriveMode(mode) {
+      state.stepper.mode = mode;
+      const modes = ['wave', 'full', 'half', 'micro'];
+      modes.forEach(m => {
+        const btn = document.getElementById(`btnStep${m.charAt(0).toUpperCase() + m.slice(1)}`);
+        if (btn) {
+          if (m === mode) {
+            btn.className = 'px-2 py-2 rounded-lg bg-amber-900/60 border border-amber-500 text-amber-300 font-bold transition';
+          } else {
+            btn.className = 'px-2 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition';
+          }
+        }
+      });
+
+      const badge = document.getElementById('stepModeBadge');
+      if (badge) {
+        const names = { wave: 'Dalga (1 Faz)', full: 'Tam Adım (Full-Step)', half: 'Yarım Adım (Half-Step)', micro: 'Mikro Adım (1/8)' };
+        badge.innerText = names[mode];
+      }
+
+      calculateStepper();
+    }
+
+    function drawStepperCanvas() {
+      const canvas = document.getElementById('stepperCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth || 450;
+      const h = canvas.height = canvas.parentElement.clientHeight || 320;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const cx = w / 2;
+      const cy = h / 2;
+      const r = Math.min(w, h) * 0.40;
+
+      // Draw Stator Ring
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 10;
+      ctx.stroke();
+
+      // 8 Stator Salient Poles
+      for (let i = 0; i < 8; i++) {
+        const ang = (i / 8) * Math.PI * 2;
+        const px = cx + Math.cos(ang) * (r - 12);
+        const py = cy + Math.sin(ang) * (r - 12);
+
+        // Determine if pole is active
+        const isActive = (i % 2 === (state.stepper.stepIndex % 2));
+
+        ctx.fillStyle = isActive ? '#f59e0b' : '#1e293b';
+        ctx.beginPath();
+        ctx.arc(px, py, 11, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = isActive ? '#fbbf24' : '#475569';
+        ctx.stroke();
+
+        ctx.fillStyle = isActive ? '#000000' : '#94a3b8';
+        ctx.font = 'bold 9px JetBrains Mono';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(String.fromCharCode(65 + (i % 4)), px, py);
+      }
+
+      // Draw Toothed Rotor
+      const rotorR = r * 0.55;
+      ctx.fillStyle = '#475569';
+      ctx.beginPath();
+      ctx.arc(cx, cy, rotorR, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 50 Rotor Teeth representation
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 50; i++) {
+        const tAng = (i / 50) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.moveTo(cx + Math.cos(tAng) * (rotorR - 4), cy + Math.sin(tAng) * (rotorR - 4));
+        ctx.lineTo(cx + Math.cos(tAng) * (rotorR + 5), cy + Math.sin(tAng) * (rotorR + 5));
+        ctx.stroke();
+      }
+
+      // Center shaft
+      ctx.beginPath();
+      ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+      ctx.fillStyle = '#0f172a';
+      ctx.fill();
+      ctx.strokeStyle = '#f59e0b';
+      ctx.stroke();
+    }
+
+    // --- WINDOW LOAD INITIALIZATION ---
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Initialize 3D Scene
+      setTimeout(init3DScene, 100);
+
+      // 2. Initialize 2D Direction Lab
+      initDirection2DLab();
+
+      // 3. Initialize BLDC Lab
+      initBldcLab();
+
+      // 4. Initialize Universal Motor Lab
+      calculateUniversalMotor();
+
+      // 5. Initialize Servo Lab
+      initServoLab();
+
+      // 6. Initialize Stepper Lab
+      initStepperLab();
+
+      // 7. Initial KaTeX Render
+      setTimeout(renderKaTeX, 500);
+
+      // Periodically redraw animated canvases
+      setInterval(() => {
+        if (state.activeTab === 'tab-servo') {
+          drawEncoderCanvas();
+          drawResolverCanvas();
+        }
+      }, 50);
+    });
+  </script>
+</body>
+</html>

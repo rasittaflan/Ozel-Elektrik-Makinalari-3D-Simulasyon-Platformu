@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Environment & Temp
+.env
+.venv
+env/
+venv/
+*.tmp
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Large zip archives (optional to keep or ignore; we can keep or track)
+# Ozel_Elektrik_Makinalari_v1.0.0.zip is ~6.8 MB, GitHub supports up to 100 MB, but we can track or release it.

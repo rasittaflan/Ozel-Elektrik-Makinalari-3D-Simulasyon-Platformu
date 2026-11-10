@@ -1,0 +1,646 @@
+
+==================== p_01 ====================
+
+
+
+==================== p_02 ====================
+
+3
+
+==================== p_03 ====================
+
+6
+S-X-X•
+L!
+
+==================== p_04 ====================
+
+e-.O.'C) Ý f*o-çor
+COÞLQ
+iJe_
+Seze p_
+Vý;JalQMa
+
+==================== p_05 ====================
+
+
+
+==================== p_06 ====================
+
+
+
+==================== p_07 ====================
+
+142. _
+
+==================== p_08 ====================
+
+asl(0JLop
+
+==================== p_09 ====================
+
+3
+
+==================== p_10 ====================
+
+_ SqoÜCü]eP (
+
+==================== p_11 ====================
+
+eaq,-
+
+==================== p_12 ====================
+
+an
+__ç15qkü
+ez
+
+==================== p_13 ====================
+
+_y-îl
+
+==================== p_14 ====================
+
+qoj-i?_-
+âcj-o
+2,2.
+Z_en
+u4U'
+car:)
+
+==================== p_15 ====================
+
+
+
+==================== p_16 ====================
+
+z-,am
+levresý
+SrÂ
+Len
+
+==================== p_17 ====================
+
+fil
+63.
+
+==================== p_18 ====================
+
+R 72-0
+d2ffi2n&t2- O
+fi(Ztn1.i
+V_çjz
+
+==================== p_19 ====================
+
+(4
+_ _ _ÝZ*TÐ
+
+==================== p_20 ====================
+
+Sensor er
+ö)iZ
+
+==================== p_21 ====================
+
+
+
+==================== p_22 ====================
+
+eab
+Ýti-
+Q7i
+
+==================== p_23 ====================
+
+
+
+==================== p_24 ====================
+
+
+
+==================== p_25 ====================
+
+
+
+==================== p_26 ====================
+
+E lelÐrilLL
+usd
+-4-qs—
+
+==================== p_27 ====================
+
+
+
+==================== p_28 ====================
+
+aþr
+r • 12.6
+360
+kö 21Ö ÜZÖ
+36Ö
+29,3
+210
+
+==================== p_29 ====================
+
+
+
+==================== p_30 ====================
+
+özd
+BÖLÜM- 3'. mo
+ý L Lîquu
+'C-!JûÜk_ vz
+, DA AA LA
+YÖKü
+X/Qf
+
+==================== p_31 ====================
+
+
+
+==================== p_32 ====================
+
+B 2. DA AA beyce* , 24 -EM k
+ÖÞW, oje.!.rn
+Câi
+JVWL-QQ.LOP
+
+==================== p_33 ====================
+
+_Þfr4F___
+
+==================== p_34 ====================
+
+j94RF
+120 'V
+Mol.-cru•n
+-2000
+RZZO„L
+
+==================== p_35 ====================
+
+
+
+==================== p_36 ====================
+
+c -ça-!-or
+bari zen-
+z-3_2_ r-
+—ýs—Q-Q-12..
+
+==================== p_37 ====================
+
+
+
+==================== p_38 ====================
+
+þ, GÖLGE
+Z Çara (
+Ýz-fl
+
+==================== p_39 ====================
+
+
+
+==================== p_40 ====================
+
+Þun (Ýð)
+üre Fi
+
+==================== p_41 ====================
+
+
+
+==================== p_42 ====================
+
+î üqkü
+CQ-öa
+( blÇeç
+
+==================== p_43 ====================
+
+
+
+==================== p_44 ====================
+
+sen
+ÖJ_RS?
+Sa Nar-
+
+==================== p_45 ====================
+
+Sürekli
+- Erc•cýder küff-fýslr.+_örü
+
+==================== p_46 ====================
+
+6.2. Servo Sistemlerde Konum Algýlayýcýlar
+Servo sistemlerde konum algýlama iþlemi (dolaylý olarak hýz algýlan-ýa iþlenýi) servo
+arka kýsmýna yerleþtirilen algýlayýcýlar ile gerçekleþtirilir. Bu algýlayýcýlar
+"Enkoder” veya "Resclver” olarak ikiye ayrýlýr.
+6.2.1. Enkodcr (Kodlarýcý)
+Encoderin çalýþma mantýðýný anlayabilmemiz için önce kýsaca optokuplörü
+hatýrlayalým. Optokuplör ayný kýlýfa konmuþ bir adet led ve Iþýða duyarlý yarý iletken ( foto
+diyot, foto transistör, foto tristör, foto triyak gibi ) elemandan oluþmaktadýr. Lede gerilim
+verildiðinde ledin Iþýðýndan etkilenen diðer eleman Ýletime geçmekte ve baðlý bulunduðu
+devrede iþ!eýn
+yapýný aktaydý.
+LED
+Pin 1 . Cathcda
+3. Anade
+4 _ Emitteý•
+Motor nailine baðlý olan bir encoder mil konumunu çözünürlüðü hassasiyetinde verir.
+Çözünürlükten kastedilen encoderin bir
+turun kaçta kaçýný ölçebildiðidir. Aþaðýda
+encoderlerde kullanýlan standart çözünürlükler verilmiþtir. Örneðin buradaki çözünürlüðün
+42()() olýmasý encoderin milin her 0,08570 lik hareketini ölçebileceði
+anlarnina gelir.
+2
+120
+376
+1000
+2000
+4200
+4
+125
+400
+1024
+2048
+4500
+8
+128
+420
+1080
+2400
+5000
+150
+480
+1100
+2500
+6000
+32
+1 go
+500
+1250
+2540
+6400
+36
+200
+512
+1270
+2700
+7200
+48
+250
+600
+1 500
+3000
+8192
+50
+256
+625
+1600
+3600
+9000
+- 60
+300
+720
+1728
+'3760
+10000
+320
+800
+4000
+100
+360
+900
+ý BOO
+4096
+Encoderler, algýlaýna tenolojisine göre ikiye ayrýlýr;
+I) Optik Algýlamalý Encoder
+2) Manyetik Algýlamalý Encoder
+Encoderler, çýkýþ tipine göre ikiye ayrýlýr;
+l) Ýncretncntal (Artýmsa)) Encoder
+2) Absolute (Mutlak) Encoder
+44
+
+==================== p_47 ====================
+
+. Encoder (
+ijret;.r. (Ji•ncðýn çözülniiriüðü 3600
+b'. dalga ( pu!ü,: usta tabii”
+iki '-Jöne dönüþünde
+, s'l_irücü hiigiý$iý-ýý?,
+siýy;zi
+enx-adtð"
+" kaft daþzoa
+ÇOZL':fþ- _
+yada
+döniisi_inde -
+t'./lotoý• vöi'lð_j
+örýcckiðþrjý.: göre -'ör, biiqi.si
+(Ic testi
+ya içerisðndev.:,
+burun an;am,_,
+- 'a 1Elk led
+bý_; lunn-ial•aaciýr. elenýar! lâdiý-:
+
+==================== p_48 ====================
+
+Enkoderlerin çýkýþ sinyalleri elektronik olarak en çok aþaðýda verilen üç yönemlc
+üretilir. Enkoder seçerken nasýl çýkýþ Ýstediðimize karar vermemiz gerekecektir.
+Line Drive[
+epen
+?ush-Puýý
+Dýxtput
+Line Driver: "Source” tipinde çýkýþtýr. Yani transistör iletimde olduðunda Vcc gerilimini
+çýkýþa aktarýr. Transistör týkamada iken boþta çýkýþ verir. Bu nedenle "silik” tipinde (ortak uc
+ile kaynak arasýnda direnç olan) giriþ uygulanmalýdýr.
+Open Collector: "Sink” tipinde çýkýþtýr. Transistör iletiýnde iken OV (ground) çýkýþý verir.
+'Fikarntýda ise çýkýþ boþtadýr. Bu nedenlede ' 'Source” tipinde (input ile kaynak arasýnda direnç
+olan) giriþ uygulanmalýdýr.
+Pasin-PLIII: Bu tür devre önceki iki devrenin birleþimidir.
+I) Çikýþ besleme kaynaðý seviyesinde olduðuna dikkat etmek gâi•âkir.
+Eðer bu çýkýþlar, bir mikrodenetleiciye giriþ olarak kullanacaksa izin verilen gerilim
+seviyelerine dikkat etmek gerekir.
+2) Servo motor ve sürücüleri ayný firmadan seçilirse enkoderin bu özelliðini dikkate
+almaya gerek yoktur. Üretici bu seçimi kendisi yapmýþtýr ve uygulamýþtýr.
+6.2. I .2 : Manyetik Encoder:
+Çözünürlüðünün düþük olmasý nedeni ile çok fazla tercih cdilýneseler de varlýðýnýn
+bilinmesi açýsýndan kýsaca bahsedeceðiz. Manyetik encoder, öptik incremcntal encoderin
+nnanyetik olanýdýr diyebiliriz. Miline baðlý manyetik disk ( rotor ) üzerinde birçok N-S sabit
+mýknatýs kutuplari sýralanmýþtýr. Mil ile birlikte bu kutuplar dönmekte ve -mahyetik atana
+dLýyarIý hall elemanýnýn her önünden geçiþlerinde hali elamaný bir gerilim üretmektedir. Bu
+gerilim manyetik encoderin elektronik devresinde yükseltilerek kâre dalgalar Þeklinde
+sürücüye verilmektedir.
+46
+
+==================== p_49 ====================
+
+Hali EIET1311i
+( Mat'a":
+Rotor
+Konþ-.liV
+'l I böl[-ýeier ç.ðkýþ'j (j geçi I
+bî!g-i.'ði elde
+P,iaary
+ijiY,n-ýþi
+, 0 Eh!cýesi
+elektrikte:
+.þdiðinde
+de L'-ar_ý
+
+==================== p_50 ====================
+
+6.2.2. Resoýver
+Absolute
+olsun
+incremental
+encoder olsun çýkýþ olarak dijital sinyaller
+ile vermektelerdi. Resolver ise bunlardan
+farklý olarak analog çýkýþ gerilimi üretir ve
+bu gerilim dijital bilgiye dönüþtürülerek
+Resolver
+sürücüye iletilir.
+Köýýneklöd_i
+Resolver arkasýna baðlanan analog-
+çevirici bir elektronik devre
+referans, sinüs ve kosinüs gerilimlerini
+karþýlaþtýrarak dönüþ yönü ve mil konumu
+hakkýnda dijital bir bilgi üretir. Sinüs ve
+kosinüs þeklinde birbirinden 900 faz farklý
+gerilimlere ihtiyaç duyulmasýnýn nedeni
+incrernental encoderdeki A ve B sinyalleri
+ile aynýdýr. Dönüþ yönüne göre bu iki
+gerilimden biri
+diðerine göre 90 Ýleride olacaktýr. Bu Ýse
+devir yönünün
+bilinmesi açýstndan
+gereklidir.
+EnkDder — Resolver seçimi
+Analog-Dij?tal
+Gövde
+Resolver
+Encoderlerin çözünürlükleri resolverlere oranla daha yüksektir. Fakat encoderler
+resolveriere göre daha ince bir teknoloji ile imal edildikleri için daha pahalýdýr. Resolvcrter
+encoderlere oranla daha yüksek sþcakllklarda çalýþabilir ayrýca darbe ve titreþimlere de daha
+dayanýklýdýr. Eðer sistemimizde yüksek çözünürlük istenmiyorsa fiyat performans açýsýndan
+resolverleri tercih edebiliriz.
+Encoder olsun olsun sürücüye dijita[ sinyaller gönderirler bu
+sinyalleri oluþturan devrelerin ve e[ektronik elemanlarýn bir anahtarlaýna hýzý vardýr.
+Kullanacaðýmýz encoder veya resolvcrin çalýþma hýzý sistemde baðlayacaðýmýz noktadaki
+hýzdan daha Yüksek olmalýdýr: Aksi taktirde encoder veya resolver sistemin hýzýna yetiþenýez
+ve hatalý ölçümler yapar. Bir diðeri, encoderinýizin çalýþma ve sinyal gerilinüdir. Elicoderler
+TM'L ve H TL olmak üzere iki çalýþma geriliminde üretilirler encodcý•ler 5 V, FÝTÝ,
+encoderler ise ü)-30V arasýnda tipik 24 V geriliný deðerinde beslenir ve çýkýþ sinyali verirler.
+48
+
+==================== p_51 ====================
+
+Sürücüler
+için ana IOC)
+noktasýd&.
+kaba! ederek iþlem ier:n;
+sürücü!?!'"
+biigiðzri ÝTEi_ýtiâk;:!
+hangi ç-nodd•a gerekli
+sürücü i_i-ze+ndeki
+ibi
+sürücijiâ[fin ve
+_ Dinler '„•rapýlatf!k: k'Ji?+xoÝ gibi
+'r :eiö sövie;nebifir.
+bilgi,
+
+==================== p_52 ====================
+
+giriþlerden, dijital giriþlerden verilebileceði gibi daha önceden hafýzaya kaydedilmiþ
+senaryolar þeklinde de olabilmektedir.
+Sis[enýe dýþarýdan verilecek dijital giriþ çýkýþlar için sürücü üzerinde ayrýlnýýþ
+konnektöý• bulunmaktadýr (resimdeki CNI konnektörü). Bu konektördeki her bir pinin hangi
+iþlev için ayrýlmýþ olduðu sürücünün kataloðunda yer alnýaktadýr.
+6.4. Servo Sistemlerde Çalýþma Türleri
+6.4.1. Eksen ( Axis) ve Master — Slave:
+Eksen asýl olarak X-Y-Z koordinat sisteminden gelen ve hareket yönlerini belirtmek için
+kullanýlan bir tabirdir. Servo sistemlerde eksen ayný servo sistem içerisinde çalýþan
+motorlardan her biridir diyebiliriz. Birden fazla eksenin kullanýldýðý sistemlerde her bir eksen
+diðer ekseni tamamlayýcý çalýþma gerçekleþtireceði için sürücüi2er birbirlerine endüstriyel
+haberleþme protokolleri
+ile baðlý olmasý gerekmektedir. Peki bu sürücülerden hangisi
+haberleþmeyi baþlatacak? A'eya diðer sürücülerden veri alýp veri aktaracak? Birden fazla
+llüidürtin öldüðü bir þirkette koordinasyon nasýl karýþacak olursa birden fhzla servo sürüciirýün
+üidLlðL1 sitemlerde koordinasyon ve kontrolün gerçekleþtirilebilýnesi için sürücülerin
+yetkilendirilmesi gerekir. Ýþte bu noktada master ve slave tecillileri iþin içine girer. Master
+keliýne anlamý olarak yönetici, sahip slave ise çalýþan, köle anlamýna gelir. Sürücülerden biri
+ýnaster olarak seçilir ( ayarlanýr ). Diðer sürücüler slave olarak ayarlanýr ve master sürücüye
+ve slave sürücülerin her birine bir iletiþim adresi verilir ( ÝP — Port numarasý Sistem master
+sürücünün kontrolü altýndadýr. Haberleþmeleri mastcr sürücü baþlatýr ve bitirir. Ayrýca diðer
+sürücülerden bilgi alabildiði gibi bifgide yazabilir.
+3. Ekse
+4, Eks
+6. Eksen
+50
+2. Eksen
+
+==================== p_53 ====================
+
+5.4.2. Senkron Ça!dþma:
+Senkron
+servo
+uyar ýayaz-;-ik
+Banttan akan mal
+az iki
+J nýaste;" Elaca
+bÝÝgisine
+Bü çalþþýnav•a en þ-jü7ei öiî!ðk ý.-:ç.an
+kesr:-ýe yapýiýrýasý büyü;•-. bir zaþ'(tar._ zvt--
+önceki ilîjajatý
+son i
+fliaikap
+Seran Sýð:
+Sonsa?
+
+==================== p_54 ====================
+
+BÖLÜM- PAYLI (AO' k oj2LAR
+-Ijcüle_
+a Caz_ r
+i 10
+7-aý
+-SQPD
+Sarp
+a, SPjðLî
+Ü ris
+L] g üþ-v-
+I g :âTQ_ #
+Uta P —
+
+==================== p_55 ====================
+
+
+
+==================== p_56 ====================
+
+ar
+4-34-
+olan
+2357...
+
+==================== p_57 ====================
+
+
+
+==================== p_58 ====================
+
+!Jiâi', %12.
+-29
+27,ç er dene
++7ÐX42
+Göç
+Phb
+23$
+152
+Pâ-fs
+
+==================== p_59 ====================
+
+
+
+==================== p_60 ====================
+
+.Z93x
+i 20
+(00
+
+==================== p_61 ====================
+
+
+
+==================== p_62 ====================
+
+Sar
+SQfD (
+ÞûJi
+ocç-q2
+Sar
+
+==================== p_63 ====================
+
+
+
+==================== p_64 ====================
+
+(O OL— 01?-î
+ûft.'QIz
+Cal
+sasSâ-k4ÝCh
+
+==================== p_65 ====================
+
+
+
+==================== p_66 ====================
+
+
+
+==================== p_67 ====================
+
+
+
+==================== p_68 ====================
+
+
+
+==================== p_69 ====================
+
+
+
+==================== p_70 ====================
+
+
+
+==================== p_71 ====================
+
+
+
+==================== p_72 ====================
+
+
+
+==================== p_73 ====================
+
+
+
+==================== p_74 ====================
+
+
+
+==================== p_75 ====================
+
+
+
+==================== p_76 ====================
+
+
+
+==================== p_77 ====================
+
+
+
+==================== p_78 ====================
+
+
+
+==================== p_79 ====================
+
+
+
+==================== p_80 ====================
+
+
+
+==================== p_81 ====================
+
+
